@@ -11,16 +11,17 @@ collections:
     files:
       - file: "content/current.json"
         label: "Current Members"
-        name: "members"
+        name: "current_members"
         fields:
           - label: "Members"
             name: "members"
             widget: list
+            summary: "{{fields.name}}"
             fields:
               - { label: "Name", name: "name", widget: "string" }
-              - { label: "BS", name: "bs", widget: "string", required: false }
-              - { label: "MS/PhD", name: "ms", widget: "string", required: false }
+              - { label: "Photo", name: "photo", widget: "image" }
+              - { label: "B.S.", name: "bs", widget: "string", required: false }
+              - { label: "M.S./Ph.D.", name: "ms", widget: "string", required: false }
               - { label: "Research", name: "research", widget: "string", required: false }
               - { label: "Email", name: "email", widget: "string", required: false }
               - { label: "Bio", name: "bio", widget: "text", required: false }
-              - { label: "Photo", name: "photo", widget: "image" }

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Current Members | Sustainable/Functional Polymer Lab</title>
+
+  <!-- 공통 CSS -->
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    /* ===== Current template (screenshot-like) ===== */
+    .page-wrap{ max-width:1100px; margin:56px auto; padding:0 20px; }
+    .page-title{ font-size:28px; font-weight:800; margin:0 0 18px; }
+
+    .member{ display:grid; grid-template-columns: 360px 1fr; gap:42px; align-items:start; padding:18px 0; }
+    .member + .member{ border-top: 1px solid rgba(0,0,0,.08); }
+
+    .photo{
+      width:100%;
+      aspect-ratio: 4 / 5;
+      border-radius: 10px;
+      overflow:hidden;
+      background: rgba(0,0,0,.06);
+    }
+    .photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .name{ font-size:28px; font-weight:800; margin:4px 0 18px; }
+    .lines p{ margin:10px 0; line-height:1.75; }
+    .lines strong{ font-weight:800; }
+    .bio{ margin-top:18px; line-height:1.85; white-space:pre-wrap; }
+
+    .empty{
+      padding:28px;
+      border-radius:14px;
+      background: rgba(0,0,0,.03);
+      color: rgba(0,0,0,.55);
+    }
+
+    @media (max-width: 900px){
+      .member{ grid-template-columns: 1fr; }
+      .photo{ max-width: 420px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ 헤더는 index.html과 같은 걸 복붙해서 넣으면 됨 -->
+  <!-- <header> ... </header> -->
+
+  <main class="page-wrap">
+    <h1 class="page-title">Current Members</h1>
+
+    <!-- 여기에 데이터가 자동으로 렌더링됨 -->
+    <div id="memberList"></div>
+
+    <div id="emptyState" class="empty" style="display:none;">
+      아직 등록된 Current 멤버가 없습니다. (관리자 /admin 에서 추가하세요)
+    </div>
+  </main>
+
+  <!-- ✅ 푸터도 index.html과 같은 걸 복붙해서 넣으면 됨 -->
+  <!-- <footer> ... </footer> -->
+
+  <script>
+    async function loadJSON() {
+      // Netlify 캐시로 갱신이 늦어지는 걸 피하려고 timestamp를 붙임
+      const url = "../content/current.json?v=" + Date.now();
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to load current.json: " + res.status);
+      return res.json();
+    }
+
+    function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+    function render(members){
+      const root = document.getElementById("memberList");
+      const empty = document.getElementById("emptyState");
+
+      if (!Array.isArray(members) || members.length === 0){
+        root.innerHTML = "";
+        empty.style.display = "block";
+        return;
+      }
+
+      empty.style.display = "none";
+      root.innerHTML = members.map(m => `
+        <section class="member">
+          <div class="photo">
+            ${m.photo ? `<img src="../${esc(m.photo)}" alt="${esc(m.name)}">` : ``}
+          </div>
+
+          <div class="info">
+            <div class="name">${esc(m.name)}</div>
+
+            <div class="lines">
+              ${m.bs ? `<p><strong>B.S.</strong>: ${esc(m.bs)}</p>` : ``}
+              ${m.ms ? `<p><strong>M.S./Ph.D.</strong>: ${esc(m.ms)}</p>` : ``}
+              ${m.research ? `<p><strong>연구분야</strong>: ${esc(m.research)}</p>` : ``}
+              ${m.email ? `<p><strong>E-mail</strong>: <a href="mailto:${esc(m.email)}">${esc(m.email)}</a></p>` : ``}
+            </div>
+
+            ${m.bio ? `<div class="bio"><strong>자기소개</strong>\n${esc(m.bio)}</div>` : ``}
+          </div>
+        </section>
+      `).join("");
+    }
+
+    (async () => {
+      try{
+        const data = await loadJSON();
+        render(data.members || []);
+      }catch(e){
+        console.error(e);
+        document.getElementById("emptyState").style.display = "block";
+        document.getElementById("emptyState").textContent = "데이터를 불러오지 못했습니다. (content/current.json 경로/배포 확인)";
+      }
+    })();
+  </script>
+</body>
+</html>
