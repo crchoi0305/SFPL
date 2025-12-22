@@ -18,16 +18,16 @@
       </span>
     </a>
 
-    <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileNav">☰</button>
-
-    <!-- Desktop nav -->
+    <!-- Desktop menu (항상 펼침) -->
     <nav class="nav" aria-label="주요 메뉴">
       <div class="nav-item">
         <a class="nav-link" href="research.html">Research</a>
       </div>
 
-      <div class="nav-item">
-        <a class="nav-link" href="people/pi.html">People <span class="caret">▾</span></a>
+      <div class="nav-item has-dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          People <span class="caret">▾</span>
+        </a>
         <div class="dropdown" role="menu" aria-label="People submenu">
           <a href="people/pi.html">PI</a>
           <a href="people/current.html">Current</a>
@@ -35,8 +35,10 @@
         </div>
       </div>
 
-      <div class="nav-item">
-        <a class="nav-link" href="achievement/sci.html">Achievement <span class="caret">▾</span></a>
+      <div class="nav-item has-dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          Achievement <span class="caret">▾</span>
+        </a>
         <div class="dropdown" role="menu" aria-label="Achievement submenu">
           <a href="achievement/sci.html">SCI</a>
           <a href="achievement/kci.html">KCI</a>
@@ -44,28 +46,26 @@
         </div>
       </div>
 
-      <div class="nav-item">
-        <a class="nav-link" href="photo.html">Photo</a>
-      </div>
-
-      <div class="nav-item">
-        <a class="nav-link" href="news.html">News</a>
-      </div>
+      <div class="nav-item"><a class="nav-link" href="photo.html">Photo</a></div>
+      <div class="nav-item"><a class="nav-link" href="news.html">News</a></div>
     </nav>
+
+    <!-- Mobile hamburger -->
+    <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileNav">☰</button>
   </div>
 
-  <!-- Mobile nav (항상 펼친 형태로, JS로 토글) -->
+  <!-- Mobile nav -->
   <nav id="mobileNav" class="mobile-nav" aria-label="모바일 메뉴">
     <a class="m-link" href="research.html">Research</a>
 
-    <a class="m-link" href="people/pi.html">People</a>
+    <a class="m-link" href="#" aria-expanded="false">People</a>
     <div class="m-sub">
       <a href="people/pi.html">PI</a>
       <a href="people/current.html">Current</a>
       <a href="people/alumni.html">Alumni</a>
     </div>
 
-    <a class="m-link" href="achievement/sci.html">Achievement</a>
+    <a class="m-link" href="#" aria-expanded="false">Achievement</a>
     <div class="m-sub">
       <a href="achievement/sci.html">SCI</a>
       <a href="achievement/kci.html">KCI</a>
@@ -76,6 +76,7 @@
     <a class="m-link" href="news.html">News</a>
   </nav>
 </header>
+
 
 <main class="container hero">
   <section class="hero-frame" aria-label="메인 비주얼">
