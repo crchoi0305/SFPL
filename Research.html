@@ -11,7 +11,7 @@
 <!-- 헤더: Research active만 다르게 -->
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="index.html" aria-label="홈으로">
+    <a class="brand" href="../index.html" aria-label="홈으로">
       <span class="brand-mark" aria-hidden="true"></span>
       <span class="brand-text">
         <span class="brand-title">친환경/기능성 고분자 연구실</span>
@@ -19,57 +19,62 @@
       </span>
     </a>
 
-    <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileNav">☰</button>
-
     <nav class="nav" aria-label="주요 메뉴">
       <div class="nav-item">
-        <a class="nav-link active" href="research.html">Research</a>
+        <a class="nav-link" href="../research.html">Research</a>
       </div>
 
-      <div class="nav-item">
-        <a class="nav-link" href="people/pi.html">People <span class="caret">▾</span></a>
+      <div class="nav-item has-dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          People <span class="caret">▾</span>
+        </a>
         <div class="dropdown" role="menu" aria-label="People submenu">
-          <a href="people/pi.html">PI</a>
-          <a href="people/current.html">Current</a>
-          <a href="people/alumni.html">Alumni</a>
+          <a href="pi.html">PI</a>
+          <a href="current.html">Current</a>
+          <a href="alumni.html">Alumni</a>
         </div>
       </div>
 
-      <div class="nav-item">
-        <a class="nav-link" href="achievement/sci.html">Achievement <span class="caret">▾</span></a>
+      <div class="nav-item has-dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          Achievement <span class="caret">▾</span>
+        </a>
         <div class="dropdown" role="menu" aria-label="Achievement submenu">
-          <a href="achievement/sci.html">SCI</a>
-          <a href="achievement/kci.html">KCI</a>
-          <a href="achievement/patent.html">Patent</a>
+          <a href="../achievement/sci.html">SCI</a>
+          <a href="../achievement/kci.html">KCI</a>
+          <a href="../achievement/patent.html">Patent</a>
         </div>
       </div>
 
-      <div class="nav-item"><a class="nav-link" href="photo.html">Photo</a></div>
-      <div class="nav-item"><a class="nav-link" href="news.html">News</a></div>
+      <div class="nav-item"><a class="nav-link" href="../photo.html">Photo</a></div>
+      <div class="nav-item"><a class="nav-link" href="../news.html">News</a></div>
     </nav>
+
+    <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileNav">☰</button>
   </div>
 
   <nav id="mobileNav" class="mobile-nav" aria-label="모바일 메뉴">
-    <a class="m-link active" href="research.html">Research</a>
+    <a class="m-link" href="../research.html">Research</a>
 
-    <a class="m-link" href="people/pi.html">People</a>
+    <a class="m-link" href="#" aria-expanded="false">People</a>
     <div class="m-sub">
-      <a href="people/pi.html">PI</a>
-      <a href="people/current.html">Current</a>
-      <a href="people/alumni.html">Alumni</a>
+      <a href="pi.html">PI</a>
+      <a href="current.html">Current</a>
+      <a href="alumni.html">Alumni</a>
     </div>
 
-    <a class="m-link" href="achievement/sci.html">Achievement</a>
+    <a class="m-link" href="#" aria-expanded="false">Achievement</a>
     <div class="m-sub">
-      <a href="achievement/sci.html">SCI</a>
-      <a href="achievement/kci.html">KCI</a>
-      <a href="achievement/patent.html">Patent</a>
+      <a href="../achievement/sci.html">SCI</a>
+      <a href="../achievement/kci.html">KCI</a>
+      <a href="../achievement/patent.html">Patent</a>
     </div>
 
-    <a class="m-link" href="photo.html">Photo</a>
-    <a class="m-link" href="news.html">News</a>
+    <a class="m-link" href="../photo.html">Photo</a>
+    <a class="m-link" href="../news.html">News</a>
   </nav>
 </header>
+
 
 <main class="container page-wrap">
   <div class="card page-hero">
