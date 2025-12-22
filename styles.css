@@ -1,0 +1,236 @@
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body{
+  margin:0;
+  font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif;
+  color:#0f172a;
+  background:#f5f7fb;
+  line-height:1.6;
+}
+a{ color:inherit; text-decoration:none; }
+.container{ width:min(1200px, calc(100% - 48px)); margin:0 auto; }
+
+.site-header{
+  position: sticky; top:0; z-index:50;
+  background: linear-gradient(180deg,#0b2c54 0%, #0a2445 100%);
+  color:#fff;
+  box-shadow: 0 10px 30px rgba(2,6,23,.18);
+}
+.header-inner{
+  display:flex; align-items:center; gap:18px;
+  padding:12px 0;
+}
+
+.brand{
+  display:flex; align-items:center; gap:12px;
+}
+.brand-mark{
+  width:38px; height:38px; border-radius:8px;
+  background: linear-gradient(180deg,#ffd166 0%, #fca311 100%);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.25);
+  flex: 0 0 auto;
+}
+.brand-text{ display:grid; gap:2px; line-height:1.1; }
+.brand-title{ font-weight:800; letter-spacing:-0.02em; font-size:15px; }
+.brand-subtitle{ font-size:12px; opacity:.82; }
+
+/* ===== Desktop nav with dropdown ===== */
+.nav{
+  margin-left:auto;
+  display:flex; align-items:center; gap:8px;
+}
+.nav-item{
+  position:relative;
+}
+.nav-link{
+  display:inline-flex; align-items:center;
+  height:36px; padding:0 12px;
+  border-radius:10px;
+  font-weight:700; font-size:14px;
+  color:rgba(255,255,255,.92);
+}
+.nav-link:hover{ background: rgba(255,255,255,.10); }
+.nav-link.active{ background: rgba(255,255,255,.18); }
+.nav-link .caret{ margin-left:6px; font-size:12px; opacity:.85; }
+
+/* dropdown panel */
+.dropdown{
+  position:absolute;
+  top: 44px;
+  left: 0;
+  min-width: 180px;
+  padding: 8px;
+  border-radius: 12px;
+  background: #0b2c54;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 16px 40px rgba(2,6,23,.35);
+  display:none;
+}
+.dropdown a{
+  display:block;
+  padding:10px 10px;
+  border-radius:10px;
+  color: rgba(255,255,255,.95);
+  font-weight: 700;
+  font-size: 13px;
+}
+.dropdown a:hover{ background: rgba(255,255,255,.10); }
+.dropdown a.active{ background: rgba(255,255,255,.16); }
+
+/* show dropdown on hover (desktop) */
+.nav-item:hover .dropdown{ display:block; }
+
+/* ===== Mobile nav ===== */
+.nav-toggle{
+  display:none;
+  margin-left:auto;
+  height:40px; width:44px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.10);
+  color:#fff;
+  cursor:pointer;
+}
+.mobile-nav{
+  display:none;
+  border-top:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+}
+.mobile-nav.open{ display:block; }
+.mobile-nav .m-link{
+  display:block;
+  padding:12px 18px;
+  color:rgba(255,255,255,.95);
+  font-weight:800;
+}
+.mobile-nav .m-link:hover{ background: rgba(255,255,255,.10); }
+.mobile-nav .m-link.active{ background: rgba(255,255,255,.16); }
+.mobile-nav .m-sub{
+  padding: 0 0 10px 0;
+}
+.mobile-nav .m-sub a{
+  display:block;
+  padding:10px 28px;
+  color: rgba(255,255,255,.92);
+  font-weight:700;
+  font-size: 13px;
+  opacity:.95;
+}
+.mobile-nav .m-sub a:hover{ background: rgba(255,255,255,.10); }
+
+/* ===== Hero (background placeholder) ===== */
+.hero{ padding:16px 0 22px; }
+.hero-frame{
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:0 16px 40px rgba(15,23,42,.12);
+  background:#0b1220;
+  position:relative;
+  min-height:380px;
+}
+.hero-frame::before{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(900px 420px at 15% 35%, rgba(255,255,255,.18), transparent 60%),
+    radial-gradient(700px 360px at 75% 35%, rgba(255,255,255,.12), transparent 62%),
+    linear-gradient(120deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+  /* 나중에: background-image: url('...'); background-size: cover; background-position: center; */
+}
+.hero-frame::after{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(90deg, rgba(2,6,23,.78) 0%, rgba(2,6,23,.30) 55%, rgba(2,6,23,.10) 100%);
+}
+.hero-content{
+  position:relative; z-index:2;
+  padding:44px 42px;
+  color:#fff;
+  max-width:860px;
+}
+.hero-title{
+  margin:0 0 10px;
+  font-size:44px;
+  line-height:1.05;
+  letter-spacing:-0.02em;
+}
+.hero-subtitle{
+  margin:0 0 14px;
+  font-size:18px;
+  opacity:.9;
+}
+.hero-desc{
+  margin:0;
+  font-size:14px;
+  opacity:.82;
+  max-width:720px;
+}
+
+/* ===== Page cards ===== */
+.card{
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 8px 28px rgba(15,23,42,.08);
+  border:1px solid rgba(15,23,42,.06);
+}
+.page-wrap{ padding: 20px 0 38px; }
+.page-hero{ padding:22px 22px; }
+.page-title{ margin:0 0 6px; font-size:26px; letter-spacing:-0.02em; }
+.page-lead{ margin:0; color:#475569; font-size:14px; }
+.page-body{ margin-top:14px; padding:20px 22px; }
+.page-body h2{ margin:0 0 10px; font-size:18px; }
+.page-body p{ margin:0 0 12px; color:#334155; }
+.page-body ul, .page-body ol{ margin:0; padding-left:18px; color:#334155; }
+
+/* ===== Footer ===== */
+.site-footer{
+  background: linear-gradient(180deg,#0b2c54 0%, #0a2445 100%);
+  color: rgba(255,255,255,.9);
+  margin-top:24px;
+}
+.footer-inner{
+  padding:18px 0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.footer-small{ font-size:12px; opacity:.85; }
+
+/* ===== Responsive ===== */
+@media (max-width: 920px){
+  .hero-title{ font-size:36px; }
+}
+@media (max-width: 760px){
+  .nav{ display:none; }
+  .nav-toggle{ display:inline-flex; align-items:center; justify-content:center; }
+  .hero-content{ padding:34px 18px; }
+  .hero-frame{ min-height:320px; }
+}
+
+.nav-item{
+  position: relative;
+  padding-bottom: 10px; /* ← 링크 아래쪽에 hover 유지 구간(브릿지) */
+}
+
+.dropdown{
+  position: absolute;
+  top: 100%;            /* ← 부모 바로 아래에 붙임 (갭 제거) */
+  left: 0;
+  margin-top: 6px;      /* ← 살짝 띄우고 싶으면(선택) */
+  min-width: 180px;
+  padding: 8px;
+  border-radius: 12px;
+  background: #0b2c54;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 16px 40px rgba(2,6,23,.35);
+  display: none;
+  z-index: 999;         /* ← 다른 요소 위로 확실히 */
+}
+
+.nav-item:hover .dropdown,
+.nav-item:focus-within .dropdown{
+  display: block;
+}

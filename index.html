@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>친환경/기능성 고분자 연구실 | Sustainable/Functional Polymer Lab</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="홈으로">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">
+        <span class="brand-title">친환경/기능성 고분자 연구실</span>
+        <span class="brand-subtitle">Sustainable/Functional Polymer Lab</span>
+      </span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileNav">☰</button>
+
+    <!-- Desktop nav -->
+    <nav class="nav" aria-label="주요 메뉴">
+      <div class="nav-item">
+        <a class="nav-link" href="research.html">Research</a>
+      </div>
+
+      <div class="nav-item">
+        <a class="nav-link" href="people/pi.html">People <span class="caret">▾</span></a>
+        <div class="dropdown" role="menu" aria-label="People submenu">
+          <a href="people/pi.html">PI</a>
+          <a href="people/current.html">Current</a>
+          <a href="people/alumni.html">Alumni</a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <a class="nav-link" href="achievement/sci.html">Achievement <span class="caret">▾</span></a>
+        <div class="dropdown" role="menu" aria-label="Achievement submenu">
+          <a href="achievement/sci.html">SCI</a>
+          <a href="achievement/kci.html">KCI</a>
+          <a href="achievement/patent.html">Patent</a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <a class="nav-link" href="photo.html">Photo</a>
+      </div>
+
+      <div class="nav-item">
+        <a class="nav-link" href="news.html">News</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Mobile nav (항상 펼친 형태로, JS로 토글) -->
+  <nav id="mobileNav" class="mobile-nav" aria-label="모바일 메뉴">
+    <a class="m-link" href="research.html">Research</a>
+
+    <a class="m-link" href="people/pi.html">People</a>
+    <div class="m-sub">
+      <a href="people/pi.html">PI</a>
+      <a href="people/current.html">Current</a>
+      <a href="people/alumni.html">Alumni</a>
+    </div>
+
+    <a class="m-link" href="achievement/sci.html">Achievement</a>
+    <div class="m-sub">
+      <a href="achievement/sci.html">SCI</a>
+      <a href="achievement/kci.html">KCI</a>
+      <a href="achievement/patent.html">Patent</a>
+    </div>
+
+    <a class="m-link" href="photo.html">Photo</a>
+    <a class="m-link" href="news.html">News</a>
+  </nav>
+</header>
+
+<main class="container hero">
+  <section class="hero-frame" aria-label="메인 비주얼">
+    <div class="hero-content">
+      <h1 class="hero-title">Sustainable/Functional Polymer Lab</h1>
+      <p class="hero-subtitle">친환경/기능성 고분자 연구실</p>
+      <p class="hero-desc">
+        (소개 문구는 추후 수정) 지속가능 소재 설계, 기능성 고분자/코팅, 재활용·순환형 고분자 시스템을 연구합니다.
+        배경 이미지는 나중에 교체하세요.
+      </p>
+    </div>
+  </section>
+
+  <section class="page-wrap">
+    <div class="card page-hero">
+      <h2 class="page-title">Welcome</h2>
+      <p class="page-lead">
+        Research / People / Achievement / Photo / News 메뉴를 통해 내용을 구성할 수 있습니다.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab
+      <div class="footer-small">경북 구미시 대학로 61</div>
+    </div>
+    <div class="footer-small">© <span id="year"></span> All Rights Reserved.</div>
+  </div>
+</footer>
+
+<script>
+  // footer year
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // mobile nav toggle
+  const btn = document.querySelector(".nav-toggle");
+  const mobileNav = document.getElementById("mobileNav");
+  btn?.addEventListener("click", () => {
+    const open = mobileNav.classList.toggle("open");
+    btn.setAttribute("aria-expanded", String(open));
+  });
+</script>
+</body>
+</html>
