@@ -98,13 +98,25 @@
 </footer>
 
 <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+  // footer year
+  const y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
+
+  // mobile nav toggle
   const btn = document.querySelector(".nav-toggle");
   const mobileNav = document.getElementById("mobileNav");
   btn?.addEventListener("click", () => {
     const open = mobileNav.classList.toggle("open");
     btn.setAttribute("aria-expanded", String(open));
   });
+
+  // prevent page jump for dropdown parent menus
+  document
+    .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
+    .forEach((el) => {
+      el.addEventListener("click", (e) => e.preventDefault());
+    });
 </script>
+
 </body>
 </html>
