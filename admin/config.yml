@@ -1,0 +1,26 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/members"
+public_folder: "/assets/members"
+
+collections:
+  - name: "current"
+    label: "People - Current"
+    files:
+      - file: "content/current.json"
+        label: "Current Members"
+        name: "members"
+        fields:
+          - label: "Members"
+            name: "members"
+            widget: list
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "BS", name: "bs", widget: "string", required: false }
+              - { label: "MS/PhD", name: "ms", widget: "string", required: false }
+              - { label: "Research", name: "research", widget: "string", required: false }
+              - { label: "Email", name: "email", widget: "string", required: false }
+              - { label: "Bio", name: "bio", widget: "text", required: false }
+              - { label: "Photo", name: "photo", widget: "image" }
