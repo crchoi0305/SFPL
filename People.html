@@ -21,30 +21,38 @@
     <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileNav">☰</button>
 
     <nav class="nav" aria-label="주요 메뉴">
-      <div class="nav-item"><a class="nav-link" href="../research.html">Research</a></div>
+ <div class="nav-item has-dropdown">
+  <a class="nav-link dropdown-toggle"
+     href="#"
+     role="button"
+     aria-haspopup="true"
+     aria-expanded="false">
+    People <span class="caret">▾</span>
+  </a>
 
-      <div class="nav-item">
-        <a class="nav-link active" href="pi.html">People <span class="caret">▾</span></a>
-        <div class="dropdown" role="menu" aria-label="People submenu">
-          <a class="active" href="pi.html">PI</a>
-          <a href="current.html">Current</a>
-          <a href="alumni.html">Alumni</a>
-        </div>
-      </div>
-
-      <div class="nav-item">
-        <a class="nav-link" href="../achievement/sci.html">Achievement <span class="caret">▾</span></a>
-        <div class="dropdown" role="menu" aria-label="Achievement submenu">
-          <a href="../achievement/sci.html">SCI</a>
-          <a href="../achievement/kci.html">KCI</a>
-          <a href="../achievement/patent.html">Patent</a>
-        </div>
-      </div>
-
-      <div class="nav-item"><a class="nav-link" href="../photo.html">Photo</a></div>
-      <div class="nav-item"><a class="nav-link" href="../news.html">News</a></div>
-    </nav>
+  <div class="dropdown" role="menu" aria-label="People submenu">
+    <a href="people/pi.html">PI</a>
+    <a href="people/current.html">Current</a>
+    <a href="people/alumni.html">Alumni</a>
   </div>
+</div>
+
+<div class="nav-item has-dropdown">
+  <a class="nav-link dropdown-toggle"
+     href="#"
+     role="button"
+     aria-haspopup="true"
+     aria-expanded="false">
+    Achievement <span class="caret">▾</span>
+  </a>
+
+  <div class="dropdown" role="menu" aria-label="Achievement submenu">
+    <a href="achievement/sci.html">SCI</a>
+    <a href="achievement/kci.html">KCI</a>
+    <a href="achievement/patent.html">Patent</a>
+  </div>
+</div>
+
 
   <nav id="mobileNav" class="mobile-nav" aria-label="모바일 메뉴">
     <a class="m-link" href="../research.html">Research</a>
