@@ -4,79 +4,31 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin | Sustainable/Functional Polymer Lab</title>
-
-  <style>
-    body{ margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    .hint{
-      position:fixed; left:16px; bottom:16px;
-      background:rgba(0,0,0,.55); color:#fff; padding:10px 12px;
-      border-radius:10px; font-size:13px;
-    }
-  </style>
 </head>
 <body>
 
-  <!-- Netlify Identity widget -->
+  <!-- Netlify Identity -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
   <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
 
-  <div class="hint">If you were invited, the signup / password set popup should open automatically.</div>
-
   <script>
-    function hasTokenInUrl() {
-      // Netlify는 보통 hash(#)로 토큰을 붙입니다.
-      const h = window.location.hash || "";
-      const q = window.location.search || "";
-      return (
-        h.includes("invite_token=") ||
-        h.includes("recovery_token=") ||
-        h.includes("confirmation_token=") ||
-        q.includes("invite_token=") ||
-        q.includes("recovery_token=") ||
-        q.includes("confirmation_token=")
-      );
-    }
-
-    function openProperModal() {
-      // invite/confirmation은 signup, recovery는 recover로 여는게 가장 자연스럽습니다.
-      const h = window.location.hash || "";
-      const q = window.location.search || "";
-      const s = h + "&" + q;
-
-      if (s.includes("recovery_token=")) {
-        window.netlifyIdentity.open("recover");
-      } else if (s.includes("invite_token=") || s.includes("confirmation_token=")) {
-        window.netlifyIdentity.open("signup");
-      } else {
-        window.netlifyIdentity.open(); // 기본 login/signup UI
-      }
-    }
-
     if (window.netlifyIdentity) {
+
+      // 🔹 recovery / invite / confirmation 토큰 처리
       window.netlifyIdentity.on("init", (user) => {
-        // ✅ 초대/복구 링크로 들어온 경우: 무조건 모달을 열어 비번 설정/복구가 진행되게 함
-        if (hasTokenInUrl()) {
-          openProperModal();
-          return;
-        }
+        const hash = window.location.hash;
 
-        // ✅ 일반 접근: 로그인 안 되어 있으면 로그인창 오픈
-        if (!user) {
-          window.netlifyIdentity.open("login");
+        if (hash.includes("recovery_token") || hash.includes("invite_token")) {
+          window.netlifyIdentity.open("recovery");
+        } else if (!user) {
+          window.netlifyIdentity.open();
         }
       });
 
-      // 로그인 성공하면 Decap 라우트로
       window.netlifyIdentity.on("login", () => {
-        // Decap은 보통 /admin/#/ 에서 안정적으로 동작
-        window.location.href = "/admin/#/";
-      });
-
-      // 로그아웃하면 다시 로그인창
-      window.netlifyIdentity.on("logout", () => {
-        window.netlifyIdentity.open("login");
+        window.location.href = "/admin/";
       });
     }
   </script>
