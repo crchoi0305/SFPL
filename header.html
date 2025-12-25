@@ -62,3 +62,21 @@
     <a class="m-link" href="/news.html">News</a>
   </nav>
 </header>
+
+<script>
+  (function () {
+    const hash = window.location.hash || "";
+    const qs = window.location.search || "";
+
+    const hasToken =
+      /(?:invite_token|recovery_token|confirmation_token)=/i.test(hash) ||
+      /(?:invite_token|recovery_token|confirmation_token)=/i.test(qs);
+
+    // 토큰이 있는데 /admin이 아니면 /admin으로 이동
+    if (hasToken && !window.location.pathname.startsWith("/admin")) {
+      const tokenPart = hash || ("#" + qs.replace(/^\?/, ""));
+      window.location.replace("/admin/" + tokenPart);
+    }
+  })();
+</script>
+
