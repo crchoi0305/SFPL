@@ -8,124 +8,163 @@
 </head>
 
 <body>
-<header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="index.html" aria-label="홈으로">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span class="brand-text">
-        <span class="brand-title">친환경/기능성 고분자 연구실</span>
-        <span class="brand-subtitle">Sustainable/Functional Polymer Lab</span>
-      </span>
-    </a>
+  <div id="site-header"></div>
 
-    <!-- Desktop menu (항상 펼침) -->
-    <nav class="nav" aria-label="주요 메뉴">
-      <div class="nav-item">
-        <a class="nav-link" href="research.html">Research</a>
+  <main class="container hero">
+    <section class="hero-frame" aria-label="메인 비주얼">
+      <div class="hero-content">
+        <h1 class="hero-title">Sustainable/Functional Polymer Lab</h1>
+        <p class="hero-subtitle">친환경/기능성 고분자 연구실</p>
+        <p class="hero-desc"></p>
       </div>
+    </section>
 
-      <div class="nav-item has-dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-          People <span class="caret">▾</span>
-        </a>
-        <div class="dropdown" role="menu" aria-label="People submenu">
-          <a href="people/pi.html">PI</a>
-          <a href="people/current.html">Current</a>
-          <a href="people/alumni.html">Alumni</a>
-        </div>
+<section class="page-wrap">
+  <div class="card page-hero">
+    <!-- ✅ 최신 News 4개 출력 자리 -->
+    <div class="home-news">
+      <div class="home-news-head">
+        <h3 class="home-news-title">Latest News</h3>
+        <a class="home-news-more" href="news.html">View all →</a>
       </div>
-
-      <div class="nav-item has-dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-          Achievement <span class="caret">▾</span>
-        </a>
-        <div class="dropdown" role="menu" aria-label="Achievement submenu">
-          <a href="achievement/sci.html">SCI</a>
-          <a href="achievement/kci.html">KCI</a>
-          <a href="achievement/patent.html">Patent</a>
-        </div>
+      <div id="latestNews" class="home-news-list" aria-label="Latest news list">
+        <!-- JS render -->
       </div>
-
-      <div class="nav-item"><a class="nav-link" href="photo.html">Photo</a></div>
-      <div class="nav-item"><a class="nav-link" href="news.html">News</a></div>
-    </nav>
-
-    <!-- Mobile hamburger -->
-    <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileNav">☰</button>
+    </div>
   </div>
+</section>
+  </main>
 
-  <!-- Mobile nav -->
-  <nav id="mobileNav" class="mobile-nav" aria-label="모바일 메뉴">
-    <a class="m-link" href="research.html">Research</a>
-
-    <a class="m-link" href="#" aria-expanded="false">People</a>
-    <div class="m-sub">
-      <a href="people/pi.html">PI</a>
-      <a href="people/current.html">Current</a>
-      <a href="people/alumni.html">Alumni</a>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab
+      </div>
+      <div class="footer-small">© <span id="year"></span> All Rights Reserved.</div>
     </div>
+  </footer>
 
-    <a class="m-link" href="#" aria-expanded="false">Achievement</a>
-    <div class="m-sub">
-      <a href="achievement/sci.html">SCI</a>
-      <a href="achievement/kci.html">KCI</a>
-      <a href="achievement/patent.html">Patent</a>
-    </div>
+  <script>
+  // 1) header 로드 (index.html과 같은 폴더면 header.html)
+  fetch("header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("site-header").innerHTML = html;
 
-    <a class="m-link" href="photo.html">Photo</a>
-    <a class="m-link" href="news.html">News</a>
-  </nav>
-</header>
+      // 헤더가 DOM에 삽입된 다음에 토글 연결
+      const btn = document.querySelector(".nav-toggle");
+      const mobileNav = document.getElementById("mobileNav");
 
+      if (btn && mobileNav) {
+        btn.addEventListener("click", () => {
+          const open = mobileNav.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(open));
+        });
+      }
 
-<main class="container hero">
-  <section class="hero-frame" aria-label="메인 비주얼">
-    <div class="hero-content">
-      <h1 class="hero-title">Sustainable/Functional Polymer Lab</h1>
-      <p class="hero-subtitle">친환경/기능성 고분자 연구실</p>
-      <p class="hero-desc">
-      </p>
-    </div>
-  </section>
+      // 드롭다운 상위 클릭 점프 방지
+      document
+        .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
+        .forEach((el) => el.addEventListener("click", (e) => e.preventDefault()));
+    })
+    .catch(err => console.error("header load failed:", err));
 
-  <section class="page-wrap">
-    <div class="card page-hero">
-      <h2 class="page-title">Welcome</h2>
-      <p class="page-lead">
-        Research / People / Achievement / Photo / News 메뉴를 통해 내용을 구성할 수 있습니다.
-      </p>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div>
-      <strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab
-    </div>
-    <div class="footer-small">© <span id="year"></span> All Rights Reserved.</div>
-  </div>
-</footer>
-
-<script>
   // footer year
   const y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
 
-  // mobile nav toggle
-  const btn = document.querySelector(".nav-toggle");
-  const mobileNav = document.getElementById("mobileNav");
-  btn?.addEventListener("click", () => {
-    const open = mobileNav.classList.toggle("open");
-    btn.setAttribute("aria-expanded", String(open));
-  });
+  // ✅ index 홈에서 최신 News 4개만 출력
+  const latestWrap = document.getElementById("latestNews");
 
-  // prevent page jump for dropdown parent menus
-  document
-    .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
-    .forEach((el) => {
-      el.addEventListener("click", (e) => e.preventDefault());
+  function safeDate(d) {
+    const t = Date.parse(d);
+    return Number.isFinite(t) ? t : 0;
+  }
+
+  function formatDate(d) {
+    if (!d) return "";
+    const m = String(d).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(m)) return m.replaceAll("-", ".");
+    return m;
+  }
+
+  function renderHomePost(p) {
+    const item = document.createElement("article");
+    item.className = "home-news-item";
+
+    const top = document.createElement("div");
+    top.className = "home-news-top";
+
+    const date = document.createElement("div");
+    date.className = "home-news-date";
+    date.textContent = formatDate(p.date || "");
+
+    const title = document.createElement("div");
+    title.className = "home-news-item-title";
+    title.textContent = p.title || "Untitled";
+
+    top.appendChild(date);
+    top.appendChild(title);
+    item.appendChild(top);
+
+    // 본문은 첫 줄만(있으면)
+    const lines = Array.isArray(p.body) ? p.body : (p.body ? [String(p.body)] : []);
+    if (lines.length) {
+      const desc = document.createElement("div");
+      desc.className = "home-news-desc";
+      desc.textContent = lines[0];
+      item.appendChild(desc);
+    }
+
+    // 대표 이미지 1장만(있으면)
+    const imgs = Array.isArray(p.images) ? p.images : [];
+    if (imgs.length) {
+      const img = document.createElement("img");
+      img.className = "home-news-thumb";
+      img.src = imgs[0];
+      img.alt = (p.title ? p.title + " - " : "") + "thumbnail";
+      img.loading = "lazy";
+      item.appendChild(img);
+    }
+
+    // 클릭하면 news.html로 이동 (원하면 앵커로도 가능)
+    item.addEventListener("click", () => {
+      window.location.href = "news.html";
     });
+
+    return item;
+  }
+
+  async function loadLatestNews() {
+    if (!latestWrap) return;
+
+    try {
+      const res = await fetch("content/news.json", { cache: "no-store" });
+      if (!res.ok) throw new Error("news.json load failed");
+      const data = await res.json();
+      const posts = Array.isArray(data.posts) ? data.posts : [];
+
+      posts.sort((a, b) => safeDate(b.date) - safeDate(a.date));
+      const top4 = posts.slice(0, 4);
+
+      latestWrap.innerHTML = "";
+      if (!top4.length) {
+        const empty = document.createElement("div");
+        empty.className = "home-news-empty";
+        empty.textContent = "등록된 소식이 없습니다.";
+        latestWrap.appendChild(empty);
+        return;
+      }
+
+      top4.forEach(p => latestWrap.appendChild(renderHomePost(p)));
+    } catch (e) {
+      console.error(e);
+      latestWrap.innerHTML = `<div class="home-news-empty">News 데이터를 불러오지 못했습니다. (content/news.json 확인)</div>`;
+    }
+  }
+
+  loadLatestNews();
 </script>
 
+</body>
 </html>

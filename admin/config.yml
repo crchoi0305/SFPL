@@ -2,6 +2,9 @@ backend:
   name: git-gateway
   branch: main
 
+  local_backend: true
+
+
 media_folder: "assets/members"
 public_folder: "/assets/members"
 

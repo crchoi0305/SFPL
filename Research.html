@@ -6,122 +6,91 @@
   <title>Research | Sustainable/Functional Polymer Lab</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
 
-<!-- 헤더: Research active만 다르게 -->
-<header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="../index.html" aria-label="홈으로">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span class="brand-text">
-        <span class="brand-title">친환경/기능성 고분자 연구실</span>
-        <span class="brand-subtitle">Sustainable/Functional Polymer Lab</span>
-      </span>
-    </a>
+<body class="page-flex">
 
-    <nav class="nav" aria-label="주요 메뉴">
-      <div class="nav-item">
-        <a class="nav-link" href="../research.html">Research</a>
-      </div>
+  <!-- ✅ 공통 헤더 삽입 위치 -->
+  <div id="site-header"></div>
 
-      <div class="nav-item has-dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-          People <span class="caret">▾</span>
-        </a>
-        <div class="dropdown" role="menu" aria-label="People submenu">
-          <a href="pi.html">PI</a>
-          <a href="current.html">Current</a>
-          <a href="alumni.html">Alumni</a>
-        </div>
-      </div>
-
-      <div class="nav-item has-dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-          Achievement <span class="caret">▾</span>
-        </a>
-        <div class="dropdown" role="menu" aria-label="Achievement submenu">
-          <a href="../achievement/sci.html">SCI</a>
-          <a href="../achievement/kci.html">KCI</a>
-          <a href="../achievement/patent.html">Patent</a>
-        </div>
-      </div>
-
-      <div class="nav-item"><a class="nav-link" href="../photo.html">Photo</a></div>
-      <div class="nav-item"><a class="nav-link" href="../news.html">News</a></div>
-    </nav>
-
-    <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileNav">☰</button>
-  </div>
-
-  <nav id="mobileNav" class="mobile-nav" aria-label="모바일 메뉴">
-    <a class="m-link" href="../research.html">Research</a>
-
-    <a class="m-link" href="#" aria-expanded="false">People</a>
-    <div class="m-sub">
-      <a href="pi.html">PI</a>
-      <a href="current.html">Current</a>
-      <a href="alumni.html">Alumni</a>
+  <main class="container page-wrap">
+    <div class="card page-hero">
+      <h1 class="page-title">Research</h1>
+      <p class="page-lead">연구 분야/키워드/대표 프로젝트 등을 정리하세요.</p>
     </div>
 
-    <a class="m-link" href="#" aria-expanded="false">Achievement</a>
-    <div class="m-sub">
-      <a href="../achievement/sci.html">SCI</a>
-      <a href="../achievement/kci.html">KCI</a>
-      <a href="../achievement/patent.html">Patent</a>
+    <div class="card page-body">
+      <h2>Research Areas</h2>
+      <ul>
+        <li>Sustainable polymer design</li>
+        <li>Functional coatings & adhesives</li>
+        <li>Closed-loop recycling / dynamic chemistry</li>
+      </ul>
     </div>
+  </main>
 
-    <a class="m-link" href="../photo.html">Photo</a>
-    <a class="m-link" href="../news.html">News</a>
-  </nav>
-</header>
-
-
-<main class="container page-wrap">
-  <div class="card page-hero">
-    <h1 class="page-title">Research</h1>
-    <p class="page-lead">연구 분야/키워드/대표 프로젝트 등을 정리하세요.</p>
-  </div>
-
-  <div class="card page-body">
-    <h2>Research Areas</h2>
-    <ul>
-      <li>Sustainable polymer design</li>
-      <li>Functional coatings & adhesives</li>
-      <li>Closed-loop recycling / dynamic chemistry</li>
-    </ul>
-  </div>
-</main>
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div>
-      <strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab
-      <div class="footer-small">Address / Email / Tel (추후 추가)</div>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab
+        <div class="footer-small">Address / Email / Tel (추후 추가)</div>
+      </div>
+      <div class="footer-small">© <span id="year"></span> All Rights Reserved.</div>
     </div>
-    <div class="footer-small">© <span id="year"></span> All Rights Reserved.</div>
-  </div>
-</footer>
+  </footer>
 
-<script>
-  // footer year
-  const y = document.getElementById("year");
-  if (y) y.textContent = new Date().getFullYear();
+  <script>
+    /* =========================
+       footer year
+    ========================= */
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
 
-  // mobile nav toggle
-  const btn = document.querySelector(".nav-toggle");
-  const mobileNav = document.getElementById("mobileNav");
-  btn?.addEventListener("click", () => {
-    const open = mobileNav.classList.toggle("open");
-    btn.setAttribute("aria-expanded", String(open));
-  });
+    /* =========================
+       header load (root 페이지 → header.html)
+    ========================= */
+    fetch("header.html")
+      .then(res => {
+        if (!res.ok) throw new Error("header.html load failed");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("site-header").innerHTML = html;
 
-  // prevent page jump for dropdown parent menus
-  document
-    .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
-    .forEach((el) => {
-      el.addEventListener("click", (e) => e.preventDefault());
-    });
-</script>
+        // (선택) Research 메뉴 active 표시
+        document.querySelectorAll(".nav-link").forEach(a => a.classList.remove("active"));
+        const desk = document.querySelector('.nav-link[href="/research.html"], .nav-link[href="research.html"]');
+        if (desk) desk.classList.add("active");
+        const mob = document.querySelector('#mobileNav .m-link[href="/research.html"], #mobileNav .m-link[href="research.html"]');
+        if (mob) mob.classList.add("active");
+
+        // hamburger toggle
+        const btn = document.querySelector(".nav-toggle");
+        const mobileNav = document.getElementById("mobileNav");
+        if (btn && mobileNav) {
+          btn.addEventListener("click", () => {
+            const open = mobileNav.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(open));
+          });
+        }
+
+        // prevent jump for dropdown parents
+        document
+          .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
+          .forEach(el => el.addEventListener("click", e => e.preventDefault()));
+
+        // mobile submenu toggle
+        document
+          .querySelectorAll("#mobileNav [data-toggle='sub']")
+          .forEach(t => {
+            t.addEventListener("click", e => {
+              e.preventDefault();
+              const sub = t.nextElementSibling;
+              if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
+            });
+          });
+      })
+      .catch(err => console.error(err));
+  </script>
 
 </body>
 </html>

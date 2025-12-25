@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>News | SFPL</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body class="page-flex">
+
+  <!-- ✅ 공통 헤더가 들어갈 자리 -->
+  <div id="site-header"></div>
+
+  <main class="page-wrap">
+    <div class="container">
+      <h1 class="page-title">News</h1>
+      <p class="page-desc">연구실 소식 아카이브 (데이터: <code>content/news.json</code>)</p>
+
+      <section id="newsList" class="news-list" aria-label="News archive">
+        <!-- JS render -->
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div><strong>친환경/기능성 고분자 연구실</strong></div>
+      <div>© <span id="year"></span></div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== footer year =====
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+
+    // ===== header load (news.html은 상위 폴더에 header.html 존재) =====
+    fetch("../header.html")
+      .then(res => {
+        if (!res.ok) throw new Error("header.html load failed");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("site-header").innerHTML = html;
+
+        // hamburger toggle
+        const btn = document.querySelector(".nav-toggle");
+        const mobileNav = document.getElementById("mobileNav");
+        if (btn && mobileNav) {
+          btn.addEventListener("click", () => {
+            const open = mobileNav.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(open));
+          });
+        }
+
+        // prevent jump for dropdown toggles (desktop + mobile '#')
+        document
+          .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
+          .forEach((el) => el.addEventListener("click", (e) => e.preventDefault()));
+
+        // mobile submenu toggle (data-toggle="sub" 사용)
+        document
+          .querySelectorAll("#mobileNav [data-toggle='sub']")
+          .forEach((t) => {
+            t.addEventListener("click", (e) => {
+              e.preventDefault();
+              const sub = t.nextElementSibling;
+              if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
+            });
+          });
+      })
+      .catch(err => console.error(err));
+
+    // ===== news render =====
+    const list = document.getElementById("newsList");
+
+    function el(tag, cls, text) {
+      const n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text !== undefined) n.textContent = text;
+      return n;
+    }
+
+    function safeDate(d) {
+      // expects YYYY-MM-DD; fallback to 0
+      const t = Date.parse(d);
+      return Number.isFinite(t) ? t : 0;
+    }
+
+    function formatDate(d) {
+      // YYYY-MM-DD -> YYYY.MM.DD (보이기용)
+      if (!d) return "";
+      const m = String(d).trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(m)) return m.replaceAll("-", ".");
+      return m;
+    }
+
+    function renderPost(p) {
+      const card = el("article", "news-card");
+
+      const head = el("div", "news-head");
+      const date = el("div", "news-date", formatDate(p.date || ""));
+      const title = el("h2", "news-title", p.title || "Untitled");
+      head.appendChild(date);
+      head.appendChild(title);
+      card.appendChild(head);
+
+      // body (bullets)
+      const bodyWrap = el("div", "news-body");
+      const lines = Array.isArray(p.body) ? p.body : (p.body ? [String(p.body)] : []);
+      if (lines.length) {
+        const ul = el("ul", "news-bullets");
+        lines.forEach(t => {
+          const li = document.createElement("li");
+          li.textContent = t;
+          ul.appendChild(li);
+        });
+        bodyWrap.appendChild(ul);
+      }
+      card.appendChild(bodyWrap);
+
+      // images row
+      const imgs = Array.isArray(p.images) ? p.images : [];
+      if (imgs.length) {
+        const gallery = el("div", "news-gallery");
+        imgs.forEach((src, i) => {
+          const a = document.createElement("a");
+          a.href = src;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.className = "news-imglink";
+
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = (p.title ? p.title + " - " : "") + (i + 1);
+          img.loading = "lazy";
+          img.className = "news-img";
+          a.appendChild(img);
+
+          gallery.appendChild(a);
+        });
+        card.appendChild(gallery);
+      }
+
+      // links
+      const links = Array.isArray(p.links) ? p.links : [];
+      if (links.length) {
+        const linkRow = el("div", "news-links");
+        links.forEach((l) => {
+          if (!l || !l.url) return;
+          const a = document.createElement("a");
+          a.href = l.url;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.className = "news-linkbtn";
+          a.textContent = l.label || "Link";
+          linkRow.appendChild(a);
+        });
+        card.appendChild(linkRow);
+      }
+
+      return card;
+    }
+
+    async function init() {
+      try {
+        // ✅ news.html은 루트에 있으므로 content/news.json 경로는 아래가 맞음
+        const res = await fetch("../content/news.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("news.json load failed");
+        const data = await res.json();
+        const posts = Array.isArray(data.posts) ? data.posts : [];
+
+        // 최신이 위로: date 내림차순
+        posts.sort((a, b) => safeDate(b.date) - safeDate(a.date));
+
+        if (!posts.length) {
+          list.appendChild(el("div", "news-empty", "등록된 소식이 없습니다."));
+          return;
+        }
+
+        posts.forEach(p => list.appendChild(renderPost(p)));
+      } catch (e) {
+        console.error(e);
+        list.appendChild(el("div", "news-empty", "News 데이터를 불러오지 못했습니다. (content/news.json 확인)"));
+      }
+    }
+
+    init();
+  </script>
+
+</body>
+</html>

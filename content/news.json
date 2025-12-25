@@ -1,0 +1,32 @@
+{
+  "posts": [
+    {
+      "date": "2025-12-25",
+      "title": "석사과정 전종혁 학생 1저자 논문 게재",
+      "body": [
+        "석사과정 전종혁 학생이 1저자로 참여한 연구가 SCI저널 Macromolecular Research에 게재되었습니다. 축하합니다.",
+        "J. Jeon, C. Choi* \"High Biomass Content in Epoxy Vitrimers: A Study on Bio-based and Reprocessable Thermosets\" Macromol. Res., 2025, 33, 345-354."
+      ],
+      "images": [
+        "uploads/news/2025-12-25/paper.jpg"
+      ],
+      "links": [
+        { "label": "DOI 링크", "url": "https://doi.org/..." }
+      ]
+    },
+    {
+      "date": "2024-11-27",
+      "title": "한국고분자학회 2024 춘계학술대회 포스터 발표 및 수상",
+      "body": [
+        "석사과정 전종혁 학생과 강나원 학생이 한국고분자학회 2024 춘계학술대회에서 포스터를 발표하였습니다.",
+        "석사과정 강나원 학생은 우수포스터상을 수상하였습니다. 축하합니다."
+      ],
+      "images": [
+        "uploads/news/2024-11-27/poster1.jpg",
+        "uploads/news/2024-11-27/poster2.jpg",
+        "uploads/news/2024-11-27/award.jpg"
+      ],
+      "links": []
+    }
+  ]
+}

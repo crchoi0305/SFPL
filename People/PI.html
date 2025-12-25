@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Current Members | SFPL</title>
+  <title>PI | Sustainable/Functional Polymer Lab</title>
   <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -14,15 +14,17 @@
 
   <main>
     <div class="container page-wrap">
-      <h1 class="page-title">Current members</h1>
-      <p>여기에 Current 학생 카드가 들어갑니다.</p>
+      <h1 class="page-title">Principal Investigator</h1>
+      <p>여기에 PI 소개 텍스트를 자유롭게 작성하세요.</p>
     </div>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <div><strong>친환경/기능성 고분자 연구실</strong></div>
-      <div>© <span id="year"></span></div>
+      <div>
+        <strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab
+      </div>
+      <div class="footer-small">© <span id="year"></span> All Rights Reserved.</div>
     </div>
   </footer>
 
@@ -34,7 +36,7 @@
     if (y) y.textContent = new Date().getFullYear();
 
     /* =========================
-       header load (people/current.html → 상위 폴더)
+       header load (people/pi.html → 상위 폴더)
     ========================= */
     fetch("../header.html")
       .then(res => {
@@ -44,15 +46,15 @@
       .then(html => {
         document.getElementById("site-header").innerHTML = html;
 
-        // (선택) People 메뉴 active 표시 (Current)
+        // (선택) People 메뉴 active 표시 (PI)
         document.querySelectorAll(".nav-link").forEach(a => a.classList.remove("active"));
         const desk = document.querySelector(
-          '.nav-link[href="/people/current.html"], .nav-link[href="../people/current.html"]'
+          '.nav-link[href="/people/pi.html"], .nav-link[href="../people/pi.html"]'
         );
         if (desk) desk.classList.add("active");
 
         const mob = document.querySelector(
-          '#mobileNav .m-link[href="/people/current.html"], #mobileNav .m-link[href="../people/current.html"]'
+          '#mobileNav .m-link[href="/people/pi.html"], #mobileNav .m-link[href="../people/pi.html"]'
         );
         if (mob) mob.classList.add("active");
 
@@ -78,7 +80,9 @@
             t.addEventListener("click", e => {
               e.preventDefault();
               const sub = t.nextElementSibling;
-              if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
+              if (sub && sub.classList.contains("m-sub")) {
+                sub.classList.toggle("open");
+              }
             });
           });
       })

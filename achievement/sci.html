@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SCI | SFPL</title>
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    .page-wrap { max-width: 1650px; margin: 56px auto; padding: 0 24px; }
+    .page-title { font-size: 30px; font-weight: 800; margin: 0 0 18px; }
+    .subdesc { color:#666; line-height:1.8; margin: 0 0 22px; }
+
+    /* year nav */
+    .year-nav{
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.04);
+      margin: 0 auto 26px;
+    }
+    .year-nav a{
+      display:inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      text-decoration:none;
+      background: white;
+      border: 1px solid rgba(0,0,0,.08);
+      color:#111;
+      font-weight: 600;
+    }
+    .year-nav a:hover{ border-color: rgba(0,0,0,.18); }
+
+    /* section */
+    .year-section { margin: 34px 0; }
+    .year-title {
+      font-size: 22px; font-weight: 800;
+      margin: 0 0 14px;
+      padding-top: 10px;
+    }
+
+    /* card list */
+    .pub-list { display:flex; flex-direction:column; gap:14px; }
+    .pub-card{
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      gap: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,.04);
+    }
+    .thumb{
+      width: 120px; height: 120px;
+      border-radius: 12px;
+      overflow:hidden;
+      background:#eee;
+    }
+    .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .pub-journal{ font-size: 16px; font-weight: 800; margin: 0 0 6px; }
+    .pub-meta{ color:#444; line-height:1.75; margin: 0 0 10px; white-space: pre-wrap; }
+    .pub-link a{ text-decoration:none; font-weight:700; }
+
+    .empty{
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.04);
+      color:#666;
+    }
+
+    @media (max-width: 640px){
+      .pub-card{ grid-template-columns: 1fr; }
+      .thumb{ width: 100%; height: 180px; }
+    }
+
+    /* ===== layout centering + compact year-nav ===== */
+    .page-wrap-wide{
+      width: min(1650px, calc(100% - 48px));
+      margin: 56px auto;
+      padding: 0 24px;
+    }
+    .page-title, .subdesc{ text-align: center; }
+
+    #yearNav.year-nav{
+      width: fit-content !important;
+      display: flex !important;
+      justify-content: center;
+      margin: 0 auto 26px !important;
+      padding: 10px 12px !important;
+      background: rgba(0,0,0,.04);
+      border-radius: 14px;
+    }
+
+    .year-section{
+      width: min(1200px, 100%);
+      margin: 34px auto;
+    }
+
+    .year-section .empty{
+      width: 70%;
+      margin: 14px auto 24px;
+    }
+
+    .year-title{
+      width: 70%;
+      margin: 14px auto 24px;
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body class="page-flex">
+
+  <!-- ✅ 공통 헤더 삽입 위치 -->
+  <div id="site-header"></div>
+
+  <main>
+    <div class="page-wrap-wide">
+      <h1 class="page-title">SCI Publications</h1>
+      <p class="subdesc">
+        연도별 SCI 게재 실적을 자동으로 출력합니다. (데이터 파일:
+        <code>content/sci.json</code>)
+      </p>
+
+      <nav class="year-nav" id="yearNav" aria-label="SCI year navigation"></nav>
+      <div id="content"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div><strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab</div>
+      <div>© <span id="year"></span> All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    /* =========================
+       footer year
+    ========================= */
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+
+    /* =========================
+       header load (achievement/sci.html → 상위 폴더)
+    ========================= */
+    fetch("../header.html")
+      .then(res => {
+        if (!res.ok) throw new Error("header.html load failed");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("site-header").innerHTML = html;
+
+        // (선택) Achievement 메뉴 active 표시 (SCI)
+        document.querySelectorAll(".nav-link").forEach(a => a.classList.remove("active"));
+        const desk = document.querySelector(
+          '.nav-link[href="/achievement/sci.html"], .nav-link[href="../achievement/sci.html"]'
+        );
+        if (desk) desk.classList.add("active");
+
+        const mob = document.querySelector(
+          '#mobileNav .m-link[href="/achievement/sci.html"], #mobileNav .m-link[href="../achievement/sci.html"]'
+        );
+        if (mob) mob.classList.add("active");
+
+        // hamburger toggle
+        const btn = document.querySelector(".nav-toggle");
+        const mobileNav = document.getElementById("mobileNav");
+        if (btn && mobileNav) {
+          btn.addEventListener("click", () => {
+            const open = mobileNav.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(open));
+          });
+        }
+
+        // prevent jump for dropdown parents
+        document
+          .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
+          .forEach(el => el.addEventListener("click", e => e.preventDefault()));
+
+        // mobile submenu toggle
+        document
+          .querySelectorAll("#mobileNav [data-toggle='sub']")
+          .forEach(t => {
+            t.addEventListener("click", e => {
+              e.preventDefault();
+              const sub = t.nextElementSibling;
+              if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
+            });
+          });
+      })
+      .catch(err => console.error(err));
+
+    /* =========================
+       SCI render
+    ========================= */
+    const slugify = (s) =>
+      String(s || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-");
+
+    function cardHTML(item){
+      const img = item.image
+        ? `<div class="thumb"><img src="../${item.image}" alt=""></div>`
+        : `<div class="thumb"></div>`;
+      const link = item.link
+        ? `<div class="pub-link"><a href="${item.link}" target="_blank" rel="noopener">View link ↗</a></div>`
+        : "";
+      return `
+        <article class="pub-card">
+          ${img}
+          <div>
+            <h3 class="pub-journal">${item.journal || ""}</h3>
+            <div class="pub-meta">${item.meta || ""}</div>
+            ${link}
+          </div>
+        </article>
+      `;
+    }
+
+    async function loadSCI(){
+      const wrap = document.getElementById("content");
+      const nav = document.getElementById("yearNav");
+
+      try{
+        const res = await fetch("../content/sci.json", { cache: "no-store" });
+        if(!res.ok) throw new Error("sci.json load failed");
+        const data = await res.json();
+
+        const groups = data.groups || [];
+        if(groups.length === 0){
+          wrap.innerHTML = `<div class="empty">표시할 데이터가 없습니다. (content/sci.json 확인)</div>`;
+          return;
+        }
+
+        // year nav
+        nav.innerHTML = groups.map(g => {
+          const id = "y-" + slugify(g.label);
+          return `<a href="#${id}">${g.label}</a>`;
+        }).join("");
+
+        // sections
+        wrap.innerHTML = groups.map(g => {
+          const id = "y-" + slugify(g.label);
+          const items = Array.isArray(g.items) ? g.items : [];
+          const body = items.length
+            ? `<div class="pub-list">${items.map(cardHTML).join("")}</div>`
+            : `<div class="empty">등록된 실적이 없습니다.</div>`;
+          return `
+            <section class="year-section" id="${id}">
+              <h2 class="year-title">${g.label}</h2>
+              ${body}
+            </section>
+          `;
+        }).join("");
+
+      }catch(err){
+        console.error(err);
+        wrap.innerHTML = `<div class="empty">SCI 데이터를 불러오지 못했습니다. (../content/sci.json 경로/배포 확인)</div>`;
+      }
+    }
+
+    loadSCI();
+  </script>
+
+</body>
+</html>
