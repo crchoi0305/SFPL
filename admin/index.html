@@ -7,24 +7,23 @@
 </head>
 <body>
 
-  <!-- Netlify Identity -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-  <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
 
   <script>
     if (window.netlifyIdentity) {
-
-      // 🔹 recovery / invite / confirmation 토큰 처리
       window.netlifyIdentity.on("init", (user) => {
-        const hash = window.location.hash;
+        const hash = window.location.hash || "";
 
-        if (hash.includes("recovery_token") || hash.includes("invite_token")) {
-          window.netlifyIdentity.open("recovery");
-        } else if (!user) {
-          window.netlifyIdentity.open();
+        if (hash.includes("invite_token")) {
+          window.netlifyIdentity.open("signup");   // ✅ 초대 토큰은 signup
+          return;
         }
+        if (hash.includes("recovery_token")) {
+          window.netlifyIdentity.open("recovery"); // ✅ 비번 재설정 토큰은 recovery
+          return;
+        }
+        if (!user) window.netlifyIdentity.open();  // 기본 로그인
       });
 
       window.netlifyIdentity.on("login", () => {

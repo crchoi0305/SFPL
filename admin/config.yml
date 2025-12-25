@@ -1,3 +1,4 @@
+
 backend:
   name: git-gateway
   branch: main
@@ -25,3 +26,122 @@ collections:
               - { label: "Research", name: "research", widget: "string", required: false }
               - { label: "Email", name: "email", widget: "string", required: false }
               - { label: "Bio", name: "bio", widget: "text", required: false }
+
+
+  # =========================
+  # News (content/news.json)
+  # news.html에서 data.posts 를 쓰는 구조에 맞춤
+  # =========================
+  - name: "news"
+    label: "News"
+    files:
+      - file: "content/news.json"
+        label: "News Posts"
+        name: "news_posts"
+        media_folder: "assets/news"
+        public_folder: "/assets/news"
+        fields:
+          - label: "Posts"
+            name: "posts"
+            widget: "list"
+            summary: "{{fields.date}} | {{fields.title}}"
+            fields:
+              # date가 단순 문자열이면 string으로 바꿔도 됨
+              - label: "Date"
+                name: "date"
+                widget: "datetime"
+                format: "YYYY.MM.DD"
+                date_format: "YYYY.MM.DD"
+                time_format: false
+
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "desc", widget: "text", required: false }
+
+              - label: "Images"
+                name: "images"
+                widget: "list"
+                required: false
+                summary: "{{fields.alt}}"
+                fields:
+                  - { label: "Image", name: "src", widget: "image" }
+                  - { label: "Alt text", name: "alt", widget: "string", required: false }
+
+              - label: "Links"
+                name: "links"
+                widget: "list"
+                required: false
+                summary: "{{fields.label}}"
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "URL", name: "url", widget: "string" }
+
+  # =========================
+  # Photos (content/photos.json)
+  # "앨범(아카이브) 단위 + 여러 이미지" 구조로 설계
+  # 프론트에서 읽는 키에 맞춰 name을 수정해야 할 수 있음(예: albums/items/photos)
+  # =========================
+  - name: "photos"
+    label: "Photos"
+    files:
+      - file: "content/photos.json"
+        label: "Photo Albums"
+        name: "photo_albums"
+        media_folder: "assets/photos"
+        public_folder: "/assets/photos"
+        fields:
+          - label: "Albums"
+            name: "albums"
+            widget: "list"
+            summary: "{{fields.date}} | {{fields.title}}"
+            fields:
+              - label: "Date"
+                name: "date"
+                widget: "datetime"
+                format: "YYYY.MM.DD"
+                date_format: "YYYY.MM.DD"
+                time_format: false
+                required: false
+
+              - { label: "Title", name: "title", widget: "string" }
+
+              - label: "Images"
+                name: "images"
+                widget: "list"
+                summary: "{{fields.alt}}"
+                fields:
+                  - { label: "Image", name: "src", widget: "image" }
+                  - { label: "Alt text", name: "alt", widget: "string", required: false }
+
+  # =========================
+  # Sci (content/sci.json)
+  # 논문/학회/특허 등 "성과 리스트" 형태로 범용 설계
+  # 프론트 키에 맞춰 publications/items 등으로 name 조정 가능
+  # =========================
+  - name: "sci"
+    label: "Sci / Publications"
+    files:
+    - file: "content/sci.json"
+      label: "Publications Data"
+      name: "sci_publications"
+      media_folder: "assets/sci"
+      public_folder: "/assets/sci"
+      fields:
+        - label: "Publications"
+          name: "publications"
+          widget: "list"
+          summary: "{{fields.year}} | {{fields.title}}"
+          fields:
+            - { label: "Year", name: "year", widget: "string"}
+            - { label: "Title", name: "title", widget: "string" }
+            - { label: "Authors", name: "authors", widget: "string"}
+            - { label: "Journal", name: "venue", widget: "string"}
+            - { label: "Volume / Pages", name: "bib", widget: "string"}
+            - { label: "DOI", name: "doi", widget: "string"}
+
+            # ✅ 추가된 이미지 필드
+            - label: "Thumbnail Image"
+              name: "image"
+              widget: "image"
+              required: false
+
+            - { label: "Note", name: "note", widget: "text"}
