@@ -506,3 +506,28 @@ main {
   .home-news-list { grid-template-columns: 1fr; }
   .home-news-thumb { height: 160px; }
 }
+
+.people-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap:16px;
+  margin-top:16px;
+}
+.person-card{
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  padding:14px;
+  background:#fff;
+}
+.person-photo{
+  width:100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+.person-name{ font-weight:700; }
+.person-role{ opacity:.8; margin-top:4px; }
+.person-topic{ opacity:.8; margin-top:6px; font-size: .95rem; }
+.person-email{ display:inline-block; margin-top:8px; font-size:.95rem; }
+.people-empty{ opacity:.7; padding:12px 0; }

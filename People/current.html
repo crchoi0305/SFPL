@@ -15,7 +15,7 @@
   <main>
     <div class="container page-wrap">
       <h1 class="page-title">Current members</h1>
-      <p>여기에 Current 학생 카드가 들어갑니다.</p>
+      <p><div id="currentGrid" class="people-grid" aria-label="Current members list"></div></p>
     </div>
   </main>
 
@@ -27,6 +27,95 @@
   </footer>
 
   <script>
+
+    // ✅ Current members JSON 로드 & 렌더
+  (function () {
+    const wrap = document.getElementById("currentGrid");
+    if (!wrap) return;
+
+    function el(tag, cls, text) {
+      const x = document.createElement(tag);
+      if (cls) x.className = cls;
+      if (text != null) x.textContent = text;
+      return x;
+    }
+
+    function pickMembers(data) {
+      // CMS에서 저장 형태가 달라질 수 있어서 여러 키를 허용
+      if (Array.isArray(data.members)) return data.members;
+      if (Array.isArray(data.people)) return data.people;
+      if (Array.isArray(data.items)) return data.items;
+      return [];
+    }
+
+    function pickSrc(v) {
+      // 문자열 또는 {src, alt} 형태 둘 다 지원
+      if (!v) return "";
+      if (typeof v === "string") return v;
+      if (typeof v === "object" && v.src) return v.src;
+      return "";
+    }
+
+    function renderCard(m) {
+      const card = el("article", "person-card");
+
+      const imgSrc = pickSrc(m.photo || m.image || m.avatar);
+      if (imgSrc) {
+        const img = document.createElement("img");
+        img.className = "person-photo";
+        img.src = imgSrc;
+        img.alt = m.name ? `${m.name} photo` : "member photo";
+        img.loading = "lazy";
+        card.appendChild(img);
+      }
+
+      const name = el("div", "person-name", m.name || "Unnamed");
+      card.appendChild(name);
+
+      const roleText = m.role || m.position || m.title || "";
+      if (roleText) card.appendChild(el("div", "person-role", roleText));
+
+      const topicText = m.research || m.interest || m.topic || "";
+      if (topicText) card.appendChild(el("div", "person-topic", topicText));
+
+      const emailText = m.email || "";
+      if (emailText) {
+        const a = document.createElement("a");
+        a.className = "person-email";
+        a.href = "mailto:" + emailText;
+        a.textContent = emailText;
+        card.appendChild(a);
+      }
+
+      return card;
+    }
+
+    async function load() {
+      try {
+        // people/current.html → 상위 폴더의 content/current.json
+        const url = "../content/current.json?v=" + Date.now();
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error("current.json load failed: " + res.status);
+
+        const data = await res.json();
+        const members = pickMembers(data);
+
+        wrap.innerHTML = "";
+        if (!members.length) {
+          wrap.appendChild(el("div", "people-empty", "등록된 Current 멤버가 없습니다."));
+          return;
+        }
+
+        members.forEach(m => wrap.appendChild(renderCard(m)));
+      } catch (e) {
+        console.error(e);
+        wrap.innerHTML = `<div class="people-empty">데이터를 불러오지 못했습니다. (../content/current.json 확인)</div>`;
+      }
+    }
+
+    load();
+  })();
+  
     /* =========================
        footer year
     ========================= */
