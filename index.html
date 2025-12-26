@@ -44,7 +44,16 @@
     </div>
   </footer>
 
-  <script>
+ <script>
+  // ✅ Password reset / Invite token이 루트(/)로 오면 /admin/으로 넘겨서 처리
+  (function () {
+    const hash = window.location.hash || "";
+    if (hash.includes("recovery_token") || hash.includes("invite_token")) {
+      window.location.replace("/admin/" + hash);
+      return; // 아래 스크립트 실행 불필요
+    }
+  })();
+
   // 1) header 로드 (index.html과 같은 폴더면 header.html)
   fetch("header.html")
     .then(res => res.text())
