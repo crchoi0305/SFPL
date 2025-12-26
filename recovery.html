@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Password Recovery</title>
+</head>
+<body>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    (function () {
+      if (!window.netlifyIdentity) {
+        document.body.innerHTML = "Netlify Identity 위젯 로드 실패";
+        return;
+      }
+
+      // recovery_token / invite_token 이 있으면 위젯이 알아서 해당 플로우로 들어감
+      window.netlifyIdentity.on("init", () => {
+        window.netlifyIdentity.open();
+      });
+
+      // 비번 재설정/초대 완료 후 로그인되면 admin으로 보내기
+      window.netlifyIdentity.on("login", () => {
+        window.location.replace("/admin/");
+      });
+
+      window.netlifyIdentity.init();
+    })();
+  </script>
+</body>
+</html>

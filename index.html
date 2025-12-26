@@ -45,25 +45,7 @@
   </footer>
 
  <script>
-  // ✅ Password reset / Invite token이 루트(/)로 오면 /admin/으로 넘겨서 처리 (무한루프 방지)
-  (function () {
-    const hash = window.location.hash || "";
-    const hasToken = hash.includes("recovery_token") || hash.includes("invite_token");
-
-    if (hasToken) {
-      // 한 번만 리다이렉트하도록 가드
-      if (!sessionStorage.getItem("did_redirect_to_admin")) {
-        sessionStorage.setItem("did_redirect_to_admin", "1");
-        window.location.replace("/admin/" + hash);
-      }
-      return; // 아래 스크립트 실행 불필요
-    } else {
-      // 토큰 없는 일반 방문이면 가드 초기화
-      sessionStorage.removeItem("did_redirect_to_admin");
-    }
-  })();
-
-  // 1) header 로드 (index.html과 같은 폴더면 header.html)
+    // 1) header 로드 (index.html과 같은 폴더면 header.html)
   fetch("header.html")
     .then(res => res.text())
     .then(html => {
