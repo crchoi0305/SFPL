@@ -14,44 +14,47 @@
     (function () {
       const w = window;
 
-      // 1) Decap 라우팅 해시 정규화: "#/recovery_token=..." → "#recovery_token=..."
-      const h = w.location.hash || "";
-      if (h.startsWith("#/recovery_token=")) {
-        w.location.hash = h.replace("#/recovery_token=", "#recovery_token=");
-      } else if (h.startsWith("#/invite_token=")) {
-        w.location.hash = h.replace("#/invite_token=", "#invite_token=");
-      }
-
       if (!w.netlifyIdentity) {
         console.error("Netlify Identity failed to load");
         return;
       }
 
-      // 2) init 이벤트에서 토큰 처리
+      // ✅ 해시 형태가 "#/recovery_token=..." 여도 포함검색으로 처리 (hash를 수정하지 않음)
+      function hasToken(name) {
+        const h = w.location.hash || "";
+        return h.includes(name + "=");
+      }
+
       w.netlifyIdentity.on("init", (user) => {
-        const hash = w.location.hash || "";
-
-        // ✅ recovery는 open("recovery")가 아니라 open()만!
-        if (hash.includes("recovery_token")) {
-          w.netlifyIdentity.open();   // 위젯이 토큰을 보고 recovery 화면으로 들어감
+        // ✅ recovery_token / invite_token 처리: 한 번만 실행되도록 가드
+        if (hasToken("recovery_token")) {
+          if (!sessionStorage.getItem("did_open_recovery")) {
+            sessionStorage.setItem("did_open_recovery", "1");
+            w.netlifyIdentity.open();  // recovery 화면은 open()으로 자동 진입
+          }
           return;
         }
 
-        // invite는 signup으로 열면 깔끔
-        if (hash.includes("invite_token")) {
-          w.netlifyIdentity.open("signup");
+        if (hasToken("invite_token")) {
+          if (!sessionStorage.getItem("did_open_invite")) {
+            sessionStorage.setItem("did_open_invite", "1");
+            w.netlifyIdentity.open("signup");
+          }
           return;
         }
 
-        // 기본: 로그인 안 되어 있으면 로그인 모달
+        // 기본 로그인
         if (!user) w.netlifyIdentity.open();
       });
 
       w.netlifyIdentity.on("login", () => {
+        // 정상 로그인 후에는 가드 초기화 (다음에 다시 토큰 플로우 가능)
+        sessionStorage.removeItem("did_open_recovery");
+        sessionStorage.removeItem("did_open_invite");
         w.location.href = "/admin/";
       });
 
-      // ✅ 중요: init을 명시적으로 호출
+      // ✅ init을 명시적으로 호출
       w.netlifyIdentity.init();
     })();
   </script>
