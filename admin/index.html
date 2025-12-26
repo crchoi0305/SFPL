@@ -7,30 +7,57 @@
 </head>
 <body>
 
+  <!-- Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
 
   <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", (user) => {
-        const hash = window.location.hash || "";
+    (function () {
+      const w = window;
 
-        if (hash.includes("invite_token")) {
-          window.netlifyIdentity.open("signup");   // ✅ 초대 토큰은 signup
-          return;
-        }
+      // 1) Decap 라우팅 해시 정규화: "#/recovery_token=..." → "#recovery_token=..."
+      const h = w.location.hash || "";
+      if (h.startsWith("#/recovery_token=")) {
+        w.location.hash = h.replace("#/recovery_token=", "#recovery_token=");
+      } else if (h.startsWith("#/invite_token=")) {
+        w.location.hash = h.replace("#/invite_token=", "#invite_token=");
+      }
+
+      if (!w.netlifyIdentity) {
+        console.error("Netlify Identity failed to load");
+        return;
+      }
+
+      // 2) init 이벤트에서 토큰 처리
+      w.netlifyIdentity.on("init", (user) => {
+        const hash = w.location.hash || "";
+
+        // ✅ recovery는 open("recovery")가 아니라 open()만!
         if (hash.includes("recovery_token")) {
-          window.netlifyIdentity.open("recovery"); // ✅ 비번 재설정 토큰은 recovery
+          w.netlifyIdentity.open();   // 위젯이 토큰을 보고 recovery 화면으로 들어감
           return;
         }
-        if (!user) window.netlifyIdentity.open();  // 기본 로그인
+
+        // invite는 signup으로 열면 깔끔
+        if (hash.includes("invite_token")) {
+          w.netlifyIdentity.open("signup");
+          return;
+        }
+
+        // 기본: 로그인 안 되어 있으면 로그인 모달
+        if (!user) w.netlifyIdentity.open();
       });
 
-      window.netlifyIdentity.on("login", () => {
-        window.location.href = "/admin/";
+      w.netlifyIdentity.on("login", () => {
+        w.location.href = "/admin/";
       });
-    }
+
+      // ✅ 중요: init을 명시적으로 호출
+      w.netlifyIdentity.init();
+    })();
   </script>
+
+  <!-- Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
 
 </body>
 </html>
