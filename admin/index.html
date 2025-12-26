@@ -6,61 +6,20 @@
   <title>Admin | Sustainable/Functional Polymer Lab</title>
 </head>
 <body>
-
-  <!-- Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
   <script>
     (function () {
-      const w = window;
+      if (!window.netlifyIdentity) return;
 
-      if (!w.netlifyIdentity) {
-        console.error("Netlify Identity failed to load");
-        return;
-      }
-
-      // ✅ 해시 형태가 "#/recovery_token=..." 여도 포함검색으로 처리 (hash를 수정하지 않음)
-      function hasToken(name) {
-        const h = w.location.hash || "";
-        return h.includes(name + "=");
-      }
-
-      w.netlifyIdentity.on("init", (user) => {
-        // ✅ recovery_token / invite_token 처리: 한 번만 실행되도록 가드
-        if (hasToken("recovery_token")) {
-          if (!sessionStorage.getItem("did_open_recovery")) {
-            sessionStorage.setItem("did_open_recovery", "1");
-            w.netlifyIdentity.open();  // recovery 화면은 open()으로 자동 진입
-          }
-          return;
-        }
-
-        if (hasToken("invite_token")) {
-          if (!sessionStorage.getItem("did_open_invite")) {
-            sessionStorage.setItem("did_open_invite", "1");
-            w.netlifyIdentity.open("signup");
-          }
-          return;
-        }
-
-        // 기본 로그인
-        if (!user) w.netlifyIdentity.open();
+      // 로그인 안 되어 있으면 로그인 창 열기(원하면 제거 가능)
+      window.netlifyIdentity.on("init", (user) => {
+        if (!user) window.netlifyIdentity.open();
       });
 
-      w.netlifyIdentity.on("login", () => {
-        // 정상 로그인 후에는 가드 초기화 (다음에 다시 토큰 플로우 가능)
-        sessionStorage.removeItem("did_open_recovery");
-        sessionStorage.removeItem("did_open_invite");
-        w.location.href = "/admin/";
-      });
-
-      // ✅ init을 명시적으로 호출
-      w.netlifyIdentity.init();
+      window.netlifyIdentity.init();
     })();
   </script>
 
-  <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
-
 </body>
 </html>

@@ -45,6 +45,25 @@
   </footer>
 
  <script>
+
+    (function () {
+    const hash = window.location.hash || "";
+    const hasToken = hash.includes("recovery_token=") || hash.includes("invite_token=");
+
+    if (!hasToken) return;
+
+    const target = "/recovery.html" + hash;
+
+    // 같은 페이지면 아무 것도 안 함
+    if ((window.location.pathname + window.location.hash) === target) return;
+
+    // 한 번만 이동
+    if (!sessionStorage.getItem("did_redirect_to_recovery")) {
+      sessionStorage.setItem("did_redirect_to_recovery", "1");
+      window.location.replace(target);
+    }
+  })();
+  
     // 1) header 로드 (index.html과 같은 폴더면 header.html)
   fetch("header.html")
     .then(res => res.text())
