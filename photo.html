@@ -216,7 +216,6 @@ const GH_RAW_BASE = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${
   }
 
 function normalizeImgSrc(v) {
-  // images: ["..."] 또는 [{ image: "..." }] 둘 다 지원
   if (!v) return "";
 
   const src =
@@ -226,17 +225,20 @@ function normalizeImgSrc(v) {
   const s = String(src).trim();
   if (!s) return "";
 
-  // ✅ 이미 http(s)면 그대로 사용
   if (isHttpUrl(s)) return s;
 
-  // ✅ "./assets/..", "/assets/..", "assets/.." 어떤 형태든
-  //    GitHub raw로 강제 변환해서 Netlify에 파일이 없어도 404 안 나게 함
-  const clean = s
-    .replace(/^\.?\//, "")   // "./", "/" 제거
-    .replace(/^\/+/, "");    // 혹시 여러 개 /면 제거
+  let clean = s
+    .replace(/^\.?\//, "")   // "./" 제거
+    .replace(/^\/+/, "");    // "/" 제거
+
+  // ✅ 핵심: 실제 업로드 저장 위치가 content/assets/photos 이므로 자동 보정
+  if (clean.startsWith("assets/photos/")) {
+    clean = "content/" + clean;  // => content/assets/photos/...
+  }
 
   return `${GH_RAW_BASE}/${clean}`;
 }
+
 
 
 
