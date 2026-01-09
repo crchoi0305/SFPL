@@ -1,32 +1,63 @@
 {
   "posts": [
     {
-      "date": "2025-12-25",
-      "title": "석사과정 전종혁 학생 1저자 논문 게재",
-      "body": [
-        "석사과정 전종혁 학생이 1저자로 참여한 연구가 SCI저널 Macromolecular Research에 게재되었습니다. 축하합니다.",
-        "J. Jeon, C. Choi* \"High Biomass Content in Epoxy Vitrimers: A Study on Bio-based and Reprocessable Thermosets\" Macromol. Res., 2025, 33, 345-354."
-      ],
+      "date": "2025.11.14",
+      "title": "2025 추계 접착 및 계면학회 발표",
+      "desc": "석사과정 전여진 학생과 이성민 학생이  2025 접착및계면학회 추계학술대회에서 각각 구두발표와 포스터발표를 하였습니다. 이성민 학생은 우수포스터상을 수상하였습니다. 축하합니다.",
       "images": [
-        "uploads/news/2025-12-25/paper.jpg"
-      ],
-      "links": [
-        { "label": "DOI 링크", "url": "https://doi.org/..." }
+        "/assets/news/unnamed.png",
+        "/assets/news/poster.png"
       ]
     },
     {
-      "date": "2024-11-27",
-      "title": "한국고분자학회 2024 춘계학술대회 포스터 발표 및 수상",
-      "body": [
-        "석사과정 전종혁 학생과 강나원 학생이 한국고분자학회 2024 춘계학술대회에서 포스터를 발표하였습니다.",
-        "석사과정 강나원 학생은 우수포스터상을 수상하였습니다. 축하합니다."
-      ],
+      "date": "2024.04.18",
+      "title": "2024 고분자학회 춘계학술대회 발표",
       "images": [
-        "uploads/news/2024-11-27/poster1.jpg",
-        "uploads/news/2024-11-27/poster2.jpg",
-        "uploads/news/2024-11-27/award.jpg"
+        "/assets/news/2024-3.png",
+        "/assets/news/2024-2.png",
+        "/assets/news/2024-1.png"
       ],
-      "links": []
+      "desc": "석사과정 전종혁 학생과 강나원 학생이 한국고분자학회 2024 춘계학술대회에서 포스터를 발표하였습니다. 석사과정 강나원 학생은 우수포스터상을 수상하였습니다. 축하합니다."
+    },
+    {
+      "date": "2024.07.01",
+      "title": "한국연구재단 석사연구장려금 지원사업 선정",
+      "desc": "석사과정 전종혁 학생이 석사과정생 연구장려금 지원사업에 선정되었습니다. 축하합니다. (1200만원/년, 2024. 07~2025.06)"
+    },
+    {
+      "title": "한국연구재단 석사연구장려금 지원사업 선정",
+      "date": "2024.09.01",
+      "desc": "석사과정 강나원 학생이 석사과정생 연구장려금 지원사업에 선정되었습니다. 축하합니다. (1200만원/년, 2024. 09~2025.08)"
+    },
+    {
+      "title": "한국연구재단 석사연구장려금 지원사업 선정",
+      "date": "2025.09.01",
+      "desc": "석사과정 강유빈 학생이 석사과정생 연구장려금 지원사업에 선정되었습니다. 축하합니다. (1200만원/년, 2025. 09~2026.08) "
+    },
+    {
+      "date": "2025.10.02",
+      "title": "2025 고분자학회 추계학술대회 발표",
+      "desc": "석사과정 이성민 학생이 2025 고분자학회 추계학술대회에서 구두발표를 하였습니다. 전여진, 정재환 학생은 포스터를 발표하였으며, 정재환 학생은 우수포스터상을 수상하였습니다. 축하합니다.",
+      "images": [
+        "/assets/news/2025-1.png",
+        "/assets/news/2025-2.png",
+        "/assets/news/2025-3.png"
+      ]
+    },
+    {
+      "date": "2025.12.15",
+      "title": "논문 게재",
+      "desc": "석사과정 이성민 학생이 1저자로 참여한 연구가 SCI저널 Small (JCR 상위 8%)에 게재되었으며 표지논문으로 선정되었습니다. 축하합니다.\nTitle: One-pot and Closed-Loop Recycling of Biomass-Derived Soft Electronics Toward Zero e-waste"
+    },
+    {
+      "date": "2025.12.24",
+      "desc": "석사과정 강유빈, 강나원 학생이 공동1저자로 참여한 연구가 SCI저널 Chemistry of Materials에 게재되었습니다. 축하합니다.\nTitle: Poly(carbosiloxane) Elastomers: One-Step Synthesis, Tunable Mechanics, and Closed-Loop Recyclability",
+      "title": "논문 게재"
+    },
+    {
+      "date": "2026.01.05",
+      "title": "신입생 합류",
+      "desc": "석사과정 김수림, 임종화 학생, 학부연구생 김진성, 최민준 학생이 연구실에 합류하였습니다. 환영합니다."
     }
   ]
 }

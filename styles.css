@@ -160,13 +160,14 @@ a{ color:inherit; text-decoration:none; }
   position:relative; z-index:2;
   padding:14px 36px;
   color:#fff;
-  max-width:860px;
+  max-width:1200px;
 }
 .hero-title{
   margin:0 0 10px;
   font-size:44px;
   line-height:1.05;
   letter-spacing:-0.02em;
+  max-width:1200px;
 }
 .hero-subtitle{
   margin:0 0 14px;
@@ -214,7 +215,7 @@ a{ color:inherit; text-decoration:none; }
 
 /* ===== Responsive ===== */
 @media (max-width: 920px){
-  .hero-title{ font-size:36px; }
+  .hero-title{ font-size:30px; }
 }
 @media (max-width: 760px){
   .nav{ display:none; }
@@ -355,29 +356,6 @@ main {
   margin: 4px 0;
 }
 
-.news-gallery{
-  margin-top: 14px;
-  display:flex;
-  gap: 12px;
-  overflow-x: auto;          /* 사진이 많으면 옆으로 스크롤 */
-  padding-bottom: 6px;
-}
-
-.news-imglink{
-  flex: 0 0 auto;
-  border-radius: 14px;
-  overflow:hidden;
-  background:#eef2f7;
-  box-shadow: 0 6px 14px rgba(0,0,0,.10);
-}
-
-.news-img{
-  display:block;
-  height: 220px;             /* 데스크탑에서 가로로 여러 개 */
-  width: auto;
-  max-width: 360px;
-  object-fit: cover;
-}
 
 .news-links{
   margin-top: 12px;
@@ -407,30 +385,42 @@ main {
   opacity:.75;
 }
 
-/* 모바일: 사진은 한 장씩 크게 보이게 */
-@media (max-width: 760px){
-  .news-card{ padding: 16px 14px 14px; }
-  .news-title{ font-size: 18px; }
 
-  .news-gallery{
-    gap: 10px;
-  }
+/* =========================
+   News layout control
+========================= */
 
-  .news-img{
-    height: auto;
-    width: 86vw;            /* 한 장이 화면 거의 꽉 차게 */
-    max-width: none;
-    aspect-ratio: 4 / 3;
-  }
+/* 헤더와 콘텐츠 사이 여백 조절용 변수 */
+:root{
+  --news-top-gap: 5px;   /* ← 여기 숫자만 바꾸면 됨 */
 }
 
-.page-wrap-wide {
-  padding: 56px 24px;
+/* 전체 페이지 배경 영역 */
+.page-wrap-wide{
+  padding: 0 24px;
 }
+
+/* 실제 뉴스 콘텐츠 컨테이너 */
+.news-wrap{
+  max-width: 1000px;          /* 뉴스 폭 조절 */
+  margin: var(--news-top-gap) auto 72px;  /* 상 | 좌우(auto) | 하 */
+}
+
 
 @media (max-width: 640px){
-  .page-wrap-wide{ margin: 36px auto; padding: 0 18px; }
+  :root{
+    --news-top-gap: 32px;
+  }
+
+  .page-wrap-wide{
+    padding: 0 18px;
+  }
+
+  .news-wrap{
+    margin-bottom: 48px;
+  }
 }
+
 
 /* ===== Mobile submenu: 기본은 닫힘(강제) ===== */
 #mobileNav .m-sub{
@@ -499,7 +489,7 @@ main {
 .home-news-date { font-size: 12px; opacity: .7; }
 .home-news-item-title { font-size: 14px; font-weight: 800; line-height: 1.3; }
 .home-news-desc { margin-top: 8px; font-size: 13px; opacity: .85; line-height: 1.5; }
-.home-news-thumb { width:100%; height: 130px; object-fit: cover; border-radius: 12px; margin-top: 10px; }
+.home-news-thumb { width:100%; height: 130px; object-fit: contain; border-radius: 12px; margin-top: 10px; }
 .home-news-empty { padding: 12px; border-radius: 12px; background: rgba(0,0,0,.04); opacity: .8; }
 
 @media (max-width: 720px){
@@ -507,27 +497,583 @@ main {
   .home-news-thumb { height: 160px; }
 }
 
-.people-grid{
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap:16px;
-  margin-top:16px;
+  .people-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap:16px;
+    margin-top:16px;
+  }
+  .person-card{
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:16px;
+    padding:14px;
+    background:#fff;
+  }
+  .person-photo{
+    width:100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    border-radius:12px;
+    margin-bottom:10px;
+  }
+  .person-name{ font-weight:700; }
+  .person-role{ opacity:.8; margin-top:4px; }
+  .person-topic{ opacity:.8; margin-top:6px; font-size: .95rem; }
+  .person-email{ display:inline-block; margin-top:5px; font-size:.95rem; }
+  .people-empty{ opacity:.7; padding:12px 0; }
+
+  /* =========================
+    People: photo left / text right layout
+  ========================= */
+
+  .person-card{
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 16px;
+    padding: 16px;
+    background: #fff;
+  }
+
+  /* 오른쪽 텍스트 묶음 */
+  .person-card > .person-name,
+  .person-card > .person-role,
+  .person-card > .person-topic,
+  .person-card > .person-email{
+    display: block;
+  }
+
+  /* 텍스트 영역 정리 */
+  .person-name{
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .person-role{
+    margin-top: 4px;
+    font-weight: 500;
+    opacity: 0.85;
+  }
+
+  .person-topic{
+    margin-top: 8px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    opacity: 0.85;
+  }
+
+  .person-email{
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: #000000;
+    text-decoration: none;
+  }
+
+  /* 카드 간 간격 */
+  .people-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  @media (max-width: 640px){
+    .person-card{
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .person-photo{
+      width: 70%;
+      height: auto;
+      max-height: 260px;
+    }
+  }
+
+  /* =========================
+    Current members layout
+  ========================= */
+
+  /* ✅ 폭: 데스크탑 70%, 모바일 92% (150% 절대 금지) */
+  .current-wrap{
+    width: 70%;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  @media (max-width: 900px){
+    .current-wrap{ width: 92%; }
+  }
+
+  /* 카드 전체 */
+  .person-card{
+    display: flex;
+    gap: 22px;
+    align-items: flex-start;
+    padding: 22px;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 18px;
+    background: #fff;
+  }
+
+  /* 왼쪽 사진 */
+  .person-photo{
+    width: 210px;
+    height: 270px;
+    object-fit: cover;
+    border-radius: 14px;
+    flex-shrink: 0;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  }
+
+  /* 오른쪽 텍스트 영역 */
+  .person-text{ flex: 1; min-width: 0; }
+
+  /* 이름 */
+  .person-name{
+    font-size: 1.65rem;
+    font-weight: 850;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  /* 학력 블록 */
+  .person-edu{
+    margin-top: 2px;
+    margin-bottom: 12px;
+    opacity: 0.85;
+  }
+  .edu-line{
+    margin-top: 4px;
+    line-height: 1.35;
+    font-size: 0.98rem;
+  }
+
+  /* 공통: 라벨+값 한 줄 */
+  .person-row,
+  .person-research,
+  .person-email{
+    margin-top: 7px;
+    line-height: 1.4;
+    font-size: 1.02rem;
+  }
+
+  /* 라벨(Research:, Email: 등) → 굵게 */
+  .person-row .label,
+  .person-research .label,
+  .person-email .label{
+    font-weight: 800;
+    opacity: 0.95;
+    margin-right: 8px;
+    white-space: nowrap;
+  }
+
+  /* 값 */
+  .person-row .value,
+  .person-research .value,
+  .person-email .value{
+    word-break: break-word;
+    opacity: 0.92;
+  }
+
+  /* Research 줄은 약간 강조 */
+  .person-research{
+    margin-top: 14px;
+  }
+
+  /* Bio(자기소개) */
+  .person-bio{
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    line-height: 1.65;
+    opacity: 0.88;
+    white-space: pre-line;
+    font-size: 1.02rem;
+  }
+
+  
+
+  /* 빈 상태 */
+  .people-empty{
+    opacity: .7;
+    padding: 12px 0;
+  }
+
+  /* 모바일: 사진 위 / 텍스트 아래 */
+  @media (max-width: 640px){
+    .person-card{
+      flex-direction: column;
+      align-items: center;
+      text-align: left;
+      padding: 18px;
+    }
+    .person-photo{
+      width: 200%;
+      height: auto;
+      max-height: 320px;
+    }
+    .person-name{
+      font-size: 1.5rem;
+      margin-top: 6px;
+      margin-bottom: 10px;
+    }
+  }
+
+  /* =========================
+   News image layout
+========================= */
+
+/* 이미지 갤러리 전체 */
+.news-gallery{
+  display: flex;
+  justify-content: center;   /* ⬅️ 가운데 정렬 */
+  align-items: center;
+  gap: 20px;
+  margin-top: 24px;
+  flex-wrap: wrap;
 }
-.person-card{
-  border:1px solid rgba(0,0,0,.08);
-  border-radius:16px;
-  padding:14px;
-  background:#fff;
+
+/* 이미지 링크 */
+.news-imglink{
+  display: block;
+  max-width: 300px;          /* ⬅️ 이미지 최대 크기 */
+  width: 100%;
 }
-.person-photo{
-  width:100%;
-  aspect-ratio: 4/3;
+
+/* 실제 이미지 */
+.news-img{
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.12);
   object-fit: cover;
-  border-radius:12px;
-  margin-bottom:10px;
 }
-.person-name{ font-weight:700; }
-.person-role{ opacity:.8; margin-top:4px; }
-.person-topic{ opacity:.8; margin-top:6px; font-size: .95rem; }
-.person-email{ display:inline-block; margin-top:8px; font-size:.95rem; }
-.people-empty{ opacity:.7; padding:12px 0; }
+
+@media (max-width: 640px){
+  .news-imglink{
+    max-width: 100%;
+  }
+
+  .news-gallery{
+    gap: 14px;
+    margin-top: 18px;
+  }
+}
+
+/* =========================
+   News: Mobile Carousel
+========================= */
+
+/* 기본(데스크탑)에서는 기존 갤러리 스타일 유지 */
+.news-gallery {
+  margin-top: 18px;
+}
+
+/* ✅ 모바일에서만 캐러셀 활성화 */
+@media (max-width: 640px){
+  .news-gallery{
+    margin-top: 18px;
+  }
+
+  /* 스크롤 트랙(가로 스와이프) */
+  .news-track{
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px 4px 10px;
+    justify-content: flex-start; /* 가운데 말고 스냅이 자연스럽게 */
+  }
+
+  .news-track::-webkit-scrollbar{ display: none; }
+  .news-track{ scrollbar-width: none; }
+
+  /* 각 슬라이드 */
+  .news-slide{
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  /* 이미지(크게) */
+  .news-slide img{
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 18px;
+    object-fit: cover;
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);
+  }
+
+  /* dots */
+  .news-dots{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .news-dot{
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    border: 0;
+    background: rgba(0,0,0,.25);
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .news-dot.is-active{
+    background: rgba(0,0,0,.70);
+  }
+}
+
+/* =========================
+   Photo page container
+========================= */
+.photo-wrap {
+  margin-top: 5px; /* header와 간격 */
+}
+
+.photo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px; /* 모바일 좌우 여백 */
+  box-sizing: border-box;
+}
+
+.photo-grid{
+  gap: 32px;
+}
+
+.album-card{
+  padding: 22px;
+  border-radius: 18px;
+}
+
+.album-title{
+  margin-bottom: 10px;
+}
+
+.carousel-img{
+  aspect-ratio: 16 / 9;
+}
+
+/* ===== SCI compact card overrides ===== */
+
+.thumb{
+  width: 84px;
+  height: 84px;
+  border-radius: 0px;
+}
+
+.pub-title{
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 850;
+  line-height: 1.3;
+}
+
+.pub-authors{
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: rgba(0,0,0,.72);
+  line-height: 1.45;
+}
+
+.pub-line{
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: rgba(0,0,0,.78);
+}
+
+.pub-journal{ font-style: italic; font-size: 14px }
+.pub-year{ font-weight: 850; font-size: 14px}
+.pub-vol{ font-style: italic; font-size: 14 px}
+
+.pub-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: #fff;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+@media (max-width: 640px){
+  .year-section{ width: min(92%, 100%); }
+  .pub-card{ grid-template-columns: 1fr; }
+  .thumb{ width: 100%; height: 170px; }
+}
+
+
+/* ===== FIX: year-section / year-title / empty box size ===== */
+.year-section{
+  width: min(900px, 70%) !important;   /* 섹션 전체 폭 줄이기 */
+  margin: 26px auto !important;         /* 섹션 상하 여백 줄이기 */
+}
+
+.year-title{
+  width: 100% !important;               /* 70% 강제 제거 */
+  margin: 0 0 10px !important;          /* 큰 margin 제거 */
+  text-align: left !important;
+}
+
+.year-section .empty{
+  width: 100% !important;               /* 70% 강제 제거 */
+  margin: 8px 0 0 !important;           /* auto 가운데 + 큰 margin 제거 */
+  padding: 12px 14px !important;        /* 빈 박스 자체도 컴팩트 */
+  border-radius: 12px !important;
+}
+
+/* ===== Home News Carousel ===== */
+.home-news-carousel{
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-top: 10px;
+  background: rgba(0,0,0,.04); /* ✅ 여백 보일 때 자연스럽게 */
+}
+
+.home-news-track{
+  display: flex;
+  transition: transform .35s ease;
+  will-change: transform;
+}
+
+.home-news-slide{
+  min-width: 100%;
+  flex-shrink: 0;
+
+  /* ✅ 가운데 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-news-slide img{
+  /* ❗ 핵심: 100% 금지 → 원본 유지(큰 것만 축소) */
+  width: auto;
+  height: auto;
+
+  max-width: min(520px, 92%);  /* 카드 폭보다 작게만(확대 X) */
+  max-height: 260px;           /* 세로 사진도 다 보이게 */
+  object-fit: contain;         /* 잘림 방지 */
+  object-position: center;
+
+  display: block;
+  background: transparent;     /* 회색/흰 배경 싫으면 transparent */
+}
+
+@media (max-width: 640px){
+  .home-news-slide img{
+    max-width: 96%;
+    max-height: 240px;
+  }
+}
+
+
+/* dots */
+.home-news-dots{
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.home-news-dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d0d0d0;
+  border: none;
+}
+
+.home-news-dot.active{
+  background: #6bbf45; /* 포인트 컬러 */
+}
+
+@media (max-width: 640px){
+  .home-news-slide img{
+    height: 160px;
+  }
+}
+
+.home-news-carousel,
+.home-news-slide{
+  background: #fff !important;
+}
+
+/* ===== Hero: fluid typography (붙여넣기 전용) ===== */
+/* 기존 .hero-title/.hero-subtitle/.hero-desc 폰트 지정(44px 등)을 clamp로 덮어씀 */
+.hero-content{
+  /* 화면이 줄면 패딩도 같이 줄어들게 */
+  padding: clamp(14px, 2.6vw, 34px) clamp(16px, 3.2vw, 40px);
+  max-width: min(1200px, 92vw);
+}
+
+.hero-title{
+  font-size: clamp(26px, 4.2vw, 48px);  /* 최소 26px ~ 최대 54px */
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle{
+  font-size: clamp(16px, 1.8vw, 26px);  /* 최소 14px ~ 최대 20px */
+  line-height: 1.35;
+}
+
+.hero-desc{
+  font-size: clamp(12px, 1.4vw, 16px);  /* 최소 12px ~ 최대 16px */
+  line-height: 1.55;
+  max-width: min(720px, 92vw);
+}
+
+/* (선택) 아주 작은 화면에서 가독성 개선 */
+@media (max-width: 520px){
+  .hero-frame{ min-height: 300px; }
+  .hero-content{ padding: 18px 16px; }
+}
+
+/* ===== FINAL OVERRIDE: index latest news images NEVER crop (desktop 포함) ===== */
+.home-news-carousel { overflow: hidden !important; } /* 캐러셀 기능 유지 */
+
+.home-news-slide{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:100% !important;
+  flex-shrink:0 !important;
+}
+
+.home-news-slide img{
+  width: auto !important;          /* ✅ 폭 강제 확대 금지 */
+  height: auto !important;         /* ✅ 높이 강제 고정 금지 */
+  max-width: 92% !important;       /* ✅ 카드 안에서만 축소 */
+  max-height: 300px !important;    /* ✅ 데스크탑에서 세로 사진 넉넉히 */
+  object-fit: contain !important;  /* ✅ 절대 안 잘림 */
+  object-position: center center !important;
+  display:block !important;
+  background: transparent !important;
+}
+
+/* 모바일만 살짝 낮춤 */
+@media (max-width: 640px){
+  .home-news-slide img{
+    max-height: 240px !important;
+  }
+}
+
+.pub-authors .lab-author{
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

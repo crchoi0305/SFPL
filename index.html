@@ -35,42 +35,30 @@
 </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>
-        <strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab
-      </div>
-      <div class="footer-small">© <span id="year"></span> All Rights Reserved.</div>
-    </div>
-  </footer>
+<div id="site-footer"></div>
+
 
  <script>
-
-    (function () {
+  (function () {
     const hash = window.location.hash || "";
     const hasToken = hash.includes("recovery_token=") || hash.includes("invite_token=");
-
     if (!hasToken) return;
 
     const target = "/recovery.html" + hash;
-
-    // 같은 페이지면 아무 것도 안 함
     if ((window.location.pathname + window.location.hash) === target) return;
 
-    // 한 번만 이동
     if (!sessionStorage.getItem("did_redirect_to_recovery")) {
       sessionStorage.setItem("did_redirect_to_recovery", "1");
       window.location.replace(target);
     }
   })();
-  
-    // 1) header 로드 (index.html과 같은 폴더면 header.html)
+
+  // 1) header 로드 (index.html과 같은 폴더면 header.html)
   fetch("header.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("site-header").innerHTML = html;
 
-      // 헤더가 DOM에 삽입된 다음에 토글 연결
       const btn = document.querySelector(".nav-toggle");
       const mobileNav = document.getElementById("mobileNav");
 
@@ -81,22 +69,32 @@
         });
       }
 
-      // 드롭다운 상위 클릭 점프 방지
       document
         .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
         .forEach((el) => el.addEventListener("click", (e) => e.preventDefault()));
     })
     .catch(err => console.error("header load failed:", err));
 
-  // footer year
-  const y = document.getElementById("year");
-  if (y) y.textContent = new Date().getFullYear();
+    fetch("footer.html")
+  .then(res => {
+    if (!res.ok) throw new Error("footer.html load failed");
+    return res.text();
+  })
+  .then(html => {
+    document.getElementById("site-footer").innerHTML = html;
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+  })
+  .catch(err => console.error(err));
+
 
   // ✅ index 홈에서 최신 News 4개만 출력
   const latestWrap = document.getElementById("latestNews");
 
   function safeDate(d) {
-    const t = Date.parse(d);
+    if (!d) return 0;
+    const s = String(d).trim().replaceAll(".", "-").replaceAll("/", "-");
+    const t = Date.parse(s);
     return Number.isFinite(t) ? t : 0;
   }
 
@@ -105,6 +103,100 @@
     const m = String(d).trim();
     if (/^\d{4}-\d{2}-\d{2}$/.test(m)) return m.replaceAll("-", ".");
     return m;
+  }
+
+  function isAbsPath(p) {
+    return /^https?:\/\//i.test(p) || String(p).startsWith("/");
+  }
+
+  // ✅ 중요: index.html 기준 이미지 경로 보정
+  function normalizeImgSrc(v) {
+    if (!v) return "";
+    const src = (typeof v === "string") ? v : (v && typeof v === "object" ? v.src : "");
+    if (!src) return "";
+    if (isAbsPath(src)) return src;                 // "/assets/..." or "https://..."
+    return String(src).replace(/^\.?\//, "");       // "assets/..." 형태로 정리
+  }
+
+  // ✅ 카드 안에 필요한 CSS를 JS가 자동 주입(붙여넣기만 하게)
+  (function injectHomeNewsCSS(){
+    if (document.getElementById("home-news-carousel-css")) return;
+    const css = `
+      /* ===== Home Latest News carousel (auto injected) ===== */
+      .home-news-item { cursor: pointer; }
+      .home-news-desc{
+        color:#555; line-height:1.6; margin-top: 8px; white-space: pre-wrap;
+      }
+
+      .home-news-carousel{
+        position: relative;
+        overflow: hidden;
+        border-radius: 14px;
+        margin-top: 12px;
+        background: rgba(0,0,0,.03);
+      }
+      .home-news-track{
+        display: flex;
+        transition: transform .35s ease;
+        will-change: transform;
+      }
+      .home-news-slide{
+        min-width: 100%;
+        flex-shrink: 0;
+        display:flex;
+        align-items:center;
+        justify-content:center;   /* ✅ 가운데 정렬 */
+      }
+      .home-news-slide img{
+        width: 100%;
+        max-width: 720px;         /* ✅ 데스크탑에서 너무 커지지 않게 */
+        height: 220px;            /* ✅ 조금 크게 */
+        object-fit: cover;
+        display:block;
+      }
+
+      .home-news-dots{
+        display:flex;
+        justify-content:center;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .home-news-dot{
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: #d0d0d0;
+        border: none;
+        padding: 0;
+      }
+      .home-news-dot.active{ background: #6bbf45; }
+
+      @media (max-width: 640px){
+        .home-news-slide img{
+          max-width: 100%;
+          height: 200px;          /* ✅ 모바일도 큼직하게 */
+        }
+      }
+    `;
+    const style = document.createElement("style");
+    style.id = "home-news-carousel-css";
+    style.textContent = css;
+    document.head.appendChild(style);
+  })();
+
+  function setHomeIndex(track, dots, i){
+    const max = track.children.length;
+    const next = Math.max(0, Math.min(max - 1, i));
+    track.style.transform = `translateX(${-next * 100}%)`;
+    track.dataset.index = String(next);
+    [...dots.children].forEach((d, k) => d.classList.toggle("active", k === next));
+  }
+
+  function stepHome(track, dots, dir){
+    const max = track.children.length;
+    if (max <= 1) return;
+    const cur = parseInt(track.dataset.index || "0", 10);
+    const next = (cur + dir + max) % max; // ✅ 루프
+    setHomeIndex(track, dots, next);
   }
 
   function renderHomePost(p) {
@@ -126,27 +218,112 @@
     top.appendChild(title);
     item.appendChild(top);
 
-    // 본문은 첫 줄만(있으면)
-    const lines = Array.isArray(p.body) ? p.body : (p.body ? [String(p.body)] : []);
-    if (lines.length) {
+    // ✅ desc 우선 출력, 없으면 body 첫줄
+    if (p.desc) {
       const desc = document.createElement("div");
       desc.className = "home-news-desc";
-      desc.textContent = lines[0];
+      desc.textContent = p.desc;
       item.appendChild(desc);
+    } else {
+      const lines = Array.isArray(p.body) ? p.body : (p.body ? [String(p.body)] : []);
+      if (lines.length) {
+        const desc = document.createElement("div");
+        desc.className = "home-news-desc";
+        desc.textContent = lines[0];
+        item.appendChild(desc);
+      }
     }
 
-    // 대표 이미지 1장만(있으면)
-    const imgs = Array.isArray(p.images) ? p.images : [];
+    // ✅ images 캐러셀 + dots + swipe + auto slide
+    const imgsRaw = Array.isArray(p.images) ? p.images : [];
+    const imgs = imgsRaw.map(normalizeImgSrc).filter(Boolean);
+
     if (imgs.length) {
-      const img = document.createElement("img");
-      img.className = "home-news-thumb";
-      img.src = imgs[0];
-      img.alt = (p.title ? p.title + " - " : "") + "thumbnail";
-      img.loading = "lazy";
-      item.appendChild(img);
+      const carousel = document.createElement("div");
+      carousel.className = "home-news-carousel";
+
+      const track = document.createElement("div");
+      track.className = "home-news-track";
+      track.dataset.index = "0";
+
+      imgs.forEach((src, i) => {
+        const slide = document.createElement("div");
+        slide.className = "home-news-slide";
+
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = `${p.title || "News"} - ${i + 1}`;
+        img.loading = "lazy";
+
+        slide.appendChild(img);
+        track.appendChild(slide);
+      });
+
+      carousel.appendChild(track);
+      item.appendChild(carousel);
+
+      const dots = document.createElement("div");
+      dots.className = "home-news-dots";
+
+      imgs.forEach((_, i) => {
+        const d = document.createElement("button");
+        d.type = "button";
+        d.className = "home-news-dot" + (i === 0 ? " active" : "");
+        d.addEventListener("click", (e) => {
+          e.stopPropagation();
+          setHomeIndex(track, dots, i);
+          restartAuto();
+        });
+        dots.appendChild(d);
+      });
+      item.appendChild(dots);
+
+      // auto slide
+      const INTERVAL = 3500;
+      let timer = null;
+
+      const startAuto = () => {
+        if (imgs.length <= 1) return;
+        if (timer) return;
+        timer = setInterval(() => stepHome(track, dots, +1), INTERVAL);
+      };
+      const stopAuto = () => {
+        if (!timer) return;
+        clearInterval(timer);
+        timer = null;
+      };
+      const restartAuto = () => {
+        stopAuto();
+        startAuto();
+      };
+
+      // hover stop
+      item.addEventListener("mouseenter", stopAuto);
+      item.addEventListener("mouseleave", startAuto);
+
+      // swipe
+      let startX = null;
+      track.addEventListener("touchstart", e => {
+        startX = e.touches[0].clientX;
+        stopAuto();
+      }, { passive: true });
+
+      track.addEventListener("touchend", e => {
+        if (startX === null) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        startX = null;
+        if (Math.abs(dx) > 40) stepHome(track, dots, dx < 0 ? 1 : -1);
+        startAuto();
+      }, { passive: true });
+
+      // 카드 클릭과 캐러셀 조작 충돌 방지
+      carousel.addEventListener("click", (e) => e.stopPropagation());
+      dots.addEventListener("click", (e) => e.stopPropagation());
+
+      startAuto();
     }
 
-    // 클릭하면 news.html로 이동 (원하면 앵커로도 가능)
+    // 클릭하면 news.html로 이동
     item.addEventListener("click", () => {
       window.location.href = "news.html";
     });
@@ -158,7 +335,7 @@
     if (!latestWrap) return;
 
     try {
-      const res = await fetch("content/news.json", { cache: "no-store" });
+      const res = await fetch("content/news.json?v=" + Date.now(), { cache: "no-store" });
       if (!res.ok) throw new Error("news.json load failed");
       const data = await res.json();
       const posts = Array.isArray(data.posts) ? data.posts : [];
@@ -184,6 +361,7 @@
 
   loadLatestNews();
 </script>
+
 
 
 </body>

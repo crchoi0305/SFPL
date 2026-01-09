@@ -19,16 +19,11 @@
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div><strong>친환경/기능성 고분자 연구실</strong></div>
-      <div>© <span id="year"></span></div>
-    </div>
-  </footer>
+<div id="site-footer"></div>
 
-  <script>
 
-    // ✅ Current members JSON 로드 & 렌더
+<script>
+  // ✅ Current members JSON 로드 & 렌더
   (function () {
     const wrap = document.getElementById("currentGrid");
     if (!wrap) return;
@@ -41,7 +36,6 @@
     }
 
     function pickMembers(data) {
-      // CMS에서 저장 형태가 달라질 수 있어서 여러 키를 허용
       if (Array.isArray(data.members)) return data.members;
       if (Array.isArray(data.people)) return data.people;
       if (Array.isArray(data.items)) return data.items;
@@ -49,16 +43,24 @@
     }
 
     function pickSrc(v) {
-      // 문자열 또는 {src, alt} 형태 둘 다 지원
       if (!v) return "";
       if (typeof v === "string") return v;
       if (typeof v === "object" && v.src) return v.src;
       return "";
     }
 
+    function addLabeledRow(parent, labelText, valueText, cls) {
+      if (!valueText) return;
+      const row = el("div", cls || "person-row");
+      row.appendChild(el("span", "label", labelText));
+      row.appendChild(el("span", "value", valueText));
+      parent.appendChild(row);
+    }
+
     function renderCard(m) {
       const card = el("article", "person-card");
 
+      // 왼쪽 사진
       const imgSrc = pickSrc(m.photo || m.image || m.avatar);
       if (imgSrc) {
         const img = document.createElement("img");
@@ -69,30 +71,54 @@
         card.appendChild(img);
       }
 
-      const name = el("div", "person-name", m.name || "Unnamed");
-      card.appendChild(name);
+      // 오른쪽 텍스트 영역
+      const text = el("div", "person-text");
+      card.appendChild(text);
 
-      const roleText = m.role || m.position || m.title || "";
-      if (roleText) card.appendChild(el("div", "person-role", roleText));
+      // 이름
+      text.appendChild(el("div", "person-name", m.name || "Unnamed"));
 
-      const topicText = m.research || m.interest || m.topic || "";
-      if (topicText) card.appendChild(el("div", "person-topic", topicText));
-
-      const emailText = m.email || "";
-      if (emailText) {
-        const a = document.createElement("a");
-        a.className = "person-email";
-        a.href = "mailto:" + emailText;
-        a.textContent = emailText;
-        card.appendChild(a);
+      // 학위/학력 (config.yml에 bs, ms가 있으니 출력)  :contentReference[oaicite:0]{index=0}
+      const bsText = m.bs || "";
+      const msText = m.ms || "";
+      if (bsText || msText) {
+        const edu = el("div", "person-edu");
+        if (bsText) edu.appendChild(el("div", "edu-line", "B.S.: " + bsText));
+        if (msText) edu.appendChild(el("div", "edu-line", "M.S./Ph.D.: " + msText));
+        text.appendChild(edu);
       }
+
+      // ✅ Research (필드명이 research로 들어오므로 최우선 출력)
+      // 혹시 다른 키로 들어오는 경우도 대비해서 fallback 허용
+      const researchText =
+        m.research || m.research_field || m.field || m.interest || m.topic || "";
+      addLabeledRow(text, "Research:", researchText, "person-research");
+
+      // Bio
+    const bioText = m.bio || "";
+if (bioText) {
+  const row = el("div", "person-bio");
+  row.innerHTML = `<span class="label">자기소개:</span> <span class="value"></span>`;
+  row.querySelector(".value").textContent = bioText;
+  text.appendChild(row);
+}
+
+
+      // ✅ Email: 하이퍼링크 제거 (그냥 텍스트로 출력)
+const emailText = m.email || "";
+if (emailText) {
+  const row = el("div", "person-email");
+  row.appendChild(el("span", "label", "Email:"));
+  row.appendChild(el("span", "value", emailText)); // ✅ 텍스트로만 출력
+  text.appendChild(row);
+}
+
 
       return card;
     }
 
     async function load() {
       try {
-        // people/current.html → 상위 폴더의 content/current.json
         const url = "../content/current.json?v=" + Date.now();
         const res = await fetch(url, { cache: "no-store" });
         if (!res.ok) throw new Error("current.json load failed: " + res.status);
@@ -115,64 +141,71 @@
 
     load();
   })();
-  
-    /* =========================
-       footer year
-    ========================= */
+
+  /* footer year */
+  const y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
+
+  /* header load (people/current.html → 상위 폴더) */
+  fetch("../header.html")
+    .then(res => {
+      if (!res.ok) throw new Error("header.html load failed");
+      return res.text();
+    })
+    .then(html => {
+      document.getElementById("site-header").innerHTML = html;
+
+      document.querySelectorAll(".nav-link").forEach(a => a.classList.remove("active"));
+      const desk = document.querySelector(
+        '.nav-link[href="/people/current.html"], .nav-link[href="../people/current.html"]'
+      );
+      if (desk) desk.classList.add("active");
+
+      const mob = document.querySelector(
+        '#mobileNav .m-link[href="/people/current.html"], #mobileNav .m-link[href="../people/current.html"]'
+      );
+      if (mob) mob.classList.add("active");
+
+      const btn = document.querySelector(".nav-toggle");
+      const mobileNav = document.getElementById("mobileNav");
+      if (btn && mobileNav) {
+        btn.addEventListener("click", () => {
+          const open = mobileNav.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(open));
+        });
+      }
+
+      document
+        .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
+        .forEach(el => el.addEventListener("click", e => e.preventDefault()));
+
+      document
+        .querySelectorAll("#mobileNav [data-toggle='sub']")
+        .forEach(t => {
+          t.addEventListener("click", e => {
+            e.preventDefault();
+            const sub = t.nextElementSibling;
+            if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
+          });
+        });
+    })
+    .catch(err => console.error(err));
+
+    fetch("../footer.html")
+  .then(res => {
+    if (!res.ok) throw new Error("footer.html load failed");
+    return res.text();
+  })
+  .then(html => {
+    document.getElementById("site-footer").innerHTML = html;
     const y = document.getElementById("year");
     if (y) y.textContent = new Date().getFullYear();
+  })
+  .catch(err => console.error(err));
 
-    /* =========================
-       header load (people/current.html → 상위 폴더)
-    ========================= */
-    fetch("../header.html")
-      .then(res => {
-        if (!res.ok) throw new Error("header.html load failed");
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById("site-header").innerHTML = html;
+</script>
 
-        // (선택) People 메뉴 active 표시 (Current)
-        document.querySelectorAll(".nav-link").forEach(a => a.classList.remove("active"));
-        const desk = document.querySelector(
-          '.nav-link[href="/people/current.html"], .nav-link[href="../people/current.html"]'
-        );
-        if (desk) desk.classList.add("active");
 
-        const mob = document.querySelector(
-          '#mobileNav .m-link[href="/people/current.html"], #mobileNav .m-link[href="../people/current.html"]'
-        );
-        if (mob) mob.classList.add("active");
-
-        // hamburger toggle
-        const btn = document.querySelector(".nav-toggle");
-        const mobileNav = document.getElementById("mobileNav");
-        if (btn && mobileNav) {
-          btn.addEventListener("click", () => {
-            const open = mobileNav.classList.toggle("open");
-            btn.setAttribute("aria-expanded", String(open));
-          });
-        }
-
-        // prevent jump for dropdown parents
-        document
-          .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
-          .forEach(el => el.addEventListener("click", e => e.preventDefault()));
-
-        // mobile submenu toggle
-        document
-          .querySelectorAll("#mobileNav [data-toggle='sub']")
-          .forEach(t => {
-            t.addEventListener("click", e => {
-              e.preventDefault();
-              const sub = t.nextElementSibling;
-              if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
-            });
-          });
-      })
-      .catch(err => console.error(err));
-  </script>
 
 </body>
 </html>

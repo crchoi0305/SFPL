@@ -1,24 +1,1846 @@
 {
-  "groups": [
+  "publications": [
     {
-      "label": "2026",
-      "items": []
+      "authors": [
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2026",
+      "title": "Recent advances in hydrophilic polymeric coatings for antifogging",
+      "venue": "Prog. Org. Coat.",
+      "bib": "210, 109711",
+      "doi": "https://doi.org/10.1016/j.porgcoat.2025.109711",
+      "note": "[JCR < 7%]"
     },
     {
-      "label": "2025",
-      "items": []
+      "authors": [
+        {
+          "is_lab": true,
+          "name": "Y.Kang",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": true,
+          "name": "N.Kang",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "E.Y.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "O.H.Kwon"
+        },
+        {
+          "is_lab": false,
+          "name": "T.Eom",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2026",
+      "title": "Poly(carbosiloxane) Elastomers: One-Step Synthesis, Tunable Mechanics, and Closed-Loop Recyclability",
+      "venue": "Chem. Mater.",
+      "bib": "ASAP",
+      "doi": "https://doi.org/10.1021/acs.chemmater.5c02785",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.chemmater.5c02785/asset/images/medium/cm5c02785_0005.gif",
+      "note": "[Featured as Supplementary Cover]"
     },
     {
-      "label": "2024",
-      "items": []
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "K.W.Kim",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": true,
+          "name": "S.Lee",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2026",
+      "title": "One-pot and Closed-Loop Recycling of Biomass-Derived Soft Electronics Toward Zero e-waste",
+      "venue": "Small",
+      "bib": "Early view",
+      "note": "[Featured as Back Cover]",
+      "doi": "https://doi.org/10.1002/smll.202511832",
+      "image": "https://onlinelibrary.wiley.com/cms/asset/0f4bde7b-dcde-4d4e-9761-60c4f43e31ea/smll71793-gra-0001-m.jpg"
     },
     {
-      "label": "2023",
-      "items": []
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "J.F.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "H.J.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "H.Jeon"
+        },
+        {
+          "is_lab": false,
+          "name": "J.G.Kim"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "K.Nam"
+        },
+        {
+          "is_lab": false,
+          "name": "G.Shin"
+        },
+        {
+          "is_lab": false,
+          "name": "S.H.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Shin"
+        },
+        {
+          "is_lab": false,
+          "name": "D.Kang"
+        },
+        {
+          "is_lab": false,
+          "name": "D.X.Oh",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "D.Y.Lee",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "S.W.Hong",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "G.Yi",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2025",
+      "title": "Research Roadmap for Sustainable Polymeric Materials in Korea",
+      "venue": "Macromol. Res.",
+      "bib": "33, 535-551",
+      "image": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1007%2Fs13233-024-00357-4/MediaObjects/13233_2024_357_Figa_HTML.png?as=webp",
+      "doi": "https://doi.org/10.1007/s13233-024-00357-4"
     },
     {
-      "label": "Prior to 2022",
-      "items": []
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "H.Yoon",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": true,
+          "name": "Y.Jeon",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "E.Mun",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "D.Woo"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2025",
+      "title": "UV-Responsive Adhesive based on Polystyrene-block-Poly(Ethyl Lipoate) Copolymer",
+      "venue": "Macromol. Rapid Commun.",
+      "bib": "46, 2401015",
+      "doi": "https://doi.org/10.1002/marc.202401015",
+      "image": "https://onlinelibrary.wiley.com/cms/asset/22116521-b359-4132-861b-f50897d06037/marc202401015-gra-0001-m.jpg",
+      "note": ""
+    },
+    {
+      "authors": [
+        {
+          "is_lab": true,
+          "name": "J.Jung"
+        },
+        {
+          "is_lab": true,
+          "name": "Y.Kang"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2025",
+      "title": "Fabrication of Long-lasting Superhydrophilic Anti-Fogging Film via Rapid and Simple UV Process",
+      "venue": "Adv. Sci.",
+      "bib": "12, 2409463",
+      "doi": "https://doi.org/10.1002/advs.202409463",
+      "image": "https://advanced.onlinelibrary.wiley.com/cms/asset/8f7ca596-1db5-461c-a5a7-2d9a4e7f9de3/advs10110-gra-0001-m.jpg",
+      "note": "[JCR < 7%]"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": true,
+          "name": "J.Jeon"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2025",
+      "title": "High biomass content in epoxy vitrimers: a study on bio-based and reprocessable thermosets",
+      "venue": "Macromol. Res.",
+      "bib": "33, 345-354",
+      "image": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1007%2Fs13233-024-00333-y/MediaObjects/13233_2024_333_Figa_HTML.png?as=webp",
+      "note": "",
+      "doi": "https://doi.org/10.1007/s13233-024-00333-y"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "M.Hyun"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2025",
+      "title": "Thermoresponsive polymer-hollow gold nanoparticle composites for effective photothermal sterilization as a potential wound dressing film",
+      "venue": "Colloid Surface A",
+      "bib": "704, 135520",
+      "doi": "https://doi.org/10.1016/j.colsurfa.2024.135520",
+      "image": "https://ars.els-cdn.com/content/image/1-s2.0-S0927775724023847-ga1.jpg"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Okayama"
+        },
+        {
+          "is_lab": false,
+          "name": "P.T.Morris"
+        },
+        {
+          "is_lab": false,
+          "name": "L.L.Robinson"
+        },
+        {
+          "is_lab": false,
+          "name": "M.Gerst"
+        },
+        {
+          "is_lab": false,
+          "name": "J.C.Speros"
+        },
+        {
+          "is_lab": false,
+          "name": "C.J.Hawker",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.Read de Alaniz",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "C.M.Bates",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2022",
+      "title": "Digital Light Processing of Dynamic Bottlebrush Materials",
+      "venue": "Adv. Funct. Mater.",
+      "bib": "32, 2200883",
+      "doi": "https://doi.org/10.1002/adfm.202200883",
+      "image": "https://advanced.onlinelibrary.wiley.com/cms/asset/3c4fbdf6-88dd-4a12-af8a-daf0f0e18d19/adfm202270146-gra-0001-m.jpg",
+      "note": "[JCR < 5%, Featured as Inside Back Cover]"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "Y.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "K.W.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.R.In"
+        },
+        {
+          "is_lab": false,
+          "name": "X.Tang"
+        },
+        {
+          "is_lab": false,
+          "name": "P.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "V.Quy"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.M.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "C.Jung"
+        },
+        {
+          "is_lab": false,
+          "name": "S.H.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "H.C.Moon",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2021",
+      "title": "Multicolor, dual-image, printed electrochromic displays based on tandem configuration",
+      "venue": "Chem. Eng. J.",
+      "bib": "249, 123319",
+      "image": "https://ars.els-cdn.com/content/image/1-s2.0-S1385894721038985-ga1.jpg",
+      "doi": "https://doi.org/10.1016/j.cej.2021.132319"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "S.Kang"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "E.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Seo"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2021",
+      "title": "Inverted Cylindrical Microdomains from Binary Block Copolymer Blends Capable of Hydrogen Bonding",
+      "venue": "Macromolecules",
+      "bib": "54, 8971-8976",
+      "doi": "https://doi.org/10.1021/acs.macromol.1c01123",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.1c01123/asset/images/medium/ma1c01123_0007.gif",
+      "note": ""
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "H.Yoon"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Ahn"
+        },
+        {
+          "is_lab": false,
+          "name": "Q.Dong"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "W.Li"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2021",
+      "title": "Multidomain Helical Nanostructure by A1BA2C Tetrablock Terpolymer Self-Assembly",
+      "venue": "ACS Macro Lett.",
+      "bib": "10, 1119-1124",
+      "doi": "https://doi.org/10.1021/acsmacrolett.1c00459",
+      "image": "https://pubs.acs.org/cms/10.1021/acsmacrolett.1c00459/asset/images/medium/mz1c00459_0005.gif",
+      "note": "[JCR < 10%]"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "S.Y.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "H.U.Jeong"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Jang"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "J.U.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2021",
+      "title": "Graphoepitaxy of Symmetric Six-Arm Star-Shaped Poly(methyl methacrylate)-block-Polystyrene Copolymer Thin Film",
+      "venue": "Macromol. Rapid Commun.",
+      "bib": "2100411",
+      "doi": "https://doi.org/10.1002/marc.202100411",
+      "image": "https://onlinelibrary.wiley.com/cms/asset/ef2271ed-e634-45c1-9e7f-28693e5ce19e/marc202170065-gra-0001-m.jpg",
+      "note": "[Featured as Cover Picture]"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "J.L.Self"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Okayama"
+        },
+        {
+          "is_lab": false,
+          "name": "A.E.Levi"
+        },
+        {
+          "is_lab": false,
+          "name": "M.Gerst"
+        },
+        {
+          "is_lab": false,
+          "name": "J.C.Speros"
+        },
+        {
+          "is_lab": false,
+          "name": "C.J.Hawker"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Read de Alaniz",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "C.M.Bates",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2021",
+      "title": "Light-Mediated Synthesis and Reprocessing of Dynamic Bottlebrush Elastomers under Ambient Conditions",
+      "venue": "J. Am. Chem. Soc.",
+      "bib": "143, 9866-9871",
+      "image": "https://pubs.acs.org/cms/10.1021/jacs.1c03686/asset/images/medium/ja1c03686_0006.gif",
+      "doi": "https://doi.org/10.1021/jacs.1c03686",
+      "note": "[JCR < 10%]"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "D.S.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "M.C.Ko"
+        },
+        {
+          "is_lab": false,
+          "name": "M.K.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "J.H.Jang"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.S.Rho",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2021",
+      "title": "Multiple-patterning colloidal lithography-implemented scalable manufacturing of heat-tolerant titanium nitride broadband absorbers in the visible to near-infrared",
+      "venue": "Microsyst. Nanoeng.",
+      "bib": "7, 14",
+      "doi": "https://doi.org/10.1038/s41378-020-00237-8",
+      "image": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41378-020-00237-8/MediaObjects/41378_2020_237_Fig2_HTML.png?as=webp"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.H.Jang",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "S.Y.Park",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.Y.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2020",
+      "title": "Fabrication of Dual Nanopatterns by Spatial Control of Nanodomain Orientation of Block Copolymer Thin Films",
+      "venue": "ACS Appl. Polym. Mater.",
+      "bib": "2, 4090-4095",
+      "image": "https://pubs.acs.org/cms/10.1021/acsapm.0c00710/asset/images/medium/ap0c00710_0006.gif",
+      "doi": "https://doi.org/10.1021/acsapm.0c00710"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "S.H.Ahn"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2020",
+      "title": "Diverse Morphologies of Block Copolymers by Blending with Homo (or Co) polymers",
+      "venue": "Macromolecules",
+      "bib": "53, 4577-4580",
+      "doi": "https://doi.org/10.1021/acs.macromol.0c00545",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.0c00545/asset/images/medium/ma0c00545_0001.gif"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "S.Y.Park"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "K.S.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "E.S.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "S.H.Ahn"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Y.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim"
+        }
+      ],
+      "year": "2020",
+      "title": "Microdomain Orientation of Star-Shaped Block Copolymer Thin Film Depending on Molecular Weight",
+      "venue": "Macromolecules",
+      "bib": "53, 3611-3618",
+      "doi": "https://doi.org/10.1021/acs.macromol.0c00403",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.0c00403/asset/images/medium/ma0c00403_0006.gif"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "J.Y.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "A.K.Mishra"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "D.Y.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "E.Y.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "K.J.Yong"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2020",
+      "title": "Three-Dimensional Nanoporous Metal Structures from Poly(2-vinylpyridine)-block-Poly(4-vinylpyridine) Copolymer Thin Film",
+      "venue": "ACS Appl. Mater. Interfaces",
+      "bib": "12, 15667-15674",
+      "doi": "https://doi.org/10.1021/acsami.9b23009",
+      "image": "https://pubs.acs.org/cms/10.1021/acsami.9b23009/asset/images/medium/am9b23009_0006.gif"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "M.C.Go"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Kang"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Seo"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Y.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "A.K.Mishra"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2019",
+      "title": "Dual Nanopatterns Consisting of Both Nanodots and Nanoholes on a Single Substrate",
+      "venue": "ACS Appl. Mater. Interfaces",
+      "bib": "52, 44636-44641",
+      "image": "https://pubs.acs.org/cms/10.1021/acsami.9b16553/asset/images/medium/am9b16553_0003.gif",
+      "doi": "https://doi.org/10.1021/acsami.9b16553"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "K.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "P.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Seo"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "K.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "C.E.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "K.W.Cho"
+        },
+        {
+          "is_lab": false,
+          "name": "H.Moon",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2019",
+      "title": "End-on Chain Orientation of Poly(3-alkylthiophenes) on a Substrate by Microphase Separation of Lamellar Forming Amphiphilic Diblock Copolymer",
+      "venue": "Macromolecules",
+      "bib": "52, 6734-6740",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.9b01266/asset/images/medium/ma9b01266_0009.gif",
+      "doi": "https://doi.org/10.1021/acs.macromol.9b01266"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "E.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "A.K.Mishra"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "M.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Y.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Ahn"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2018",
+      "title": "Phase Behavior of Adenine-Containing Block Copolymer",
+      "venue": "Macromolecules",
+      "bib": "51, 10223-10229",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.8b02278/asset/images/medium/ma-2018-022787_0009.gif",
+      "doi": "https://doi.org/10.1021/acs.macromol.8b02278"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "A.K.Mishra"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Maiti"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Seo"
+        },
+        {
+          "is_lab": false,
+          "name": "K.S.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "E.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2018",
+      "title": "Sequential synthesis of well-defined poly(vinyl acetate)-block-polystyrene and poly(vinyl alcohol)-block-polystyrene copolymers using difunctional chloroamide-xanthate iniferter",
+      "venue": "Polymer",
+      "bib": "139, 68-75",
+      "image": "https://ars.els-cdn.com/content/image/1-s2.0-S0032386118301253-fx1.jpg",
+      "doi": "https://doi.org/10.1016/j.polymer.2018.02.009"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Kwak"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "S.H.Han"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2017",
+      "title": "Phase Behavior of Poly(2-vinylpyridine)-block-Poly(4-vinylpyridine) Copolymers Containing Gold Nanoparticles",
+      "venue": "Macromolecules",
+      "bib": "50, 9373-9379",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.7b01590/asset/images/medium/ma-2017-01590b_0006.gif",
+      "doi": "https://doi.org/10.1021/acs.macromol.7b01590"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "S.Ahn"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Kwak"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Seo"
+        },
+        {
+          "is_lab": false,
+          "name": "B.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2017",
+      "title": "Gyroid Structures at Highly Asymmetric Volume Fractions by Blending of ABC Triblock Terpolymer and AB Diblock Copolymer",
+      "venue": "Macromolecules",
+      "bib": "50, 9008-9014",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.7b01734/asset/images/medium/ma-2017-01734s_0006.gif",
+      "doi": "https://doi.org/10.1021/acs.macromol.7b01734"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "K.L.VincentJoseph"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Ahn"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Kwak"
+        },
+        {
+          "is_lab": false,
+          "name": "K.S.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2017",
+      "title": "Simultaneous fabrication of line and dot dual nanopatterns using miktoarm block copolymer with photocleavable linker",
+      "venue": "Nat. Commun.",
+      "bib": "8, 1765",
+      "doi": "https://doi.org/10.1038/s41467-017-02019-9",
+      "image": "https://www.nanowerk.com/spotlight/id48735.jpg",
+      "note": "[JCR < 5%]"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "J.Kwak"
+        },
+        {
+          "is_lab": false,
+          "name": "A.K.Mishra"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "K.S.Lee"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Maiti"
+        },
+        {
+          "is_lab": false,
+          "name": "M.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "JinKonKim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2017",
+      "title": "Fabrication of Sub-3 nm Feature Size Based on Block Copolymer Self-Assembly for Next-Generation Nanolithography",
+      "venue": "Macromolecules",
+      "bib": "50, 6813-6818",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.7b00945/asset/images/medium/ma-2017-00945n_0005.gif",
+      "doi": "https://doi.org/10.1021/acs.macromol.7b00945"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "A.K.Mishra"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "K.L.VincentJoseph"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Maiti"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Kwak"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Hyun"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2016",
+      "title": "Synthesis and self-assembly of amphiphilic and biocompatible poly(vinyl alcohol)-block-poly(l-lactide) copolymer",
+      "venue": "Polymer",
+      "bib": "100, 28-36",
+      "image": "https://ars.els-cdn.com/content/image/1-s2.0-S0032386116306620-fx1.jpg",
+      "doi": "https://doi.org/10.1016/j.polymer.2016.08.005"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "J.C.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "K.S.Lee"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "J.H.Kwak"
+        },
+        {
+          "is_lab": false,
+          "name": "H.C.Moon"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2016",
+      "title": "Effect of Molecular Weight on Competitive Self-Assembly of Poly(3-dodecylthiophene)-block-poly(methyl methacrylate) Copolymers",
+      "venue": "Macromolecules",
+      "bib": "49, 3647-3653",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.6b00513/asset/images/medium/ma-2016-005136_0003.gif",
+      "doi": "https://doi.org/10.1021/acs.macromol.6b00513"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "S.Hyun"
+        },
+        {
+          "is_lab": false,
+          "name": "O.Kwon"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "K.L.VincentJoseph"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2016",
+      "title": "Self-Positioned Nanosized Mask for Transparent and Flexible Ferroelectric Polymer Nanodiodes Array",
+      "venue": "ACS Appl. Mater. Interfaces",
+      "bib": "8, 27074-27080",
+      "doi": "https://doi.org/10.1021/acsami.6b08459",
+      "image": "https://pubs.acs.org/cms/10.1021/acsami.6b08459/asset/images/medium/am-2016-08459a_0006.gif"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "J.Park"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Hyun"
+        },
+        {
+          "is_lab": false,
+          "name": "H.C.Moon"
+        },
+        {
+          "is_lab": false,
+          "name": "K.L.VincentJoseph"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2016",
+      "title": "Microphase Separation of P3HT-Containing Miktoarm Star Copolymers",
+      "venue": "Macromolecules",
+      "bib": "49, 616-623",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.5b02600/asset/images/medium/ma-2015-02600a_0008.gif",
+      "doi": "https://doi.org/10.1021/acs.macromol.5b02600"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "J.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "H.C.Moon"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2015",
+      "title": "Synthesis and Characterization of [Poly(3-dodecylthiophene)]2Poly(methyl methacrylate) Miktoarm Star Copolymer",
+      "venue": "Macromolecules",
+      "bib": "48, 3523-3530",
+      "image": "https://pubs.acs.org/cms/10.1021/acs.macromol.5b00094/asset/images/medium/ma-2015-00094v_0007.gif",
+      "doi": "https://doi.org/10.1021/acs.macromol.5b00094"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "H.Yoon"
+        },
+        {
+          "is_lab": false,
+          "name": "Q.Dong"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Ahn"
+        },
+        {
+          "is_lab": false,
+          "name": "E.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "W.Li",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2023",
+      "title": "Co-existing Morphologies of Lamellae and Double Arrays of Cylinders By A1BA2C Tetrablock Terpolymer",
+      "venue": "Giant",
+      "bib": "16, 100207",
+      "doi": "https://doi.org/10.1016/j.giant.2023.100207",
+      "image": "https://ars.els-cdn.com/content/image/1-s2.0-S2666542523000693-ga1.jpg"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "G.Ha"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "K.Kim"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2023",
+      "title": "Facile Synthesis of Porous Transition Metal Hydroxides from a Poly(4-vinyl pyridine) Film by Controlling pH",
+      "venue": "Nanoscale Adv.",
+      "bib": "5, 2565-2572",
+      "image": "https://pubs.rsc.org/en/Image/Get?imageInfo.ImageType=GA&imageInfo.ImageIdentifier.ManuscriptID=D3NA00076A&imageInfo.ImageIdentifier.Year=2023",
+      "doi": "https://doi.org/10.1039/D3NA00076A"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "K.Albanese"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Okayama"
+        },
+        {
+          "is_lab": false,
+          "name": "P.T.Morris"
+        },
+        {
+          "is_lab": false,
+          "name": "M.Gerst"
+        },
+        {
+          "is_lab": false,
+          "name": "R.Gupta"
+        },
+        {
+          "is_lab": false,
+          "name": "J.C.Speros"
+        },
+        {
+          "is_lab": false,
+          "name": "C.J.Hawker"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.Read de Alaniz",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "C.M.Bates",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2023",
+      "title": "Building Tunable Degradation into High-Performance Poly(acrylate) Pressure-Sensitive Adhesives",
+      "venue": "ACS Macro Lett.",
+      "bib": "12, 787-793",
+      "image": "https://pubs.acs.org/cms/10.1021/acsmacrolett.3c00204/asset/images/medium/mz3c00204_0006.gif",
+      "doi": "https://doi.org/10.1021/acsmacrolett.3c00204",
+      "note": "[JCR < 10%]"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "J.Jang"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "K.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Okayama"
+        },
+        {
+          "is_lab": false,
+          "name": "J.H.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Read de Alaniz"
+        },
+        {
+          "is_lab": false,
+          "name": "C.M.Bates",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2023",
+      "title": "Triboelectric Nanogenerators: Enhancing Performance by Increasing the Charge-Generating Layer Compressibility",
+      "venue": "ACS Macro Lett.",
+      "bib": "27, 1291-1297",
+      "note": "[JCR < 10%]",
+      "image": "https://pubs.acs.org/cms/10.1021/acsmacrolett.2c00535/asset/images/medium/mz2c00535_0006.gif",
+      "doi": "https://doi.org/10.1021/acsmacrolett.2c00535"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "K.W.Kim",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.Kim",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "H.K.Yoon"
+        },
+        {
+          "is_lab": false,
+          "name": "M.C.Go"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "H.Seok"
+        },
+        {
+          "is_lab": false,
+          "name": "T.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "K.Wu"
+        },
+        {
+          "is_lab": false,
+          "name": "S.H.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "Y.M.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "J.H.Kwon"
+        },
+        {
+          "is_lab": false,
+          "name": "H.C.Moon",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2022",
+      "title": "Soft-Template-Assisted Fabrication of Mesoporous Graphenes for High-Performance Energy Storage Systems",
+      "venue": "ACS Appl. Mater. Interfaces",
+      "bib": "14, 46994-47002",
+      "image": "https://pubs.acs.org/cms/10.1021/acsami.2c12948/asset/images/medium/am2c12948_0006.gif",
+      "doi": "https://doi.org/10.1021/acsami.2c12948"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "G.Lee",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "S.Lee",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "D.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "S.H.Kim"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "S.G.Lee",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "K.Cho",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2024",
+      "title": "Anisotropic Fluorinated-elastomer-blended Micro-dominoes for Wearable Triboelectric Nanogenerators",
+      "venue": "Adv. Funct. Mater.",
+      "bib": "2316288",
+      "doi": "https://doi.org/10.1002/adfm.202316288",
+      "image": "https://advanced.onlinelibrary.wiley.com/cms/asset/310b157a-9c50-46f5-b30b-95e9f2ca5356/adfm202470177-gra-0001-m.jpg",
+      "note": "[Featured as Cover Picture]"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "G.Ha"
+        },
+        {
+          "is_lab": false,
+          "name": "K.W.Kim"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Lee"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi"
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2024",
+      "title": "Facile Synthesis of Amorphous Ni(OH)2 Nanorod Array for High Performance Electrochromic Supercapacitors",
+      "venue": "J. Energy Storage",
+      "bib": "84, 110987",
+      "image": "https://ars.els-cdn.com/content/image/1-s2.0-S2352152X24005711-gr1.jpg",
+      "doi": "https://doi.org/10.1016/j.est.2024.110987"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "S.Lee",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.Kim",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "D.Kim",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "H.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Myoung"
+        },
+        {
+          "is_lab": false,
+          "name": "J.Han"
+        },
+        {
+          "is_lab": false,
+          "name": "C.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "Y.Kim"
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "G.Lee",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2024",
+      "title": "Wearable Volatile Organic Compound Sensors for Plant Health Monitoring",
+      "venue": "Adv. Sustain. Sys.",
+      "bib": "8, 2300634",
+      "doi": "https://doi.org/10.1002/adsu.202300634",
+      "image": "https://advanced.onlinelibrary.wiley.com/cms/asset/936dfc57-dbf4-41ce-b954-e39eacab0644/adsu202300634-gra-0001-m.jpg"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "D.Woo",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "N.Kang",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "H.Park"
+        },
+        {
+          "is_lab": false,
+          "name": "S.Myoung"
+        },
+        {
+          "is_lab": false,
+          "name": "G.Lee",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2024",
+      "title": "Biomass-Derived Closed-Loop Recyclable Chemically Crosslinked Polymer Composites for Green Soft Electronics",
+      "venue": "Chem. Eng. J.",
+      "bib": "488, 150818",
+      "image": "https://ars.els-cdn.com/content/image/1-s2.0-S1385894724023052-ga1.jpg",
+      "doi": "https://doi.org/10.1016/j.cej.2024.150818",
+      "note": "[JCR < 5%]"
+    },
+    {
+      "authors": [
+        {
+          "is_lab": false,
+          "name": "J.H.Jeon",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.H.Jung",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": true,
+          "name": "C.Choi",
+          "roles": [
+            "corresponding"
+          ]
+        }
+      ],
+      "year": "2024",
+      "title": "Toward a Greener Future: Exploring Sustainable Thermoplastic Elastomers",
+      "venue": "J. Polym. Sci.",
+      "bib": "62, 662-678",
+      "doi": "https://doi.org/10.1002/pol.20230293",
+      "image": "https://onlinelibrary.wiley.com/cms/asset/f3eccfa1-b2be-4739-a98f-51d64c448f9f/pola31034-toc-0001-m.jpg",
+      "note": "[Invited Perspective, Featured as Front Cover]"
     }
   ]
 }

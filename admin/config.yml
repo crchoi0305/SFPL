@@ -3,6 +3,9 @@ backend:
   name: git-gateway
   branch: main
 
+local_backend: false
+
+
 media_folder: "assets/members"
 public_folder: "/assets/members"
 
@@ -21,7 +24,7 @@ collections:
             fields:
               - { label: "Name", name: "name", widget: "string" }
               - { label: "Photo", name: "photo", widget: "image" }
-              - { label: "B.S.", name: "bs", widget: "string", required: false }
+              - { label: "B.S.", name: "bs", widget: "string"}
               - { label: "M.S./Ph.D.", name: "ms", widget: "string", required: false }
               - { label: "Research", name: "research", widget: "string", required: false }
               - { label: "Email", name: "email", widget: "string", required: false }
@@ -34,12 +37,12 @@ collections:
   # =========================
   - name: "news"
     label: "News"
+    media_folder: "assets/news"
+    public_folder: "/assets/news"
     files:
       - file: "content/news.json"
         label: "News Posts"
         name: "news_posts"
-        media_folder: "assets/news"
-        public_folder: "/assets/news"
         fields:
           - label: "Posts"
             name: "posts"
@@ -57,14 +60,20 @@ collections:
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Description", name: "desc", widget: "text", required: false }
 
-              - label: "Images"
+              # ✅ 다중 업로드(한 번에 여러 장 선택/드래그&드롭)용
+              # - 기본 Media Library에서 멀티선택이 지원되면 한 번에 여러 파일을 선택할 수 있습니다.
+              # - 저장 형태: ["/assets/news/a.jpg", "/assets/news/b.jpg", ...]
+              # - 프론트(news.html/index.html)는 문자열 배열도 이미 지원하도록 작성되어 있습니다.
+              - label: "Images (multi)"
                 name: "images"
-                widget: "list"
+                widget: "file"
                 required: false
-                summary: "{{fields.alt}}"
-                fields:
-                  - { label: "Image", name: "src", widget: "image" }
-                  - { label: "Alt text", name: "alt", widget: "string", required: false }
+                allow_multiple: true
+                media_library:
+                  config:
+                    multiple: true
+                # URL 입력 버튼 숨기기(원하면 true로)
+                choose_url: false
 
               - label: "Links"
                 name: "links"
@@ -104,13 +113,17 @@ collections:
 
               - { label: "Title", name: "title", widget: "string" }
 
-              - label: "Images"
+              # ✅ 다중 업로드(한 번에 여러 장 선택/드래그&드롭)용
+              # 저장 형태: ["/assets/photos/a.jpg", "/assets/photos/b.jpg", ...]
+              - label: "Images (multi)"
                 name: "images"
-                widget: "list"
-                summary: "{{fields.alt}}"
-                fields:
-                  - { label: "Image", name: "src", widget: "image" }
-                  - { label: "Alt text", name: "alt", widget: "string", required: false }
+                widget: "file"
+                required: false
+                allow_multiple: true
+                media_library:
+                  config:
+                    multiple: true
+                choose_url: false
 
   # =========================
   # Sci (content/sci.json)
@@ -131,17 +144,36 @@ collections:
           widget: "list"
           summary: "{{fields.year}} | {{fields.title}}"
           fields:
-            - { label: "Year", name: "year", widget: "string"}
+            - { label: "Year",  name: "year",  widget: "string" }
             - { label: "Title", name: "title", widget: "string" }
-            - { label: "Authors", name: "authors", widget: "string"}
-            - { label: "Journal", name: "venue", widget: "string"}
-            - { label: "Volume / Pages", name: "bib", widget: "string"}
-            - { label: "DOI", name: "doi", widget: "string"}
 
-            # ✅ 추가된 이미지 필드
+            # ✅ Journal / Venue
+            - { label: "Journal", name: "venue", widget: "string", required: true }
+
+            # ✅ Bib (optional; if you prefer using only this, keep it)
+            - { label: "Bib (vol, page)", name: "bib", widget: "string", required: true }
+
+            - label: "Authors"
+              name: "authors"
+              widget: "list"
+              summary: "{{fields.name}}"
+              fields:
+                - { label: "Name", name: "name", widget: "string" }
+                - { label: "KIT-Polymer author", name: "is_lab", widget: "boolean", default: false }
+                - label: "Roles"
+                  name: "roles"
+                  widget: "select"
+                  multiple: true
+                  required: false
+                  options:
+                    - { label: "Co-first author (†)", value: "co-first" }
+                    - { label: "Corresponding author (*)", value: "corresponding" }
+
+            - { label: "DOI", name: "doi", widget: "string", required: false }
+
             - label: "Thumbnail Image"
               name: "image"
               widget: "image"
               required: false
 
-            - { label: "Note", name: "note", widget: "text"}
+            - { label: "Note", name: "note", widget: "text", required: false }

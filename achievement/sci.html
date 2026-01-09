@@ -55,15 +55,16 @@
       border: 1px solid rgba(0,0,0,.08);
       box-shadow: 0 10px 30px rgba(0,0,0,.04);
     }
-    .thumb{
-      width: 120px; height: 120px;
-      border-radius: 12px;
-      overflow:hidden;
-      background:#eee;
-    }
-    .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+   .pub-card{
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+}
 
-    .pub-journal{ font-size: 16px; font-weight: 800; margin: 0 0 6px; }
+
+    .pub-journal{ font-size: 16px; font-weight: 400; margin: 0 0 6px; }
+    .pub-year{ font-size: 16px; font-weight: 400; margin: 0 0 6px; }
+    .pub-vol{ font-size: 16px; font-weight: 400; margin: 0 0 6px; }
+    .pub-page{ font-size: 16px; font-weight: 400; margin: 0 0 6px; }
     .pub-meta{ color:#444; line-height:1.75; margin: 0 0 10px; white-space: pre-wrap; }
     .pub-link a{ text-decoration:none; font-weight:700; }
 
@@ -74,15 +75,38 @@
       color:#666;
     }
 
-    @media (max-width: 640px){
-      .pub-card{ grid-template-columns: 1fr; }
-      .thumb{ width: 100%; height: 180px; }
-    }
+@media (max-width: 900px){
+  .pub-card{
+    display: grid;
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "thumb"
+      "body";
+    gap: 12px !important;
+  }
+
+  .pub-thumb{ grid-area: thumb; }
+  .pub-body{  grid-area: body; }
+
+  /* 모바일에서 썸네일은 가로로 예쁘게 */
+  .thumb{
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: auto !important;  /* 이 줄이 중요 */
+  }
+
+.thumb img{
+  width: 100%;
+  height: auto;           /* 핵심: 비율 유지하면서 세로 자동 */
+  object-fit: contain;    /* cover -> contain */
+}
+}
+
 
     /* ===== layout centering + compact year-nav ===== */
     .page-wrap-wide{
       width: min(1650px, calc(100% - 48px));
-      margin: 56px auto;
+      margin: 20px auto;
       padding: 0 24px;
     }
     .page-title, .subdesc{ text-align: center; }
@@ -112,6 +136,87 @@
       margin: 14px auto 24px;
       text-align: left;
     }
+
+    /* ===== mobile gutters tighten ===== */
+@media (max-width: 900px){
+  .page-wrap-wide{
+    width: 100% !important;      /* calc(100% - 48px) 제거 */
+    padding: 0 16px !important;  /* 좌우 여백 12px 정도로 */
+    margin: 18px auto !important;
+  }
+
+  .year-section{
+    width: 100% !important;      /* 섹션도 꽉 차게 */
+    margin: 18px auto !important;
+  }
+
+  .pub-card{
+    padding: 10px 12px !important; /* 카드 내부 여백도 살짝 컴팩트 */
+  }
+}
+
+.pub-note-inline{
+  font-size: 16px;      /* 제목과 동일한 크기 */
+  font-weight: 400;        /* bold 제거 */
+  color: #d11;             /* 붉은색 */
+  margin-left: 6px;
+  white-space: nowrap;     /* 줄바꿈 방지 */
+}
+
+.pub-title{
+  font-size: 18px;     /* ← 원하는 크기로 조절 (예: 20~24px) */
+  font-weight: 800;   /* 제목은 bold 유지 */
+  margin: 0 0 4px;
+  line-height: 1.25;
+}
+
+.pub-authors{
+  font-size: 16px;     /* ← authors 크기 */
+  line-height: 1.6;
+  color: #222;
+}
+
+.pub-authors .lab-author{
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ===== SCI thumbnail ===== */
+/* ===== SCI thumbnail (desktop) ===== */
+.thumb{
+  width: 300px;           /* 가로 고정 */
+  height: auto;           /* 자동 */
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0,0,0,.05);
+}
+
+
+.thumb img{
+  width: 100%;
+  height: auto;           /* 핵심: 비율 유지하면서 세로 자동 */
+  object-fit: contain;    /* cover -> contain */
+  display: block;
+}
+
+/* 카드 그리드도 명확히 */
+.pub-card{
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.author-mark{
+  font-size: 0.85em;
+  vertical-align: super;
+  margin-left: 1px;
+  line-height: 0;
+}
+
+
+
   </style>
 </head>
 
@@ -123,154 +228,281 @@
   <main>
     <div class="page-wrap-wide">
       <h1 class="page-title">SCI Publications</h1>
-      <p class="subdesc">
-        연도별 SCI 게재 실적을 자동으로 출력합니다. (데이터 파일:
-        <code>content/sci.json</code>)
-      </p>
-
       <nav class="year-nav" id="yearNav" aria-label="SCI year navigation"></nav>
       <div id="content"></div>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div><strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab</div>
-      <div>© <span id="year"></span> All Rights Reserved.</div>
-    </div>
-  </footer>
+<div id="site-footer"></div>
 
-  <script>
-    /* =========================
-       footer year
-    ========================= */
+
+ <script>
+  /* =========================
+     footer year
+  ========================= */
+  const y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
+
+  /* =========================
+     header load
+  ========================= */
+  fetch("../header.html")
+    .then(res => {
+      if (!res.ok) throw new Error("header.html load failed");
+      return res.text();
+    })
+    .then(html => {
+      document.getElementById("site-header").innerHTML = html;
+
+      document.querySelectorAll(".nav-link").forEach(a => a.classList.remove("active"));
+      const desk = document.querySelector(
+        '.nav-link[href="/achievement/sci.html"], .nav-link[href="../achievement/sci.html"]'
+      );
+      if (desk) desk.classList.add("active");
+
+      const mob = document.querySelector(
+        '#mobileNav .m-link[href="/achievement/sci.html"], #mobileNav .m-link[href="../achievement/sci.html"]'
+      );
+      if (mob) mob.classList.add("active");
+
+      const btn = document.querySelector(".nav-toggle");
+      const mobileNav = document.getElementById("mobileNav");
+      if (btn && mobileNav) {
+        btn.addEventListener("click", () => {
+          const open = mobileNav.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(open));
+        });
+      }
+
+      document
+        .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
+        .forEach(el => el.addEventListener("click", e => e.preventDefault()));
+
+      document
+        .querySelectorAll("#mobileNav [data-toggle='sub']")
+        .forEach(t => {
+          t.addEventListener("click", e => {
+            e.preventDefault();
+            const sub = t.nextElementSibling;
+            if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
+          });
+        });
+    })
+    .catch(err => console.error(err));
+
+    fetch("../footer.html")
+  .then(res => {
+    if (!res.ok) throw new Error("footer.html load failed");
+    return res.text();
+  })
+  .then(html => {
+    document.getElementById("site-footer").innerHTML = html;
     const y = document.getElementById("year");
     if (y) y.textContent = new Date().getFullYear();
+  })
+  .catch(err => console.error(err));
 
-    /* =========================
-       header load (achievement/sci.html → 상위 폴더)
-    ========================= */
-    fetch("../header.html")
-      .then(res => {
-        if (!res.ok) throw new Error("header.html load failed");
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById("site-header").innerHTML = html;
 
-        // (선택) Achievement 메뉴 active 표시 (SCI)
-        document.querySelectorAll(".nav-link").forEach(a => a.classList.remove("active"));
-        const desk = document.querySelector(
-          '.nav-link[href="/achievement/sci.html"], .nav-link[href="../achievement/sci.html"]'
-        );
-        if (desk) desk.classList.add("active");
+  /* =========================
+     helpers
+  ========================= */
+  const slugify = s =>
+    String(s || "").trim().toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
 
-        const mob = document.querySelector(
-          '#mobileNav .m-link[href="/achievement/sci.html"], #mobileNav .m-link[href="../achievement/sci.html"]'
-        );
-        if (mob) mob.classList.add("active");
+  const escapeHTML = s =>
+    String(s || "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#39;");
 
-        // hamburger toggle
-        const btn = document.querySelector(".nav-toggle");
-        const mobileNav = document.getElementById("mobileNav");
-        if (btn && mobileNav) {
-          btn.addEventListener("click", () => {
-            const open = mobileNav.classList.toggle("open");
-            btn.setAttribute("aria-expanded", String(open));
-          });
-        }
+  const isAbs = url => /^https?:\/\//i.test(url) || String(url).startsWith("/");
+  const resolveImgSrc = p => {
+    if (!p) return "";
+    const s = String(p).trim();
+    if (!s) return "";
+    return isAbs(s) ? s : "../" + s.replace(/^\.?\//, "");
+  };
 
-        // prevent jump for dropdown parents
-        document
-          .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
-          .forEach(el => el.addEventListener("click", e => e.preventDefault()));
+  /* =========================
+     핵심: 그룹 자동 생성 로직
+  ========================= */
+  function pickGroups(data) {
+    const pubs = Array.isArray(data?.publications) ? data.publications : [];
+    const posts = pubs.length ? pubs : [];
 
-        // mobile submenu toggle
-        document
-          .querySelectorAll("#mobileNav [data-toggle='sub']")
-          .forEach(t => {
-            t.addEventListener("click", e => {
-              e.preventDefault();
-              const sub = t.nextElementSibling;
-              if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
-            });
-          });
-      })
-      .catch(err => console.error(err));
+    // 1️⃣ posts에서 연도 수집
+    const years = new Set();
+    posts.forEach(p => {
+      const y = Number(String(p.year || "").trim());
+      if (Number.isFinite(y)) years.add(y);
+    });
 
-    /* =========================
-       SCI render
-    ========================= */
-    const slugify = (s) =>
-      String(s || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, "")
-        .replace(/\s+/g, "-");
+    // 2️⃣ Prior 컷오프
+    const PRIOR_LABEL = "Prior to 2022";
+    const CUT = 2022;
 
-    function cardHTML(item){
-      const img = item.image
-        ? `<div class="thumb"><img src="../${item.image}" alt=""></div>`
-        : `<div class="thumb"></div>`;
-      const link = item.link
-        ? `<div class="pub-link"><a href="${item.link}" target="_blank" rel="noopener">View link ↗</a></div>`
-        : "";
-      return `
-        <article class="pub-card">
-          ${img}
-          <div>
-            <h3 class="pub-journal">${item.journal || ""}</h3>
-            <div class="pub-meta">${item.meta || ""}</div>
-            ${link}
-          </div>
-        </article>
-      `;
-    }
+    // 3️⃣ 개별 연도 라벨 (컷오프 이상)
+    const yearLabels = Array.from(years)
+      .filter(y => y >= CUT)
+      .sort((a,b) => b - a)
+      .map(String);
 
-    async function loadSCI(){
-      const wrap = document.getElementById("content");
-      const nav = document.getElementById("yearNav");
+    // 4️⃣ 전체 라벨 순서
+    const labels = [...yearLabels, PRIOR_LABEL];
 
-      try{
-        const res = await fetch("../content/sci.json", { cache: "no-store" });
-        if(!res.ok) throw new Error("sci.json load failed");
-        const data = await res.json();
+    // 5️⃣ map 초기화
+    const map = new Map();
+    labels.forEach(l => map.set(l, []));
 
-        const groups = data.groups || [];
-        if(groups.length === 0){
-          wrap.innerHTML = `<div class="empty">표시할 데이터가 없습니다. (content/sci.json 확인)</div>`;
-          return;
-        }
+    // 6️⃣ 배치
+    posts.forEach(p => {
+      const y = Number(String(p.year || "").trim());
+      if (!Number.isFinite(y)) return;
 
-        // year nav
-        nav.innerHTML = groups.map(g => {
-          const id = "y-" + slugify(g.label);
-          return `<a href="#${id}">${g.label}</a>`;
-        }).join("");
-
-        // sections
-        wrap.innerHTML = groups.map(g => {
-          const id = "y-" + slugify(g.label);
-          const items = Array.isArray(g.items) ? g.items : [];
-          const body = items.length
-            ? `<div class="pub-list">${items.map(cardHTML).join("")}</div>`
-            : `<div class="empty">등록된 실적이 없습니다.</div>`;
-          return `
-            <section class="year-section" id="${id}">
-              <h2 class="year-title">${g.label}</h2>
-              ${body}
-            </section>
-          `;
-        }).join("");
-
-      }catch(err){
-        console.error(err);
-        wrap.innerHTML = `<div class="empty">SCI 데이터를 불러오지 못했습니다. (../content/sci.json 경로/배포 확인)</div>`;
+      if (y < CUT) {
+        map.get(PRIOR_LABEL).push(p);
+      } else {
+        const key = String(y);
+        if (!map.has(key)) map.set(key, []);
+        map.get(key).push(p);
       }
+    });
+
+    return labels.map(l => ({ label: l, items: map.get(l) || [] }));
+  }
+
+  /* =========================
+     card renderer
+  ========================= */
+  function cardHTML(item){
+    const imgSrc = resolveImgSrc(item.image || item.thumbnail || item.thumb);
+
+    const title = item.title || "";
+    const authors = item.authors || "";
+    const journal = item.venue || item.journal || "";
+    const year = String(item.year || "").trim();
+    const note = String(item.note || "").trim();
+
+    const bib = String(item.bib || "").trim();
+    let volume = "", page = "";
+    if (bib) {
+      const parts = bib.split(",").map(s => s.trim()).filter(Boolean);
+      volume = parts[0] || "";
+      page = parts.slice(1).join(", ");
     }
 
-    loadSCI();
-  </script>
+    const linkUrl = item.doi || item.link || item.url || "";
+
+    const img = imgSrc
+      ? `<div class="thumb"><img src="${escapeHTML(imgSrc)}" alt=""></div>`
+      : `<div class="thumb"></div>`;
+
+    const line = [
+      journal && `<span class="pub-journal">${escapeHTML(journal)}</span>`,
+      year && `<span class="pub-year">${escapeHTML(year)}</span>`,
+      volume && `<span class="pub-vol">${escapeHTML(volume)}</span>`,
+      page && `<span class="pub-page">${escapeHTML(page)}</span>`
+    ].filter(Boolean).join(", ");
+
+    const btn = linkUrl
+      ? `<a class="pub-btn" href="${escapeHTML(linkUrl)}" target="_blank" rel="noopener">LINK</a>`
+      : "";
+
+    return `
+      <article class="pub-card">
+        ${img.replace('class="thumb"', 'class="thumb pub-thumb"')}
+<div class="pub-body">
+
+        <div>
+         <h3 class="pub-title">
+  ${escapeHTML(title)}
+  ${note ? `<span class="pub-note-inline"> ${escapeHTML(note)}</span>` : ""}
+</h3>
+          <div class="pub-authors">${renderAuthors(authors)}</div>
+          <div class="pub-line">${line}</div>
+          ${btn}
+        </div>
+      </article>
+    `;
+  }
+
+function renderAuthors(authors){
+  // 기존 데이터(문자열) 호환
+  if(typeof authors === "string") return escapeHTML(authors);
+
+  // roles -> 기호 매핑
+  const roleMarks = (roles) => {
+    if(!Array.isArray(roles)) return "";
+    let mark = "";
+    if(roles.includes("co-first")) mark += "†";
+    if(roles.includes("corresponding")) mark += "*";
+    return mark ? `<sup class="author-mark">${mark}</sup>` : "";
+  };
+
+  // 새 데이터(배열) 처리
+  if(Array.isArray(authors)){
+    return authors
+      .filter(a => a && (a.name || typeof a === "string"))
+      .map(a => {
+        // 문자열 author도 지원
+        if(typeof a === "string"){
+          return `<span class="author">${escapeHTML(a)}</span>`;
+        }
+
+        const name = a.name || "";
+        const isLab = !!a.is_lab;
+        const cls = isLab ? "author lab-author" : "author";
+        const mark = roleMarks(a.roles);
+
+        return `<span class="${cls}">${escapeHTML(name)}${mark}</span>`;
+      })
+      .join(", ");
+  }
+
+  return "";
+}
+
+
+  /* =========================
+     init
+  ========================= */
+  async function loadSCI(){
+    const wrap = document.getElementById("content");
+    const nav = document.getElementById("yearNav");
+
+    try{
+      const res = await fetch("../content/sci.json?v=" + Date.now(), { cache: "no-store" });
+      if(!res.ok) throw new Error("sci.json load failed");
+      const data = await res.json();
+
+      const groups = pickGroups(data);
+
+      nav.innerHTML = groups
+        .map(g => `<a href="#y-${slugify(g.label)}">${escapeHTML(g.label)}</a>`)
+        .join("");
+
+      wrap.innerHTML = groups.map(g => `
+        <section class="year-section" id="y-${slugify(g.label)}">
+          <h2 class="year-title">${escapeHTML(g.label)}</h2>
+          ${
+            g.items.length
+              ? `<div class="pub-list">${g.items.map(cardHTML).join("")}</div>`
+              : `<div class="empty">등록된 실적이 없습니다.</div>`
+          }
+        </section>
+      `).join("");
+
+    }catch(err){
+      console.error(err);
+      wrap.innerHTML = `<div class="empty">SCI 데이터를 불러오지 못했습니다.</div>`;
+      nav.innerHTML = "";
+    }
+  }
+
+  loadSCI();
+</script>
 
 </body>
 </html>

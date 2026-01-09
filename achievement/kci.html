@@ -6,7 +6,7 @@
   <title>KCI | SFPL</title>
   <link rel="stylesheet" href="../styles.css" />
   <style>
-    .page-wrap { max-width: 1100px; margin: 56px auto; padding: 0 24px; }
+    .page-wrap { max-width: 1100px; margin: 20px auto; padding: 0 24px; }
     .page-title { font-size: 30px; font-weight: 800; margin: 0 0 18px; }
     .box { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:16px; padding:18px; }
     .pubs { margin:0; padding-left: 18px; line-height: 1.9; }
@@ -23,17 +23,14 @@
     <h1 class="page-title">KCI Publications</h1>
     <div class="box">
       <ul class="pubs">
-        <li>여기에 KCI 실적을 한 줄씩 추가하세요. (저자, 논문명, 저널, 연도, DOI/링크 등)</li>
+        <li>김서림 방지 코팅의 최근 연구 동향 (최청룡, 공업화학회지, 2025, 36, 539-547, https://doi.org/10.14478/ace.2025.1073)</li>
+        <li>해중합 가능한 고신축성과 고강도 바이오매스 기반 고분자 합성(강나원, 최청룡, 한국접착및계면학회지, 2024, 25, 135-139, http://doi.org/10.17702/jai.2024.25.4.135)</li>
       </ul>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div><strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab</div>
-      <div>© <span id="year"></span> All Rights Reserved.</div>
-    </div>
-  </footer>
+<div id="site-footer"></div>
+
 
   <script>
     /* =========================
@@ -92,6 +89,19 @@
           });
       })
       .catch(err => console.error(err));
+
+      fetch("../footer.html")
+  .then(res => {
+    if (!res.ok) throw new Error("footer.html load failed");
+    return res.text();
+  })
+  .then(html => {
+    document.getElementById("site-footer").innerHTML = html;
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+  })
+  .catch(err => console.error(err));
+
   </script>
 
 </body>

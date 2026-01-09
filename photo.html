@@ -12,185 +12,337 @@
   <!-- ✅ 공통 헤더 삽입 위치 -->
   <div id="site-header"></div>
 
-  <main class="page-wrap">
-    <div class="container">
-      <h1 class="page-title">Photos</h1>
-      <p class="page-desc">
-        행사/연구실 활동 사진을 앨범(캐러셀) 형태로 표시합니다.
-        (데이터: <code>content/photos.json</code>)
-      </p>
+<main class="page-wrap photo-wrap">
+  <div class="photo-container">
+    <h1 class="page-title">Photos</h1>
+    <section id="photoGrid" class="photo-grid"></section>
+  </div>
+</main>
 
-      <section id="photoGrid" class="photo-grid" aria-label="Photo albums">
-        <!-- JS render -->
-      </section>
-    </div>
-  </main>
+<div id="site-footer"></div>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div><strong>친환경/기능성 고분자 연구실</strong></div>
-      <div>© <span id="year"></span></div>
-    </div>
-  </footer>
 
   <script>
-    /* =========================
-       footer year
-    ========================= */
-    const y = document.getElementById("year");
-    if (y) y.textContent = new Date().getFullYear();
+  // ===== footer year =====
+  const y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
 
-    /* =========================
-       header load (photo.html은 상위 폴더에 header.html)
-    ========================= */
-    fetch("../header.html")
-      .then(res => {
-        if (!res.ok) throw new Error("header.html load failed");
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById("site-header").innerHTML = html;
+  // ===== header load (photo.html은 상위 폴더에 header.html) =====
+  fetch("../header.html")
+    .then(res => {
+      if (!res.ok) throw new Error("header.html load failed");
+      return res.text();
+    })
+    .then(html => {
+      document.getElementById("site-header").innerHTML = html;
 
-        // hamburger toggle
-        const btn = document.querySelector(".nav-toggle");
-        const mobileNav = document.getElementById("mobileNav");
-        if (btn && mobileNav) {
-          btn.addEventListener("click", () => {
-            const open = mobileNav.classList.toggle("open");
-            btn.setAttribute("aria-expanded", String(open));
-          });
-        }
-
-        // prevent jump for dropdown parents
-        document
-          .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
-          .forEach(el => el.addEventListener("click", e => e.preventDefault()));
-
-        // mobile submenu toggle
-        document
-          .querySelectorAll("#mobileNav [data-toggle='sub']")
-          .forEach(t => {
-            t.addEventListener("click", e => {
-              e.preventDefault();
-              const sub = t.nextElementSibling;
-              if (sub && sub.classList.contains("m-sub")) {
-                sub.classList.toggle("open");
-              }
-            });
-          });
-      })
-      .catch(err => console.error(err));
-
-    /* =========================
-       Photo render
-    ========================= */
-    const grid = document.getElementById("photoGrid");
-
-    function el(tag, cls, html) {
-      const n = document.createElement(tag);
-      if (cls) n.className = cls;
-      if (html !== undefined) n.innerHTML = html;
-      return n;
-    }
-
-    function buildCarousel(album) {
-      const card = el("article", "album-card");
-
-      const title = el("h2", "album-title");
-      title.textContent = album.title || "Untitled";
-      card.appendChild(title);
-
-      const wrap = el("div", "carousel");
-      const track = el("div", "carousel-track");
-      track.dataset.index = "0";
-
-      const imgs = Array.isArray(album.images) ? album.images : [];
-      imgs.forEach((src, i) => {
-        const slide = el("div", "carousel-slide");
-        const img = document.createElement("img");
-        img.className = "carousel-img";
-        img.src = src;
-        img.alt = `${album.title || "Album"} - ${i + 1}`;
-        img.loading = "lazy";
-        slide.appendChild(img);
-        track.appendChild(slide);
-      });
-
-      wrap.appendChild(track);
-
-      const controls = el("div", "carousel-controls");
-      const prev = el("button", "carousel-btn", "‹");
-      const next = el("button", "carousel-btn", "›");
-      prev.type = next.type = "button";
-
-      const dots = el("div", "carousel-dots");
-      imgs.forEach((_, i) => {
-        const d = el("button", "dot" + (i === 0 ? " active" : ""), "");
-        d.type = "button";
-        d.addEventListener("click", () => setIndex(track, dots, i));
-        dots.appendChild(d);
-      });
-
-      prev.addEventListener("click", () => step(track, dots, -1));
-      next.addEventListener("click", () => step(track, dots, +1));
-
-      controls.appendChild(prev);
-      controls.appendChild(dots);
-      controls.appendChild(next);
-
-      card.appendChild(wrap);
-      card.appendChild(controls);
-
-      if (!imgs.length) {
-        card.appendChild(el("div", "album-empty", "등록된 사진이 없습니다."));
-      } else {
-        let startX = null;
-        track.addEventListener("touchstart", e => startX = e.touches[0].clientX, { passive: true });
-        track.addEventListener("touchend", e => {
-          if (startX === null) return;
-          const dx = e.changedTouches[0].clientX - startX;
-          startX = null;
-          if (Math.abs(dx) > 40) step(track, dots, dx < 0 ? 1 : -1);
-        }, { passive: true });
+      const btn = document.querySelector(".nav-toggle");
+      const mobileNav = document.getElementById("mobileNav");
+      if (btn && mobileNav) {
+        btn.addEventListener("click", () => {
+          const open = mobileNav.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(open));
+        });
       }
 
+      document
+        .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
+        .forEach(el => el.addEventListener("click", e => e.preventDefault()));
+
+      document
+        .querySelectorAll("#mobileNav [data-toggle='sub']")
+        .forEach(t => {
+          t.addEventListener("click", e => {
+            e.preventDefault();
+            const sub = t.nextElementSibling;
+            if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
+          });
+        });
+    })
+    .catch(err => console.error(err));
+
+    fetch("footer.html")
+  .then(res => {
+    if (!res.ok) throw new Error("footer.html load failed");
+    return res.text();
+  })
+  .then(html => {
+    document.getElementById("site-footer").innerHTML = html;
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+  })
+  .catch(err => console.error(err));
+
+
+  // ===== inject CSS for layout + carousel =====
+  (function ensurePhotoCSSOnce(){
+    if (document.getElementById("photoCarouselCSS")) return;
+    const style = document.createElement("style");
+    style.id = "photoCarouselCSS";
+    style.textContent = `
+      /* ✅ page wrapper: max 1200, center, header gap 5px */
+      main.page-wrap { margin-top: 5px !important; }
+      main.page-wrap .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* ✅ album grid: desktop 2 columns, mobile 1 column */
+      .photo-grid{
+        display:grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 26px;
+        align-items: start;
+      }
+      @media (max-width: 820px){
+        .photo-grid{ grid-template-columns: 1fr; gap: 18px; }
+      }
+
+      .album-card{
+        border: 1px solid rgba(0,0,0,.08);
+        border-radius: 16px;
+        padding: 16px;
+        background: #fff;
+      }
+      .album-title{
+        margin: 0 0 12px;
+        font-size: 24px;
+        letter-spacing: -0.02em;
+      }
+
+      /* ✅ carousel (works for both desktop + mobile, swipe on mobile) */
+      .carousel{
+        position: relative;
+        width: 100%;
+      }
+      .carousel-track{
+        display:flex;
+        overflow-x:auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding: 6px 2px 4px;
+        scrollbar-width: none;
+      }
+      .carousel-track::-webkit-scrollbar{ display:none; }
+
+      .carousel-slide{
+        flex: 0 0 100%;
+        scroll-snap-align: center;
+      }
+
+      .carousel-img{
+        width:100%;
+        height:auto;
+        display:block;
+        border-radius: 14px;
+        object-fit: cover;
+      }
+
+      /* ✅ dots */
+      .carousel-dots{
+        display:flex;
+        justify-content:center;
+        gap: 8px;
+        padding: 10px 0 2px;
+      }
+      .dot{
+        width: 7px; height: 7px;
+        border-radius: 999px;
+        background: rgba(0,0,0,.25);
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+      }
+      .dot.active{ background: rgba(0,0,0,.75); }
+
+      /* ✅ optional arrows (desktop convenience) */
+      .carousel-controls{
+        display:grid;
+        grid-template-columns: 36px 1fr 36px;
+        align-items:center;
+        gap: 10px;
+        margin-top: 6px;
+      }
+      .carousel-btn{
+        width: 36px; height: 36px;
+        border-radius: 10px;
+        border: 1px solid rgba(0,0,0,.15);
+        background: #fff;
+        cursor: pointer;
+        font-size: 20px;
+        line-height: 1;
+      }
+      @media (max-width: 640px){
+        .carousel-controls{ grid-template-columns: 1fr; }
+        .carousel-btn{ display:none; } /* 모바일은 스와이프 중심 */
+      }
+
+      .album-empty, .album-empty-wide{
+        padding: 14px 0;
+        color: rgba(0,0,0,.6);
+      }
+    `;
+    document.head.appendChild(style);
+  })();
+
+  // ===== helpers =====
+  const grid = document.getElementById("photoGrid");
+
+  function el(tag, cls, html) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html !== undefined) n.innerHTML = html;
+    return n;
+  }
+
+  function isAbsPath(p) {
+    return /^https?:\/\//i.test(p) || String(p).startsWith("/");
+  }
+
+  function normalizeImgSrc(v) {
+    // images: ["..."] or [{src:"..."}] 모두 지원
+    if (!v) return "";
+    const src = (typeof v === "string") ? v : (v && typeof v === "object" ? v.src : "");
+    if (!src) return "";
+    if (isAbsPath(src)) return src;
+    return "../" + String(src).replace(/^\.?\//, "");
+  }
+
+  function scrollToIndex(track, i){
+    const slides = track.querySelectorAll(".carousel-slide");
+    const idx = Math.max(0, Math.min(slides.length - 1, i));
+    const target = slides[idx];
+    const left = target.offsetLeft - track.offsetLeft;
+    track.scrollTo({ left, behavior: "smooth" });
+    track.dataset.index = String(idx);
+  }
+
+  function setActiveDot(dots, idx){
+    [...dots.children].forEach((d, k) => d.classList.toggle("active", k === idx));
+  }
+
+  function bindScrollSync(track, dots){
+    let raf = null;
+    const slides = () => [...track.querySelectorAll(".carousel-slide")];
+
+    track.addEventListener("scroll", () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const ss = slides();
+        if (!ss.length) return;
+
+        const center = track.scrollLeft + track.clientWidth / 2;
+        let bestIdx = 0;
+        let bestDist = Infinity;
+
+        ss.forEach((s, i) => {
+          const sCenter = (s.offsetLeft - track.offsetLeft) + s.clientWidth / 2;
+          const dist = Math.abs(center - sCenter);
+          if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+        });
+
+        track.dataset.index = String(bestIdx);
+        setActiveDot(dots, bestIdx);
+      });
+    }, { passive: true });
+  }
+
+  // ===== build album carousel =====
+  function buildCarousel(album) {
+    const card = el("article", "album-card");
+
+    const title = el("h2", "album-title");
+    title.textContent = album.title || "Untitled";
+    card.appendChild(title);
+
+    const wrap = el("div", "carousel");
+    const track = el("div", "carousel-track");
+    track.dataset.index = "0";
+
+    // ✅ 핵심: src 경로 보정
+    const raw = Array.isArray(album.images) ? album.images : [];
+    const imgs = raw.map(normalizeImgSrc).filter(Boolean);
+
+    imgs.forEach((src, i) => {
+      const slide = el("div", "carousel-slide");
+      const img = document.createElement("img");
+      img.className = "carousel-img";
+      img.src = src;
+      img.alt = `${album.title || "Album"} - ${i + 1}`;
+      img.loading = "lazy";
+      slide.appendChild(img);
+      track.appendChild(slide);
+    });
+
+    wrap.appendChild(track);
+    card.appendChild(wrap);
+
+    if (!imgs.length) {
+      card.appendChild(el("div", "album-empty", "등록된 사진이 없습니다."));
       return card;
     }
 
-    function setIndex(track, dots, i) {
-      const slides = track.children.length;
-      const next = Math.max(0, Math.min(slides - 1, i));
-      track.style.transform = `translateX(${-next * 100}%)`;
-      track.dataset.index = String(next);
-      [...dots.children].forEach((d, k) => d.classList.toggle("active", k === next));
-    }
+    // dots
+    const dots = el("div", "carousel-dots");
+    imgs.forEach((_, i) => {
+      const d = el("button", "dot" + (i === 0 ? " active" : ""), "");
+      d.type = "button";
+      d.addEventListener("click", () => scrollToIndex(track, i));
+      dots.appendChild(d);
+    });
 
-    function step(track, dots, dir) {
+    // controls (desktop arrows + dots)
+    const controls = el("div", "carousel-controls");
+    const prev = el("button", "carousel-btn", "‹");
+    const next = el("button", "carousel-btn", "›");
+    prev.type = next.type = "button";
+
+    prev.addEventListener("click", () => {
       const cur = parseInt(track.dataset.index || "0", 10);
-      setIndex(track, dots, cur + dir);
-    }
+      scrollToIndex(track, cur - 1);
+    });
+    next.addEventListener("click", () => {
+      const cur = parseInt(track.dataset.index || "0", 10);
+      scrollToIndex(track, cur + 1);
+    });
 
-    async function init() {
-      try {
-        const res = await fetch("../content/photos.json", { cache: "no-store" });
-        if (!res.ok) throw new Error("photos.json load failed");
-        const data = await res.json();
-        const albums = Array.isArray(data.albums) ? data.albums : [];
+    controls.appendChild(prev);
+    controls.appendChild(dots);
+    controls.appendChild(next);
+    card.appendChild(controls);
 
-        if (!albums.length) {
-          grid.appendChild(el("div", "album-empty-wide", "등록된 앨범이 없습니다."));
-          return;
-        }
+    // sync dots with scroll (mobile swipe 포함)
+    bindScrollSync(track, dots);
 
-        albums.forEach(a => grid.appendChild(buildCarousel(a)));
-      } catch (e) {
-        console.error(e);
-        grid.appendChild(el("div", "album-empty-wide", "Photo 데이터를 불러오지 못했습니다. (content/photos.json 확인)"));
+    return card;
+  }
+
+  // ===== init =====
+  async function init() {
+    try {
+      // ✅ cache-bust
+      const res = await fetch("../content/photos.json?v=" + Date.now(), { cache: "no-store" });
+      if (!res.ok) throw new Error("photos.json load failed");
+
+      const data = await res.json();
+      const albums = Array.isArray(data.albums) ? data.albums : [];
+
+      if (!albums.length) {
+        grid.appendChild(el("div", "album-empty-wide", "등록된 앨범이 없습니다."));
+        return;
       }
-    }
 
-    init();
-  </script>
+      albums.forEach(a => grid.appendChild(buildCarousel(a)));
+    } catch (e) {
+      console.error(e);
+      grid.appendChild(el("div", "album-empty-wide", "Photo 데이터를 불러오지 못했습니다. (content/photos.json 확인)"));
+    }
+  }
+
+  init();
+</script>
+
 
 </body>
 </html>

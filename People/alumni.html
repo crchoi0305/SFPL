@@ -17,20 +17,13 @@
       <h1 class="page-title">Alumni</h1>
 
       <ul>
-        <li>정재환 (M.S. 2026) – ○○</li>
-        <li>김철수 (Ph.D. 2022) – ○○연구소</li>
+        <li>정재환 (M.S. 2026) – 주식회사 알데바</li>
       </ul>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>
-        <strong>친환경/기능성 고분자 연구실</strong> | Sustainable/Functional Polymer Lab
-      </div>
-      <div class="footer-small">© <span id="year"></span> All Rights Reserved.</div>
-    </div>
-  </footer>
+<div id="site-footer"></div>
+
 
   <script>
     /* =========================
@@ -91,6 +84,19 @@
           });
       })
       .catch(err => console.error(err));
+
+      fetch("../footer.html")
+  .then(res => {
+    if (!res.ok) throw new Error("footer.html load failed");
+    return res.text();
+  })
+  .then(html => {
+    document.getElementById("site-footer").innerHTML = html;
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+  })
+  .catch(err => console.error(err));
+
   </script>
 
 </body>
