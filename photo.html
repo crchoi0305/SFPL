@@ -283,12 +283,26 @@ function normalizeImgSrc(v) {
   }
 
   // ===== build album carousel =====
-  function buildCarousel(album) {
-    const card = el("article", "album-card");
+function buildCarousel(album) {
+  const card = el("article", "album-card");
 
-    const title = el("h2", "album-title");
-    title.textContent = album.title || "Untitled";
-    card.appendChild(title);
+  // ✅ header block (date + title)
+  const header = el("div", "album-header");
+
+  if (album.date) {
+    const dateText = el("div", "album-date");
+    dateText.textContent = String(album.date);
+    header.appendChild(dateText);
+  }
+
+  const title = el("h2", "album-title");
+  title.textContent = album.title || "Untitled";
+  header.appendChild(title);
+
+  card.appendChild(header);
+
+  // ... 이하 기존 코드 그대로 (carousel 생성)
+
 
     const wrap = el("div", "carousel");
     const track = el("div", "carousel-track");

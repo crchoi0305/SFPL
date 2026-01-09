@@ -851,13 +851,40 @@ main {
 }
 
 .album-card{
-  padding: 22px;
-  border-radius: 18px;
+  position: relative; /* ✅ date absolute 기준 */
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 16px;
+  padding: 16px;
+  background: #fff;
 }
 
-.album-title{
-  margin-bottom: 10px;
+.album-header{
+  margin: 0 0 12px;
 }
+
+.album-date{
+  /* ✅ pill 제거: 그냥 텍스트 */
+  position: static;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  backdrop-filter: none;
+
+  /* 스타일 */
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(0,0,0,.55);
+  margin: 0 0 0px; /* 제목과 간격 */
+}
+
+
+.album-title{
+  margin: 0;              /* ✅ header가 margin 관리 */
+  font-size: 24px;
+  letter-spacing: -0.02em;
+}
+
 
 .carousel-img{
   aspect-ratio: 16 / 9;

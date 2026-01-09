@@ -116,7 +116,7 @@ collections:
               format: "YYYY-MM-DD"     # 저장용(안전)
               date_format: "YYYY.MM.DD" # UI 표시용
               time_format: false
-              required: false
+              required: true
 
             - { label: "Title", name: "title", widget: "string" }
 
