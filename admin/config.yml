@@ -5,7 +5,6 @@ backend:
 
 local_backend: false
 
-netlify deploy --prod --dir=.
 media_folder: "assets/members"
 public_folder: "/assets/members"
 
