@@ -2,7 +2,7 @@
   "members": [
     {
       "name": "강나원 (MS candidate)",
-      "photo": "/assets/members/강나원.jpg",
+      "photo": "/assets/members/member_1.jpg",
       "bs": "Kumon National Institute of Technology (2020~2024)",
       "email": "kangnawon017@gmail.com",
       "research": "Depolymerization",
@@ -14,12 +14,12 @@
       "email": "jin382428@gmail.com",
       "bio": "2001년 충청북도 청주에서 태어나, 모든 10대의 삶을 청주에서 보냈습니다. 중학교 화학 선생님의 영향으로 처음 화학에 대한 흥미를 갖게 되었고, 2020년, 코로나 19와 함께 경상북도 구미의 금오공과대학교의 고분자공학과에서 대학 생활을 시작했습니다. 칼럼 및 다큐멘터리 시청이 취미인 저는 지구 환경에 관한 영상을 많이 접할 수 있었습니다. 우리의 삶을 윤택하게 하는 고분자는 지구를 서서히 망가뜨리고 있다는 사실을 알게 되었고, 환경과 전공인 고분자의 융합에 대해 생각하게 되었습니다. 앞으로 저는 지구와 인간이 공존할 수 있는 방법을 고분자공학에서 찾아보고자 합니다. 현재 친환경 기능성 고분자 연구실에서 최청룡 교수님과 함께 지속 가능한 고분자와 고분자 재활용에 대해 공부하고 있습니다.",
       "research": "Synthesis of Sustainable Polymers",
-      "photo": "/assets/members/전여진.png"
+      "photo": "/assets/members/member_6.png"
     },
     {
       "name": "전종혁 (MS candidate)",
       "bs": "Kumon National Institute of Technology (2018~2024)",
-      "photo": "/assets/members/전종혁.png",
+      "photo": "/assets/members/member_7.png",
       "email": "gost829@gmail.com",
       "research": "Synthesis of Bio-based Polymer",
       "bio": "1999년에 대한민국 대구에서 태어나 현재 울산으로 이사해 지금까지 살아 왔습니다. 중학교때부터 화학에 관심을 가지게 되었고 친구들에게 가르쳐주는 것이 즐거웠기에 화학 교사가 되고자 했습니다. 현재 금오공대 고분자 공학과에서 학부연구생으로써 최청룡 교수님의 지도아래 분해가능 고분자 소재에 대해 연구하게 되었고, 앞으로 스스로가 더 발전된 모습을 보일 수 있도록 노력할 것입니다."
@@ -27,14 +27,14 @@
     {
       "name": "이성민 (MS candidate)",
       "bs": "Kumon National Institute of Technology (2020~2024)",
-      "photo": "/assets/members/이성민.png",
+      "photo": "/assets/members/member_5.png",
       "email": "tjdals71600@gmail.com",
       "research": "Electronic Device Recycling",
       "bio": "2001년 경상남도 마산에서 태어나 스무살 금오공대에 입학하면서 고분자공학과에 재학중입니다. 어디서든 볼 수 있어 가벼이 사용되고 버려지는  플라스틱을 대량으로, 효율적으로 만드는데에만 집중하던 사람들이 이제는 플라스틱의 사용을 줄이는데에 노력을 쏟고 있습니다. 플라스틱은 분명히 장담점이 존재하며, 이를 전공으로 한 제가 환경문제에 앞장서야한다고 생각합니다.  그래서 저는 최청룡 교수님의 지도아래, 지속가능한 지구를 만들기 위해 공부하고 있습니다."
     },
     {
       "name": "강유빈 (MS candidate)",
-      "photo": "/assets/members/강유빈.png",
+      "photo": "/assets/members/member_2.png",
       "bs": "Kumon National Institute of Technology (2021~2025)",
       "research": "Synthesis and Depolymerization of Silicone Polymer",
       "email": "gangyubin358@gmail.com",
@@ -42,7 +42,7 @@
     },
     {
       "name": "김민정 (MS candidate)",
-      "photo": "/assets/members/김민정.png",
+      "photo": "/assets/members/member_33.png",
       "bs": "Kumon National Institute of Technology (2021~2025)",
       "email": "kmjj3159@gmail.com",
       "research": "Development of Battery Binder",
@@ -50,7 +50,7 @@
     },
     {
       "name": "김수림 (MS candidate)",
-      "photo": "/assets/members/김수림.png",
+      "photo": "/assets/members/member_4.png",
       "bs": "Kumon National Institute of Technology (2022~2026)",
       "research": "Functional Polymer for Antifogging",
       "email": "kimsulim9@gmail.com",
