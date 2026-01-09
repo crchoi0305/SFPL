@@ -1,12 +1,22 @@
 
 backend:
+  # ✅ Netlify(Identity + Git Gateway)를 쓰는 경우 그대로 사용
+  # name: git-gateway
+  # branch: main
+  #
+  # ✅ GitHub Pages 등 'Netlify 없이' 운영하면서도 업로드/편집이
+  # GitHub 레포에 바로 커밋되길 원하면 아래 github 백엔드를 사용하세요.
+  # (OAuth 설정이 필요합니다. 아래 repo/branch만 먼저 채우고,
+  #  auth_endpoint 등은 배포 환경에 맞춰 추가)
   name: git-gateway
   branch: main
 
 local_backend: false
 
 media_folder: "assets/members"
-public_folder: "/assets/members"
+# ✅ GitHub Pages(/repo/...)에서도 경로가 깨지지 않도록 public_folder는
+# 선행 슬래시("/") 없이 상대 경로를 권장합니다.
+public_folder: "assets/members"
 
 collections:
   - name: "current"
@@ -37,7 +47,7 @@ collections:
   - name: "news"
     label: "News"
     media_folder: "assets/news"
-    public_folder: "/assets/news"
+    public_folder: "assets/news"
     files:
       - file: "content/news.json"
         label: "News Posts"
@@ -110,17 +120,19 @@ collections:
 
             - { label: "Title", name: "title", widget: "string" }
 
-            # ✅ 여러 장 업로드: 배열로 저장됨
-            - label: "Images"
+            # ✅ 여러 장 업로드: 저장 형태가 ["assets/photos/a.jpg", ...] 로 깔끔하게 떨어지도록
+            # list(image) 대신 file(allow_multiple) 사용
+            - label: "Images (multi)"
               name: "images"
-              widget: "list"
+              widget: "file"
               required: false
-              field:
-                label: "Image"
-                name: "image"
-                widget: "image"
-                media_folder: "assets/photos"
-                public_folder: "/assets/photos"
+              allow_multiple: true
+              media_folder: "assets/photos"
+              public_folder: "assets/photos"
+              media_library:
+                config:
+                  multiple: true
+              choose_url: false
 
 
   # =========================
@@ -135,7 +147,7 @@ collections:
         label: "Publications Data"
         name: "sci_publications"
         media_folder: "assets/sci"
-        public_folder: "/assets/sci"
+        public_folder: "assets/sci"
         fields:
         - label: "Publications"
           name: "publications"
