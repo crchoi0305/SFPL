@@ -133,25 +133,25 @@ collections:
   - name: "sci"
     label: "Sci / Publications"
     files:
-    - file: "content/sci.json"
-      label: "Publications Data"
-      name: "sci_publications"
-      media_folder: "assets/sci"
-      public_folder: "/assets/sci"
-      fields:
+      - file: "content/sci.json"
+        label: "Publications Data"
+        name: "sci_publications"
+        media_folder: "assets/sci"
+        public_folder: "/assets/sci"
+        fields:
         - label: "Publications"
           name: "publications"
           widget: "list"
           summary: "{{fields.year}} | {{fields.title}}"
           fields:
-            - { label: "Year",  name: "year",  widget: "string" }
+            - { label: "Year", name: "year", widget: "string" }
             - { label: "Title", name: "title", widget: "string" }
 
-            # ✅ Journal / Venue
-            - { label: "Journal", name: "venue", widget: "string", required: true }
+            # ✅ 저널명(venue) 다시 추가
+            - { label: "Journal (venue)", name: "venue", widget: "string", required: false }
 
-            # ✅ Bib (optional; if you prefer using only this, keep it)
-            - { label: "Bib (vol, page)", name: "bib", widget: "string", required: true }
+            # ✅ vol/page(기존 bib) 다시 추가
+            - { label: "Vol / Page (bib)", name: "bib", widget: "string", required: false }
 
             - label: "Authors"
               name: "authors"
@@ -169,11 +169,11 @@ collections:
                     - { label: "Co-first author (†)", value: "co-first" }
                     - { label: "Corresponding author (*)", value: "corresponding" }
 
-            - { label: "DOI", name: "doi", widget: "string", required: false }
+            - { label: "DOI (URL)", name: "doi", widget: "string", required: false }
 
             - label: "Thumbnail Image"
               name: "image"
               widget: "image"
               required: false
 
-            - { label: "Note", name: "note", widget: "text", required: false }
+            - { label: "Note", name: "note", widget: "string", required: false }
