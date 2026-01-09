@@ -469,7 +469,7 @@ main {
 /* ===== Home: Latest News (index) ===== */
 .home-news { margin-top: 0px; padding-top: 0px; border-top: 0px solid rgba(0,0,0,0); }
 .home-news-head { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom: 10px; }
-.home-news-title { margin:0; font-size: 22px; font-weight: 800; }
+.home-news-title { margin:0; font-size: 24px; font-weight: 800; }
 .home-news-more { font-size: 14px; text-decoration:none; font-weight: 700; opacity: .85; }
 .home-news-more:hover { opacity: 1; }
 
@@ -486,9 +486,9 @@ main {
 .home-news-item:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(15,23,42,.10); }
 
 .home-news-top { display:flex; flex-direction:column; gap: 6px; }
-.home-news-date { font-size: 12px; opacity: .7; }
-.home-news-item-title { font-size: 14px; font-weight: 800; line-height: 1.3; }
-.home-news-desc { margin-top: 8px; font-size: 13px; opacity: .85; line-height: 1.5; }
+.home-news-date { font-size: 15px; opacity: .9; }
+.home-news-item-title { font-size: 18px; font-weight: 800; line-height: 1.3; }
+.home-news-desc { margin-top: 8px; font-size: 15px; opacity: 1.0; line-height: 1.5; }
 .home-news-thumb { width:100%; height: 130px; object-fit: contain; border-radius: 12px; margin-top: 10px; }
 .home-news-empty { padding: 12px; border-radius: 12px; background: rgba(0,0,0,.04); opacity: .8; }
 

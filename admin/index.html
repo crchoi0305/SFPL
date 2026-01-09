@@ -6,20 +6,29 @@
   <title>Admin | Sustainable/Functional Polymer Lab</title>
 </head>
 <body>
+  <!-- 1) Netlify Identity widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
   <script>
     (function () {
-      if (!window.netlifyIdentity) return;
+      // Identity가 로드되면 초기화만 수행 (자동 open()은 제거)
+      function initIdentity() {
+        if (!window.netlifyIdentity) return;
+        window.netlifyIdentity.init();
+      }
 
-      // 로그인 안 되어 있으면 로그인 창 열기(원하면 제거 가능)
-      window.netlifyIdentity.on("init", (user) => {
-        if (!user) window.netlifyIdentity.open();
-      });
+      // 스크립트 로딩 타이밍 대비
+      if (document.readyState === "complete") initIdentity();
+      else window.addEventListener("load", initIdentity);
 
-      window.netlifyIdentity.init();
+      // 디버그용: 콘솔에서 상태 확인 가능
+      window.__openLogin = function () {
+        if (window.netlifyIdentity) window.netlifyIdentity.open();
+      };
     })();
   </script>
 
+  <!-- 2) Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
 </body>
 </html>
