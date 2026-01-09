@@ -91,38 +91,37 @@ collections:
   - name: "photos"
     label: "Photos"
     files:
-      - file: "content/photos.json"
-        label: "Photo Albums"
-        name: "photo_albums"
-        media_folder: "assets/photos"
-        public_folder: "/assets/photos"
-        fields:
-          - label: "Albums"
-            name: "albums"
-            widget: "list"
-            summary: "{{fields.date}} | {{fields.title}}"
-            fields:
-              - label: "Date"
-                name: "date"
-                widget: "datetime"
-                format: "YYYY.MM.DD"
-                date_format: "YYYY.MM.DD"
-                time_format: false
-                required: false
+    - file: "content/photos.json"
+      label: "Photo Albums"
+      name: "photo_albums"
+      fields:
+        - label: "Albums"
+          name: "albums"
+          widget: "list"
+          summary: "{{fields.date}} | {{fields.title}}"
+          fields:
+            - label: "Date"
+              name: "date"
+              widget: "datetime"
+              format: "YYYY-MM-DD"     # 저장용(안전)
+              date_format: "YYYY.MM.DD" # UI 표시용
+              time_format: false
+              required: false
 
-              - { label: "Title", name: "title", widget: "string" }
+            - { label: "Title", name: "title", widget: "string" }
 
-              # ✅ 다중 업로드(한 번에 여러 장 선택/드래그&드롭)용
-              # 저장 형태: ["/assets/photos/a.jpg", "/assets/photos/b.jpg", ...]
-              - label: "Images (multi)"
-                name: "images"
-                widget: "file"
-                required: false
-                allow_multiple: true
-                media_library:
-                  config:
-                    multiple: true
-                choose_url: false
+            # ✅ 여러 장 업로드: 배열로 저장됨
+            - label: "Images"
+              name: "images"
+              widget: "list"
+              required: false
+              field:
+                label: "Image"
+                name: "image"
+                widget: "image"
+                media_folder: "assets/photos"
+                public_folder: "/assets/photos"
+
 
   # =========================
   # Sci (content/sci.json)

@@ -200,14 +200,24 @@
     return /^https?:\/\//i.test(p) || String(p).startsWith("/");
   }
 
-  function normalizeImgSrc(v) {
-    // images: ["..."] or [{src:"..."}] 모두 지원
-    if (!v) return "";
-    const src = (typeof v === "string") ? v : (v && typeof v === "object" ? v.src : "");
-    if (!src) return "";
-    if (isAbsPath(src)) return src;
-    return "../" + String(src).replace(/^\.?\//, "");
-  }
+function normalizeImgSrc(v) {
+  // images: ["..."] 또는 [{ image: "..." }] 둘 다 지원
+  if (!v) return "";
+
+  const src =
+    (typeof v === "string") ? v :
+    (v && typeof v === "object" ? (v.image || v.src || "") : "");
+
+  const s = String(src).trim();
+  if (!s) return "";
+
+  // ✅ /assets/... 또는 https://... 는 그대로 사용
+  if (isAbsPath(s)) return s;
+
+  // ✅ 상대경로면 photo.html 기준 한 단계 위로
+  return "../" + s.replace(/^\.?\//, "");
+}
+
 
   function scrollToIndex(track, i){
     const slides = track.querySelectorAll(".carousel-slide");
