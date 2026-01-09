@@ -122,16 +122,12 @@ collections:
 
             # ✅ 여러 장 업로드: 저장 형태가 ["assets/photos/a.jpg", ...] 로 깔끔하게 떨어지도록
             # list(image) 대신 file(allow_multiple) 사용
-            - label: "Images (multi)"
+            - label: "Images"
               name: "images"
               widget: "file"
-              required: false
               allow_multiple: true
               media_folder: "assets/photos"
-              public_folder: "assets/photos"
-              media_library:
-                config:
-                  multiple: true
+              public_folder: "https://raw.githubusercontent.com/crchoi0305/SFPL/main/assets/photos"
               choose_url: false
 
 
