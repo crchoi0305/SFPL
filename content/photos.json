@@ -2,14 +2,7 @@
   "albums": [
     {
       "title": "기가막힌 화이트엘리펀트 ~~",
-      "images": [
-        "/assets/photos/1.jpg",
-        "/assets/photos/2.jpg",
-        "/assets/photos/3.jpg",
-        "/assets/photos/1.jpg",
-        "/assets/photos/2.jpg",
-        "/assets/photos/3.jpg"
-      ],
+      "images": "",
       "date": "2025.12.23"
     },
     {
