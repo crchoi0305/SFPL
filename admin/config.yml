@@ -130,16 +130,15 @@ collections:
 
               # ✅ 멀티 업로드(여러 장 추가 가능하도록 list + image로 구성)
               # 저장 형태: [{"src": "..."}, ...]
-              - label: "Images"
-                name: "images"
-                widget: "list"
-                required: false
-                summary: "{{fields.src}}"
-                fields:
-                  - label: "Image"
-                    name: "src"
-                    widget: "image"
-                    choose_url: false
+          - label: "Images (multi)"
+            name: "images"
+            widget: "file"
+            required: false
+            allow_multiple: true
+            media_library:
+             config:
+               multiple: true
+            choose_url: false
 
 
   # =========================
