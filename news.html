@@ -131,9 +131,9 @@
 
     // 1) raw URL로 저장된 경우: 같은 파일을 로컬 경로로 먼저 시도
     if (isHttpUrl(s) && s.startsWith(GH_RAW_BASE + "/")) {
-      let rel = s.slice((GH_RAW_BASE + "/").length); // e.g. content/assets/news/... or assets/news/...
-      // ✅ 과거 설정(assets/news)로 저장된 경우도 content/assets로 보정
-      if (rel.startsWith("assets/news/")) rel = "content/" + rel;
+      let rel = s.slice((GH_RAW_BASE + "/").length); // e.g. assets/news/... or content/assets/news/...
+      // ✅ 과거 데이터 호환: content/assets/news -> assets/news 로 보정
+      rel = rel.replace(/^content\/assets\/news\//, "assets/news/");
       const primary = (basePrefix + rel).replace(/\/\/+/, "/");
       return { primary, fallback: s };
     }
@@ -144,8 +144,10 @@
     // 3) 로컬 경로로 우선 시도
     let clean = s.replace(/^\.?\//, "").replace(/^\/+/, "");
 
-    // ✅ 파일명만 오는 경우 -> content/assets/news로 보정
-    if (!clean.includes("/")) clean = "content/assets/news/" + clean;
+    // ✅ 파일명만 오는 경우 -> assets/news로 보정
+    if (!clean.includes("/")) clean = "assets/news/" + clean;
+    // ✅ 과거 데이터 호환: content/assets/news -> assets/news
+    clean = clean.replace(/^content\/assets\/news\//, "assets/news/");
 
     const primary = (basePrefix + clean).replace(/\/\/+/, "/");
     const fallback = `${GH_RAW_BASE}/${clean}`;

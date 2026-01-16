@@ -13,14 +13,18 @@ backend:
 
 local_backend: false
 
-media_folder: "assets/members"
-# ✅ GitHub Pages(/repo/...)에서도 경로가 깨지지 않도록 public_folder는
-# 선행 슬래시("/") 없이 상대 경로를 권장합니다.
-public_folder: "assets/members"
+# ✅ 업로드 파일(이미지) 기본 저장 위치
+# - Decap CMS는 repo 루트 기준 경로를 가장 안정적으로 처리합니다.
+# - 업로드한 이미지는 /assets/** 로 저장되며, 사이트에서는 /assets/** 로 접근합니다.
+media_folder: "assets"
+public_folder: "/assets"
 
 collections:
   - name: "current"
     label: "People - Current"
+    # ✅ People 사진은 members 폴더로 정리
+    media_folder: "assets/members"
+    public_folder: "/assets/members"
     files:
       - file: "content/current.json"
         label: "Current Members"
@@ -46,10 +50,9 @@ collections:
   # =========================
   - name: "news"
     label: "News"
-    # ✅ 업로드는 content/assets 아래로 정리(레포 내 실제 정적 파일 위치)
-    media_folder: "content/assets/news"
-    # ✅ 저장은 raw URL로 저장(어디서 열어도 경로 안깨짐)
-    public_folder: "https://raw.githubusercontent.com/crchoi0305/SFPL/main/content/assets/news"
+    # ✅ News 이미지 업로드/저장 경로
+    media_folder: "assets/news"
+    public_folder: "/assets/news"
     files:
       - file: "content/news.json"
         label: "News Posts"
@@ -102,42 +105,41 @@ collections:
   # =========================
   - name: "photos"
     label: "Photos"
-    # ✅ Photos 업로드 경로/저장 URL(사진 멀티 업로드 지원)
-    media_folder: "content/assets/photos"
-    public_folder: "https://raw.githubusercontent.com/crchoi0305/SFPL/main/content/assets/photos"
+    # ✅ Photos 업로드 경로(사진 멀티 업로드 지원)
+    media_folder: "assets/photos"
+    public_folder: "/assets/photos"
     files:
-    - file: "content/photos.json"
-      label: "Photo Albums"
-      name: "photo_albums"
-      fields:
-        - label: "Albums"
-          name: "albums"
-          widget: "list"
-          summary: "{{fields.date}} | {{fields.title}}"
-          fields:
-            - label: "Date"
-              name: "date"
-              widget: "datetime"
-              format: "YYYY-MM-DD"     # 저장용(안전)
-              date_format: "YYYY.MM.DD" # UI 표시용
-              time_format: false
-              required: true
+      - file: "content/photos.json"
+        label: "Photo Albums"
+        name: "photo_albums"
+        fields:
+          - label: "Albums"
+            name: "albums"
+            widget: "list"
+            summary: "{{fields.date}} | {{fields.title}}"
+            fields:
+              - label: "Date"
+                name: "date"
+                widget: "datetime"
+                format: "YYYY-MM-DD"      # 저장용(안전)
+                date_format: "YYYY.MM.DD" # UI 표시용
+                time_format: false
+                required: true
 
-            - { label: "Title", name: "title", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
 
-            # ✅ 멀티 업로드(확실히 여러 장 추가 가능하도록 list + image로 구성)
-            # 저장 형태: [{"src": "..."}, ...]
-            # 프론트(photo.html)는 string/object 둘 다 처리하도록 되어 있음(v.src/v.image)
-            - label: "Images"
-              name: "images"
-              widget: "list"
-              required: false
-              summary: "{{fields.src}}"
-              fields:
-                - label: "Image"
-                  name: "src"
-                  widget: "image"
-                  choose_url: false
+              # ✅ 멀티 업로드(여러 장 추가 가능하도록 list + image로 구성)
+              # 저장 형태: [{"src": "..."}, ...]
+              - label: "Images"
+                name: "images"
+                widget: "list"
+                required: false
+                summary: "{{fields.src}}"
+                fields:
+                  - label: "Image"
+                    name: "src"
+                    widget: "image"
+                    choose_url: false
 
 
   # =========================
@@ -151,50 +153,54 @@ collections:
       - file: "content/sci.json"
         label: "Publications Data"
         name: "sci_publications"
-        media_folder: "content/assets/sci"
-        # ✅ 사진 업로드(Photos)와 동일한 방식으로 raw URL을 저장해
-        # GitHub Pages(/repo/...) 환경에서도 이미지 경로가 깨지지 않도록 처리
-        public_folder: "https://raw.githubusercontent.com/crchoi0305/SFPL/main/content/assets/sci"
+        # ✅ SCI 썸네일 업로드 경로
+        media_folder: "assets/sci"
+        public_folder: "/assets/sci"
         fields:
-        - label: "Publications"
-          name: "publications"
-          widget: "list"
-          summary: "{{fields.year}} | {{fields.title}}"
-          fields:
-            - { label: "Year", name: "year", widget: "string" }
-            - { label: "Title", name: "title", widget: "string" }
+          - label: "Publications"
+            name: "publications"
+            widget: "list"
+            summary: "{{fields.year}} | {{fields.title}}"
+            fields:
+              - { label: "Year", name: "year", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
 
-            # ✅ 저널명(venue) 다시 추가
-            - { label: "Journal (venue)", name: "venue", widget: "string", required: false }
 
-            # ✅ vol/page(기존 bib) 다시 추가
-            - { label: "Vol / Page (bib)", name: "bib", widget: "string", required: false }
+              # ✅ 저널명(venue) 다시 추가
+              - { label: "Journal (venue)", name: "venue", widget: "string", required: false }
 
-            - label: "Authors"
-              name: "authors"
-              widget: "list"
-              summary: "{{fields.name}}"
-              fields:
-                - { label: "Name", name: "name", widget: "string" }
-                - { label: "KIT-Polymer author", name: "is_lab", widget: "boolean", default: false }
-                - label: "Roles"
-                  name: "roles"
-                  widget: "select"
-                  multiple: true
-                  required: false
-                  options:
-                    - { label: "Co-first author (†)", value: "co-first" }
-                    - { label: "Corresponding author (*)", value: "corresponding" }
 
-            - { label: "DOI (URL)", name: "doi", widget: "string", required: false }
+              # ✅ vol/page(기존 bib) 다시 추가
+              - { label: "Vol / Page (bib)", name: "bib", widget: "string", required: false }
 
-            - label: "Thumbnail Image"
-              name: "image"
-              # ✅ photo와 동일한 업로드 UX(파일 선택/업로드 → URL 저장)
-              widget: "file"
-              media_folder: "content/assets/sci"
-              public_folder: "https://raw.githubusercontent.com/crchoi0305/SFPL/main/content/assets/sci"
-              choose_url: false
-              required: false
 
-            - { label: "Note", name: "note", widget: "string", required: false }
+              - label: "Authors"
+                name: "authors"
+                widget: "list"
+                summary: "{{fields.name}}"
+                fields:
+                  - { label: "Name", name: "name", widget: "string" }
+                  - { label: "KIT-Polymer author", name: "is_lab", widget: "boolean", default: false }
+                  - label: "Roles"
+                    name: "roles"
+                    widget: "select"
+                    multiple: true
+                    required: false
+                    options:
+                      - { label: "Co-first author (†)", value: "co-first" }
+                      - { label: "Corresponding author (*)", value: "corresponding" }
+
+
+              - { label: "DOI (URL)", name: "doi", widget: "string", required: false }
+
+
+              - label: "Thumbnail Image"
+                name: "image"
+                # ✅ photo와 동일한 업로드 UX(파일 선택/업로드 → URL 저장)
+                widget: "file"
+                media_folder: "assets/sci"
+                public_folder: "/assets/sci"
+                choose_url: false
+                required: false
+
+              - { label: "Note", name: "note", widget: "string", required: false }

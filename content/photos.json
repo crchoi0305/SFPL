@@ -1,14 +1,16 @@
 {
   "albums": [
     {
-      "date": "2023-10-13",
-      "title": "2023 고분자학회 추계 학술대회",
-      "images": "https://raw.githubusercontent.com/crchoi0305/SFPL/main/assets/photos/kakaotalk_20251017_145439301_12.jpg"
+      "title": "기가막힌 화이트엘리펀트 ~~",
+      "images": [
+        "/assets/photos/2025-1.png",
+        "/assets/photos/2025-2.png"
+      ],
+      "date": "2025.12.23"
     },
     {
-      "title": "연구실 멤버들과 벚꽃 구경 (단란하다~)",
-      "date": "2024-04-02",
-      "images": "https://raw.githubusercontent.com/crchoi0305/SFPL/main/assets/photos/1.jpg"
+      "title": "(25.11.27) 멋진 디펜스를 마무리하고 회식",
+      "images": []
     }
   ]
 }

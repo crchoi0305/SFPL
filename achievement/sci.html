@@ -334,7 +334,14 @@
     if (!s) return "";
     // raw.githubusercontent.com/.../main/assets/... -> /assets/...
     const prefix = GH_RAW_BASE + "/";
-    if (s.startsWith(prefix)) return "/" + s.slice(prefix.length);
+    if (s.startsWith(prefix)) {
+      let rel = s.slice(prefix.length); // assets/... 또는 content/assets/...
+      // ✅ 과거 데이터 호환: content/assets -> assets
+      rel = rel.replace(/^content\/assets\//, "assets/");
+      return "/" + rel;
+    }
+    // ✅ 과거 데이터 호환: /content/assets/... -> /assets/...
+    if (s.startsWith("/content/assets/")) return s.replace(/^\/content\/assets\//, "/assets/");
     return s;
   };
 

@@ -217,8 +217,8 @@ const GH_RAW_BASE = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${
   }
 
 // ===== 이미지 src를 "로컬 경로 우선 + 실패 시 raw URL"로 세팅하기 위한 해석기 =====
-// - Admin에서는 raw.githubusercontent.com URL로 저장되더라도
-//   화면에서는 가능하면 같은 repo의 로컬 파일(/<repo>/content/assets/...)을 먼저 로드하고,
+// - Admin에서 raw.githubusercontent.com URL로 저장되더라도
+//   화면에서는 가능하면 같은 repo의 로컬 파일(/<repo>/assets/...)을 먼저 로드하고,
 //   로컬이 없으면 raw URL로 자동 fallback 합니다.
 function resolveImgSources(v) {
   if (!v) return { primary: "", fallback: "" };
@@ -232,9 +232,9 @@ function resolveImgSources(v) {
 
   // 1) 이미 raw URL로 저장된 경우: 같은 파일을 로컬 경로로 먼저 시도
   if (isHttpUrl(s) && s.startsWith(GH_RAW_BASE + "/")) {
-    let rel = s.slice((GH_RAW_BASE + "/").length); // e.g. content/assets/photos/... or assets/photos/...
-    // ✅ 과거 설정(assets/photos)로 저장된 경우도 content/assets로 보정
-    if (rel.startsWith("assets/photos/")) rel = "content/" + rel;
+    let rel = s.slice((GH_RAW_BASE + "/").length); // e.g. assets/photos/... or content/assets/photos/...
+    // ✅ 과거 데이터 호환: content/assets/photos -> assets/photos
+    rel = rel.replace(/^content\/assets\/photos\//, "assets/photos/");
     const primary = (basePrefix + rel).replace(/\/\/+/, "/");
     return { primary, fallback: s };
   }
@@ -247,10 +247,10 @@ function resolveImgSources(v) {
     .replace(/^\.?\//, "")   // "./" 제거
     .replace(/^\/+/, "");    // "/" 제거
 
-  // ✅ photo 업로드가 저장되는 위치가 content/assets/photos 이므로 자동 보정
-  if (clean.startsWith("assets/photos/")) {
-    clean = "content/" + clean; // => content/assets/photos/...
-  }
+  // ✅ 파일명만 오는 경우 -> assets/photos로 보정
+  if (!clean.includes("/")) clean = "assets/photos/" + clean;
+  // ✅ 과거 데이터 호환: content/assets/photos -> assets/photos
+  clean = clean.replace(/^content\/assets\/photos\//, "assets/photos/");
 
   const primary = (basePrefix + clean).replace(/\/\/+/, "/");
   const fallback = `${GH_RAW_BASE}/${clean}`;
