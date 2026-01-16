@@ -46,8 +46,10 @@ collections:
   # =========================
   - name: "news"
     label: "News"
-    media_folder: "assets/news"
-    public_folder: "assets/news"
+    # ✅ 업로드는 content/assets 아래로 정리(레포 내 실제 정적 파일 위치)
+    media_folder: "content/assets/news"
+    # ✅ 저장은 raw URL로 저장(어디서 열어도 경로 안깨짐)
+    public_folder: "https://raw.githubusercontent.com/crchoi0305/SFPL/main/content/assets/news"
     files:
       - file: "content/news.json"
         label: "News Posts"
@@ -100,6 +102,9 @@ collections:
   # =========================
   - name: "photos"
     label: "Photos"
+    # ✅ Photos 업로드 경로/저장 URL(사진 멀티 업로드 지원)
+    media_folder: "content/assets/photos"
+    public_folder: "https://raw.githubusercontent.com/crchoi0305/SFPL/main/content/assets/photos"
     files:
     - file: "content/photos.json"
       label: "Photo Albums"
@@ -120,15 +125,19 @@ collections:
 
             - { label: "Title", name: "title", widget: "string" }
 
-            # ✅ 여러 장 업로드: 저장 형태가 ["assets/photos/a.jpg", ...] 로 깔끔하게 떨어지도록
-            # list(image) 대신 file(allow_multiple) 사용
+            # ✅ 멀티 업로드(확실히 여러 장 추가 가능하도록 list + image로 구성)
+            # 저장 형태: [{"src": "..."}, ...]
+            # 프론트(photo.html)는 string/object 둘 다 처리하도록 되어 있음(v.src/v.image)
             - label: "Images"
               name: "images"
-              widget: "file"
-              allow_multiple: true
-              media_folder: "assets/photos"
-              public_folder: "https://raw.githubusercontent.com/crchoi0305/SFPL/main/assets/photos"
-              choose_url: false
+              widget: "list"
+              required: false
+              summary: "{{fields.src}}"
+              fields:
+                - label: "Image"
+                  name: "src"
+                  widget: "image"
+                  choose_url: false
 
 
   # =========================
@@ -142,8 +151,10 @@ collections:
       - file: "content/sci.json"
         label: "Publications Data"
         name: "sci_publications"
-        media_folder: "assets/sci"
-        public_folder: "assets/sci"
+        media_folder: "content/assets/sci"
+        # ✅ 사진 업로드(Photos)와 동일한 방식으로 raw URL을 저장해
+        # GitHub Pages(/repo/...) 환경에서도 이미지 경로가 깨지지 않도록 처리
+        public_folder: "https://raw.githubusercontent.com/crchoi0305/SFPL/main/content/assets/sci"
         fields:
         - label: "Publications"
           name: "publications"
@@ -179,7 +190,11 @@ collections:
 
             - label: "Thumbnail Image"
               name: "image"
-              widget: "image"
+              # ✅ photo와 동일한 업로드 UX(파일 선택/업로드 → URL 저장)
+              widget: "file"
+              media_folder: "content/assets/sci"
+              public_folder: "https://raw.githubusercontent.com/crchoi0305/SFPL/main/content/assets/sci"
+              choose_url: false
               required: false
 
             - { label: "Note", name: "note", widget: "string", required: false }

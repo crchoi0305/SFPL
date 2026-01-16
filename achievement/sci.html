@@ -317,10 +317,30 @@
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#39;");
 
+  // ===== 이미지 경로 보정 =====
+  // CMS 저장값이
+  //  - "/assets/..."(상대/절대)
+  //  - "assets/..."(상대)
+  //  - "https://raw.githubusercontent.com/.../assets/..."(raw URL)
+  // 어떤 형태든 화면에서는 가능한 한 "\/assets/..." 형태로 통일해 사용.
+  const GH_OWNER  = "crchoi0305";
+  const GH_REPO   = "SFPL";
+  const GH_BRANCH = "main";
+  const GH_RAW_BASE = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}`;
+
   const isAbs = url => /^https?:\/\//i.test(url) || String(url).startsWith("/");
+  const rawToSitePath = (url) => {
+    const s = String(url || "").trim();
+    if (!s) return "";
+    // raw.githubusercontent.com/.../main/assets/... -> /assets/...
+    const prefix = GH_RAW_BASE + "/";
+    if (s.startsWith(prefix)) return "/" + s.slice(prefix.length);
+    return s;
+  };
+
   const resolveImgSrc = p => {
     if (!p) return "";
-    const s = String(p).trim();
+    const s = rawToSitePath(String(p).trim());
     if (!s) return "";
     return isAbs(s) ? s : "../" + s.replace(/^\.?\//, "");
   };

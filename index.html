@@ -72,6 +72,15 @@
       document
         .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
         .forEach((el) => el.addEventListener("click", (e) => e.preventDefault()));
+
+      // ✅ Mobile submenu (People/Achievement): 클릭 시 열기/닫기
+      document.querySelectorAll('#mobileNav .m-link[data-toggle="sub"]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const sub = link.nextElementSibling;
+          if (sub && sub.classList.contains('m-sub')) sub.classList.toggle('open');
+        });
+      });
     })
     .catch(err => console.error("header load failed:", err));
 
