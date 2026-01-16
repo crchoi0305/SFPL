@@ -105,40 +105,43 @@ collections:
   # =========================
   - name: "photos"
     label: "Photos"
-    # ✅ Photos 업로드 경로(사진 멀티 업로드 지원)
+  # ✅ Photos 업로드 경로(사진 멀티 업로드 지원)
     media_folder: "assets/photos"
     public_folder: "/assets/photos"
     files:
-      - file: "content/photos.json"
-        label: "Photo Albums"
-        name: "photo_albums"
-        fields:
-          - label: "Albums"
-            name: "albums"
-            widget: "list"
-            summary: "{{fields.date}} | {{fields.title}}"
-            fields:
-              - label: "Date"
-                name: "date"
-                widget: "datetime"
-                format: "YYYY.MM.DD"      # 저장용(안전)
-                date_format: "YYYY.MM.DD" # UI 표시용
-                time_format: false
-                required: true
+    - file: "content/photos.json"
+      label: "Photo Albums"
+      name: "photo_albums"
+      fields:
+        - label: "Albums"
+          name: "albums"
+          widget: "list"
+          summary: "{{fields.date}} | {{fields.title}}"
+          fields:
+            - label: "Date"
+              name: "date"
+              widget: "datetime"
+              format: "YYYY.MM.DD"       # 저장용
+              date_format: "YYYY.MM.DD"  # UI 표시용
+              time_format: false
+              required: true
 
-              - { label: "Title", name: "title", widget: "string" }
+            - label: "Title"
+              name: "title"
+              widget: "string"
 
-              # ✅ 멀티 업로드(여러 장 추가 가능하도록 list + image로 구성)
-              # 저장 형태: [{"src": "..."}, ...]
-          - label: "Images (multi)"
-            name: "images"
-            widget: "file"
-            required: false
-            allow_multiple: true
-            media_library:
-             config:
-               multiple: true
-            choose_url: false
+            # ✅ 각 앨범마다 여러 장 업로드 (문자열 배열로 저장됨)
+            # 저장 형태: ["/assets/photos/a.jpg", "/assets/photos/b.jpg", ...]
+            - label: "Images (multi)"
+              name: "images"
+              widget: "file"
+              required: false
+              allow_multiple: true
+              media_library:
+                config:
+                  multiple: true
+              choose_url: false
+
 
 
   # =========================
@@ -147,59 +150,27 @@ collections:
   # 프론트 키에 맞춰 publications/items 등으로 name 조정 가능
   # =========================
   - name: "sci"
-    label: "Sci / Publications"
+    label: "Publications"
+    media_folder: "assets/sci"
+    public_folder: "/assets/sci"
     files:
-      - file: "content/sci.json"
-        label: "Publications Data"
-        name: "sci_publications"
-        # ✅ SCI 썸네일 업로드 경로
-        media_folder: "assets/sci"
-        public_folder: "/assets/sci"
-        fields:
-          - label: "Publications"
-            name: "publications"
-            widget: "list"
-            summary: "{{fields.year}} | {{fields.title}}"
-            fields:
-              - { label: "Year", name: "year", widget: "string" }
-              - { label: "Title", name: "title", widget: "string" }
+    - file: "content/sci.json"
+      label: "SCI Publications"
+      name: "sci_publications"
+      fields:
+        - label: "Publications"
+          name: "publications"
+          widget: "list"
+          summary: "{{fields.year}} | {{fields.title}}"
+          fields:
+            - { label: "Year", name: "year", widget: "number" }
+            - { label: "Title", name: "title", widget: "string" }
+            - { label: "Journal", name: "journal", widget: "string" }
+            - { label: "Vol / Page", name: "vol", widget: "string", required: false }
 
-
-              # ✅ 저널명(venue) 다시 추가
-              - { label: "Journal (venue)", name: "venue", widget: "string", required: false }
-
-
-              # ✅ vol/page(기존 bib) 다시 추가
-              - { label: "Vol / Page (bib)", name: "bib", widget: "string", required: false }
-
-
-              - label: "Authors"
-                name: "authors"
-                widget: "list"
-                summary: "{{fields.name}}"
-                fields:
-                  - { label: "Name", name: "name", widget: "string" }
-                  - { label: "KIT-Polymer author", name: "is_lab", widget: "boolean", default: false }
-                  - label: "Roles"
-                    name: "roles"
-                    widget: "select"
-                    multiple: true
-                    required: false
-                    options:
-                      - { label: "Co-first author (†)", value: "co-first" }
-                      - { label: "Corresponding author (*)", value: "corresponding" }
-
-
-              - { label: "DOI (URL)", name: "doi", widget: "string", required: false }
-
-
-              - label: "Thumbnail Image"
-                name: "image"
-                # ✅ photo와 동일한 업로드 UX(파일 선택/업로드 → URL 저장)
-                widget: "file"
-                media_folder: "assets/sci"
-                public_folder: "/assets/sci"
-                choose_url: false
-                required: false
-
-              - { label: "Note", name: "note", widget: "string", required: false }
+            # ✅ 썸네일 (이제 실제 파일이 커밋됨)
+            - label: "Thumbnail Image"
+              name: "image"
+              widget: "image"
+              required: false
+              choose_url: false
