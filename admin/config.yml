@@ -150,27 +150,55 @@ collections:
   # 프론트 키에 맞춰 publications/items 등으로 name 조정 가능
   # =========================
   - name: "sci"
-    label: "Publications"
-    media_folder: "assets/sci"
-    public_folder: "/assets/sci"
+    label: "Sci / Publications"
     files:
-    - file: "content/sci.json"
-      label: "SCI Publications"
-      name: "sci_publications"
-      fields:
-        - label: "Publications"
-          name: "publications"
-          widget: "list"
-          summary: "{{fields.year}} | {{fields.title}}"
-          fields:
-            - { label: "Year", name: "year", widget: "number" }
-            - { label: "Title", name: "title", widget: "string" }
-            - { label: "Journal", name: "journal", widget: "string" }
-            - { label: "Vol / Page", name: "vol", widget: "string", required: false }
+      - file: "content/sci.json"
+        label: "Publications Data"
+        name: "sci_publications"
+        # ✅ SCI 썸네일 업로드 경로
+        media_folder: "assets/sci"
+        public_folder: "/assets/sci"
+        fields:
+          - label: "Publications"
+            name: "publications"
+            widget: "list"
+            summary: "{{fields.year}} | {{fields.title}}"
+            fields:
+              - { label: "Year", name: "year", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+
+
+              # ✅ 저널명(venue) 다시 추가
+              - { label: "Journal (venue)", name: "venue", widget: "string", required: false }
+
+
+              # ✅ vol/page(기존 bib) 다시 추가
+              - { label: "Vol / Page (bib)", name: "bib", widget: "string", required: false }
+
+
+              - label: "Authors"
+                name: "authors"
+                widget: "list"
+                summary: "{{fields.name}}"
+                fields:
+                  - { label: "Name", name: "name", widget: "string" }
+                  - { label: "KIT-Polymer author", name: "is_lab", widget: "boolean", default: false }
+                  - label: "Roles"
+                    name: "roles"
+                    widget: "select"
+                    multiple: true
+                    required: false
+                    options:
+                      - { label: "Co-first author (†)", value: "co-first" }
+                      - { label: "Corresponding author (*)", value: "corresponding" }
+
+
+              - { label: "DOI (URL)", name: "doi", widget: "string", required: false }
+
 
             # ✅ 썸네일 (이제 실제 파일이 커밋됨)
-            - label: "Thumbnail Image"
-              name: "image"
-              widget: "image"
-              required: false
-              choose_url: false
+              - label: "Thumbnail Image"
+                name: "image"
+                widget: "image"
+                required: false
+                choose_url: false
