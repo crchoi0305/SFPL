@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: crchoi0305/SFPL
+  name: git-gateway
   branch: main
   commit_messages:
     create: "Create {{collection}} “{{slug}}”"
@@ -9,6 +8,7 @@ backend:
     uploadMedia: "Upload “{{path}}”"
     deleteMedia: "Delete “{{path}}”"
 
+local_backend: false
 
 # ✅ 업로드 파일(이미지) 기본 저장 위치
 # - Decap CMS는 repo 루트 기준 경로를 가장 안정적으로 처리합니다.
