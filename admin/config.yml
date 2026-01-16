@@ -121,7 +121,7 @@ collections:
               - label: "Date"
                 name: "date"
                 widget: "datetime"
-                format: "YYYY-MM-DD"      # 저장용(안전)
+                format: "YYYY.MM.DD"      # 저장용(안전)
                 date_format: "YYYY.MM.DD" # UI 표시용
                 time_format: false
                 required: true
