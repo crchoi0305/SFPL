@@ -10,16 +10,13 @@ backend:
 
 local_backend: false
 
-# ✅ 업로드 파일(이미지) 기본 저장 위치
-# - Decap CMS는 repo 루트 기준 경로를 가장 안정적으로 처리합니다.
-# - 업로드한 이미지는 /assets/** 로 저장되며, 사이트에서는 /assets/** 로 접근합니다.
+# 업로드 파일(이미지) 기본 저장 위치 (repo 루트 기준)
 media_folder: "assets"
 public_folder: "/assets"
 
 collections:
   - name: "current"
     label: "People - Current"
-    # ✅ People 사진은 members 폴더로 정리
     media_folder: "assets/members"
     public_folder: "/assets/members"
     files:
@@ -29,25 +26,22 @@ collections:
         fields:
           - label: "Members"
             name: "members"
-            widget: list
+            widget: "list"
             summary: "{{fields.name}}"
             fields:
               - { label: "Name", name: "name", widget: "string" }
-              - { label: "Photo", name: "photo", widget: "image" }
-              - { label: "B.S.", name: "bs", widget: "string"}
+              - { label: "Photo", name: "photo", widget: "image", choose_url: false }
+              - { label: "B.S.", name: "bs", widget: "string" }
               - { label: "M.S./Ph.D.", name: "ms", widget: "string", required: false }
               - { label: "Research", name: "research", widget: "string", required: false }
               - { label: "Email", name: "email", widget: "string", required: false }
               - { label: "Bio", name: "bio", widget: "text", required: false }
 
-
   # =========================
   # News (content/news.json)
-  # news.html에서 data.posts 를 쓰는 구조에 맞춤
   # =========================
   - name: "news"
     label: "News"
-    # ✅ News 이미지 업로드/저장 경로
     media_folder: "assets/news"
     public_folder: "/assets/news"
     files:
@@ -60,7 +54,6 @@ collections:
             widget: "list"
             summary: "{{fields.date}} | {{fields.title}}"
             fields:
-              # date가 단순 문자열이면 string으로 바꿔도 됨
               - label: "Date"
                 name: "date"
                 widget: "datetime"
@@ -71,20 +64,18 @@ collections:
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Description", name: "desc", widget: "text", required: false }
 
-              # ✅ 다중 업로드(한 번에 여러 장 선택/드래그&드롭)용
-              # - 기본 Media Library에서 멀티선택이 지원되면 한 번에 여러 파일을 선택할 수 있습니다.
-              # - 저장 형태: ["/assets/news/a.jpg", "/assets/news/b.jpg", ...]
-              # - 프론트(news.html/index.html)는 문자열 배열도 이미 지원하도록 작성되어 있습니다.
+              # ✅ 안정적인 멀티 이미지: list + image
+              # 저장 형태(권장): images: [{ "image": "/assets/news/a.jpg" }, ...]
               - label: "Images (multi)"
                 name: "images"
-                widget: "file"
+                widget: "list"
                 required: false
-                allow_multiple: true
-                media_library:
-                  config:
-                    multiple: true
-                # URL 입력 버튼 숨기기(원하면 true로)
-                choose_url: false
+                summary: "{{fields.image}}"
+                field:
+                  label: "Image"
+                  name: "image"
+                  widget: "image"
+                  choose_url: false
 
               - label: "Links"
                 name: "links"
@@ -97,54 +88,48 @@ collections:
 
   # =========================
   # Photos (content/photos.json)
-  # "앨범(아카이브) 단위 + 여러 이미지" 구조로 설계
-  # 프론트에서 읽는 키에 맞춰 name을 수정해야 할 수 있음(예: albums/items/photos)
   # =========================
   - name: "photos"
     label: "Photos"
-  # ✅ Photos 업로드 경로(사진 멀티 업로드 지원)
     media_folder: "assets/photos"
     public_folder: "/assets/photos"
     files:
-    - file: "content/photos.json"
-      label: "Photo Albums"
-      name: "photo_albums"
-      fields:
-        - label: "Albums"
-          name: "albums"
-          widget: "list"
-          summary: "{{fields.date}} | {{fields.title}}"
-          fields:
-            - label: "Date"
-              name: "date"
-              widget: "datetime"
-              format: "YYYY.MM.DD"       # 저장용
-              date_format: "YYYY.MM.DD"  # UI 표시용
-              time_format: false
-              required: true
+      - file: "content/photos.json"
+        label: "Photo Albums"
+        name: "photo_albums"
+        fields:
+          - label: "Albums"
+            name: "albums"
+            widget: "list"
+            summary: "{{fields.date}} | {{fields.title}}"
+            fields:
+              - label: "Date"
+                name: "date"
+                widget: "datetime"
+                format: "YYYY.MM.DD"
+                date_format: "YYYY.MM.DD"
+                time_format: false
+                required: true
 
-            - label: "Title"
-              name: "title"
-              widget: "string"
+              - label: "Title"
+                name: "title"
+                widget: "string"
 
-            # ✅ 각 앨범마다 여러 장 업로드 (문자열 배열로 저장됨)
-            # 저장 형태: ["/assets/photos/a.jpg", "/assets/photos/b.jpg", ...]
-            - label: "Images (multi)"
-              name: "images"
-              widget: "file"
-              required: false
-              allow_multiple: true
-              media_library:
-                config:
-                  multiple: true
-              choose_url: false
-
-
+              # ✅ 안정적인 멀티 이미지: list + image
+              # 저장 형태(권장): images: [{ "image": "/assets/photos/a.jpg" }, ...]
+              - label: "Images (multi)"
+                name: "images"
+                widget: "list"
+                required: false
+                summary: "{{fields.image}}"
+                field:
+                  label: "Image"
+                  name: "image"
+                  widget: "image"
+                  choose_url: false
 
   # =========================
   # Sci (content/sci.json)
-  # 논문/학회/특허 등 "성과 리스트" 형태로 범용 설계
-  # 프론트 키에 맞춰 publications/items 등으로 name 조정 가능
   # =========================
   - name: "sci"
     label: "Sci / Publications"
@@ -152,7 +137,6 @@ collections:
       - file: "content/sci.json"
         label: "Publications Data"
         name: "sci_publications"
-        # ✅ SCI 썸네일 업로드 경로
         media_folder: "assets/sci"
         public_folder: "/assets/sci"
         fields:
@@ -163,15 +147,8 @@ collections:
             fields:
               - { label: "Year", name: "year", widget: "string" }
               - { label: "Title", name: "title", widget: "string" }
-
-
-              # ✅ 저널명(venue) 다시 추가
               - { label: "Journal (venue)", name: "venue", widget: "string", required: false }
-
-
-              # ✅ vol/page(기존 bib) 다시 추가
               - { label: "Vol / Page (bib)", name: "bib", widget: "string", required: false }
-
 
               - label: "Authors"
                 name: "authors"
@@ -189,11 +166,8 @@ collections:
                       - { label: "Co-first author (†)", value: "co-first" }
                       - { label: "Corresponding author (*)", value: "corresponding" }
 
-
               - { label: "DOI (URL)", name: "doi", widget: "string", required: false }
 
-
-            # ✅ 썸네일 (이제 실제 파일이 커밋됨)
               - label: "Thumbnail Image"
                 name: "image"
                 widget: "image"
