@@ -1,5 +1,6 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: crchoi0305/SFPL
   branch: main
   commit_messages:
     create: "Create {{collection}} “{{slug}}”"
@@ -7,6 +8,7 @@ backend:
     delete: "Delete {{collection}} “{{slug}}”"
     uploadMedia: "Upload “{{path}}”"
     deleteMedia: "Delete “{{path}}”"
+
 
 local_backend: false
 
