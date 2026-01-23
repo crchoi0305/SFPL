@@ -1,3 +1,11 @@
 {
-  "albums": []
+  "albums": [
+    {
+      "date": "2026.01.23",
+      "title": "test",
+      "images": [
+        "/assets/photos/2025-1.png"
+      ]
+    }
+  ]
 }
