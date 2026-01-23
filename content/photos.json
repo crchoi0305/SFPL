@@ -1,12 +1,3 @@
 {
-  "albums": [
-    {
-      "date": "2024.04.02",
-      "title": "벚꽃 test",
-      "images": [
-        "/assets/photos/1.jpg",
-        "/assets/photos/2.jpg"
-      ]
-    }
-  ]
+  "albums": []
 }
