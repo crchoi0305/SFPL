@@ -2,22 +2,22 @@ backend:
   name: git-gateway
   branch: main
   commit_messages:
-    create: "Create {{collection}} “{{slug}}”"
-    update: "Update {{collection}} “{{slug}}”"
-    delete: "Delete {{collection}} “{{slug}}”"
-    uploadMedia: "Upload “{{path}}”"
-    deleteMedia: "Delete “{{path}}”"
+    create: "Create {{collection}} {{slug}}"
+    update: "Update {{collection}} {{slug}}"
+    delete: "Delete {{collection}} {{slug}}"
+    uploadMedia: "Upload {{path}}"
+    deleteMedia: "Delete {{path}}"
 
 local_backend: false
 
-# ✅ 업로드 이미지가 빌드 산출물에 포함되도록 public 아래로 저장
-media_folder: "public/assets"
+# ✅ 이미지 업로드는 repo 루트의 assets로 통일
+media_folder: "assets"
 public_folder: "/assets"
 
 collections:
   - name: "current"
     label: "People - Current"
-    media_folder: "public/assets/members"
+    media_folder: "assets/members"
     public_folder: "/assets/members"
     files:
       - file: "content/current.json"
@@ -39,7 +39,7 @@ collections:
 
   - name: "news"
     label: "News"
-    media_folder: "public/assets/news"
+    media_folder: "assets/news"
     public_folder: "/assets/news"
     files:
       - file: "content/news.json"
@@ -83,7 +83,7 @@ collections:
 
   - name: "photos"
     label: "Photos"
-    media_folder: "public/assets/photos"
+    media_folder: "assets/photos"
     public_folder: "/assets/photos"
     files:
       - file: "content/photos.json"
@@ -124,7 +124,7 @@ collections:
       - file: "content/sci.json"
         label: "Publications Data"
         name: "sci_publications"
-        media_folder: "public/assets/sci"
+        media_folder: "assets/sci"
         public_folder: "/assets/sci"
         fields:
           - label: "Publications"
