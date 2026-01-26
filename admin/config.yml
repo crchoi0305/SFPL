@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: crchoi0305/SFPL
+  name: git-gateway
   branch: main
   commit_messages:
     create: "Create {{collection}} “{{slug}}”"
@@ -9,17 +8,16 @@ backend:
     uploadMedia: "Upload “{{path}}”"
     deleteMedia: "Delete “{{path}}”"
 
-
 local_backend: false
 
-# 업로드 파일(이미지) 기본 저장 위치 (repo 루트 기준)
-media_folder: "assets"
+# ✅ 업로드 이미지가 빌드 산출물에 포함되도록 public 아래로 저장
+media_folder: "public/assets"
 public_folder: "/assets"
 
 collections:
   - name: "current"
     label: "People - Current"
-    media_folder: "assets/members"
+    media_folder: "public/assets/members"
     public_folder: "/assets/members"
     files:
       - file: "content/current.json"
@@ -39,12 +37,9 @@ collections:
               - { label: "Email", name: "email", widget: "string", required: false }
               - { label: "Bio", name: "bio", widget: "text", required: false }
 
-  # =========================
-  # News (content/news.json)
-  # =========================
   - name: "news"
     label: "News"
-    media_folder: "assets/news"
+    media_folder: "public/assets/news"
     public_folder: "/assets/news"
     files:
       - file: "content/news.json"
@@ -66,8 +61,6 @@ collections:
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Description", name: "desc", widget: "text", required: false }
 
-              # ✅ 안정적인 멀티 이미지: list + image
-              # 저장 형태(권장): images: [{ "image": "/assets/news/a.jpg" }, ...]
               - label: "Images (multi)"
                 name: "images"
                 widget: "list"
@@ -88,12 +81,9 @@ collections:
                   - { label: "Label", name: "label", widget: "string" }
                   - { label: "URL", name: "url", widget: "string" }
 
-  # =========================
-  # Photos (content/photos.json)
-  # =========================
   - name: "photos"
     label: "Photos"
-    media_folder: "assets/photos"
+    media_folder: "public/assets/photos"
     public_folder: "/assets/photos"
     files:
       - file: "content/photos.json"
@@ -117,8 +107,6 @@ collections:
                 name: "title"
                 widget: "string"
 
-              # ✅ 안정적인 멀티 이미지: list + image
-              # 저장 형태(권장): images: [{ "image": "/assets/photos/a.jpg" }, ...]
               - label: "Images (multi)"
                 name: "images"
                 widget: "list"
@@ -130,16 +118,13 @@ collections:
                   widget: "image"
                   choose_url: false
 
-  # =========================
-  # Sci (content/sci.json)
-  # =========================
   - name: "sci"
     label: "Sci / Publications"
     files:
       - file: "content/sci.json"
         label: "Publications Data"
         name: "sci_publications"
-        media_folder: "assets/sci"
+        media_folder: "public/assets/sci"
         public_folder: "/assets/sci"
         fields:
           - label: "Publications"
