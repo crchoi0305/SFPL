@@ -55,11 +55,10 @@
       border: 1px solid rgba(0,0,0,.08);
       box-shadow: 0 10px 30px rgba(0,0,0,.04);
     }
-   .pub-card{
-  grid-template-columns: auto 1fr;
-  gap: 14px;
-}
-
+    .pub-card{
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+    }
 
     .pub-journal{ font-size: 16px; font-weight: 400; margin: 0 0 6px; }
     .pub-year{ font-size: 16px; font-weight: 400; margin: 0 0 6px; }
@@ -75,33 +74,32 @@
       color:#666;
     }
 
-@media (max-width: 900px){
-  .pub-card{
-    display: grid;
-    grid-template-columns: 1fr !important;
-    grid-template-areas:
-      "thumb"
-      "body";
-    gap: 12px !important;
-  }
+    @media (max-width: 900px){
+      .pub-card{
+        display: grid;
+        grid-template-columns: 1fr !important;
+        grid-template-areas:
+          "thumb"
+          "body";
+        gap: 12px !important;
+      }
 
-  .pub-thumb{ grid-area: thumb; }
-  .pub-body{  grid-area: body; }
+      .pub-thumb{ grid-area: thumb; }
+      .pub-body{  grid-area: body; }
 
-  /* 모바일에서 썸네일은 가로로 예쁘게 */
-  .thumb{
-    width: 100% !important;
-    height: auto !important;
-    aspect-ratio: auto !important;  /* 이 줄이 중요 */
-  }
+      /* 모바일에서 썸네일은 가로로 예쁘게 */
+      .thumb{
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: auto !important;
+      }
 
-.thumb img{
-  width: 100%;
-  height: auto;           /* 핵심: 비율 유지하면서 세로 자동 */
-  object-fit: contain;    /* cover -> contain */
-}
-}
-
+      .thumb img{
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+    }
 
     /* ===== layout centering + compact year-nav ===== */
     .page-wrap-wide{
@@ -138,85 +136,80 @@
     }
 
     /* ===== mobile gutters tighten ===== */
-@media (max-width: 900px){
-  .page-wrap-wide{
-    width: 100% !important;      /* calc(100% - 48px) 제거 */
-    padding: 0 16px !important;  /* 좌우 여백 12px 정도로 */
-    margin: 18px auto !important;
-  }
+    @media (max-width: 900px){
+      .page-wrap-wide{
+        width: 100% !important;
+        padding: 0 16px !important;
+        margin: 18px auto !important;
+      }
 
-  .year-section{
-    width: 100% !important;      /* 섹션도 꽉 차게 */
-    margin: 18px auto !important;
-  }
+      .year-section{
+        width: 100% !important;
+        margin: 18px auto !important;
+      }
 
-  .pub-card{
-    padding: 10px 12px !important; /* 카드 내부 여백도 살짝 컴팩트 */
-  }
-}
+      .pub-card{
+        padding: 10px 12px !important;
+      }
+    }
 
-.pub-note-inline{
-  font-size: 16px;      /* 제목과 동일한 크기 */
-  font-weight: 400;        /* bold 제거 */
-  color: #d11;             /* 붉은색 */
-  margin-left: 6px;
-  white-space: nowrap;     /* 줄바꿈 방지 */
-}
+    .pub-note-inline{
+      font-size: 16px;
+      font-weight: 400;
+      color: #d11;
+      margin-left: 6px;
+      white-space: nowrap;
+    }
 
-.pub-title{
-  font-size: 18px;     /* ← 원하는 크기로 조절 (예: 20~24px) */
-  font-weight: 800;   /* 제목은 bold 유지 */
-  margin: 0 0 4px;
-  line-height: 1.25;
-}
+    .pub-title{
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0 0 4px;
+      line-height: 1.25;
+    }
 
-.pub-authors{
-  font-size: 16px;     /* ← authors 크기 */
-  line-height: 1.6;
-  color: #222;
-}
+    .pub-authors{
+      font-size: 16px;
+      line-height: 1.6;
+      color: #222;
+    }
 
-.pub-authors .lab-author{
-  font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
+    .pub-authors .lab-author{
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
 
-/* ===== SCI thumbnail ===== */
-/* ===== SCI thumbnail (desktop) ===== */
-.thumb{
-  width: 300px;           /* 가로 고정 */
-  height: auto;           /* 자동 */
-  border-radius: 16px;
-  overflow: hidden;
-  background: rgba(0,0,0,.05);
-}
+    /* ===== SCI thumbnail (desktop) ===== */
+    .thumb{
+      width: 300px;
+      height: auto;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(0,0,0,.05);
+    }
 
+    .thumb img{
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
 
-.thumb img{
-  width: 100%;
-  height: auto;           /* 핵심: 비율 유지하면서 세로 자동 */
-  object-fit: contain;    /* cover -> contain */
-  display: block;
-}
+    /* 카드 그리드도 명확히 */
+    .pub-card{
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
 
-/* 카드 그리드도 명확히 */
-.pub-card{
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 18px;
-  align-items: start;
-}
-
-.author-mark{
-  font-size: 0.85em;
-  vertical-align: super;
-  margin-left: 1px;
-  line-height: 0;
-}
-
-
-
+    .author-mark{
+      font-size: 0.85em;
+      vertical-align: super;
+      margin-left: 1px;
+      line-height: 0;
+    }
   </style>
 </head>
 
@@ -233,10 +226,9 @@
     </div>
   </main>
 
-<div id="site-footer"></div>
+  <div id="site-footer"></div>
 
-
- <script>
+  <script>
   /* =========================
      footer year
   ========================= */
@@ -290,18 +282,17 @@
     })
     .catch(err => console.error(err));
 
-    fetch("../footer.html")
-  .then(res => {
-    if (!res.ok) throw new Error("footer.html load failed");
-    return res.text();
-  })
-  .then(html => {
-    document.getElementById("site-footer").innerHTML = html;
-    const y = document.getElementById("year");
-    if (y) y.textContent = new Date().getFullYear();
-  })
-  .catch(err => console.error(err));
-
+  fetch("../footer.html")
+    .then(res => {
+      if (!res.ok) throw new Error("footer.html load failed");
+      return res.text();
+    })
+    .then(html => {
+      document.getElementById("site-footer").innerHTML = html;
+      const y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear();
+    })
+    .catch(err => console.error(err));
 
   /* =========================
      helpers
@@ -317,40 +308,65 @@
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#39;");
 
-  // ===== 이미지 경로 보정 =====
-  // CMS 저장값이
-  //  - "/assets/..."(상대/절대)
-  //  - "assets/..."(상대)
-  //  - "https://raw.githubusercontent.com/.../assets/..."(raw URL)
-  // 어떤 형태든 화면에서는 가능한 한 "\/assets/..." 형태로 통일해 사용.
+  // ===== 이미지 경로 보정 (SCI: content/assets/sci 우선) =====
+  // 지원:
+  // - "1.jpg"                     -> /content/assets/sci/1.jpg
+  // - "assets/sci/1.jpg"          -> /content/assets/sci/1.jpg
+  // - "content/assets/sci/1.jpg"  -> 그대로
+  // - raw URL (assets/sci or content/assets/sci) -> 로컬 우선으로 변환
+  // - 외부 URL -> 그대로 사용
   const GH_OWNER  = "crchoi0305";
   const GH_REPO   = "SFPL";
   const GH_BRANCH = "main";
   const GH_RAW_BASE = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}`;
 
-  const isAbs = url => /^https?:\/\//i.test(url) || String(url).startsWith("/");
-  const rawToSitePath = (url) => {
-    const s = String(url || "").trim();
+  const isHttp = url => /^https?:\/\//i.test(String(url));
+
+  function resolveImgSrc(p){
+    if (!p) return "";
+    let s = String(p).trim();
     if (!s) return "";
-    // raw.githubusercontent.com/.../main/assets/... -> /assets/...
-    const prefix = GH_RAW_BASE + "/";
-    if (s.startsWith(prefix)) {
-      let rel = s.slice(prefix.length); // assets/... 또는 content/assets/...
-      // ✅ 과거 데이터 호환: content/assets -> assets
-      rel = rel.replace(/^content\/assets\//, "assets/");
+
+    // 1) raw.githubusercontent.com/... -> /content/assets/sci/... 로 우선 변환
+    if (isHttp(s) && s.startsWith(GH_RAW_BASE + "/")) {
+      let rel = s.slice((GH_RAW_BASE + "/").length); // assets/... or content/assets/...
+      rel = rel.replace(/^\/+/, "");
+
+      // assets/sci -> content/assets/sci
+      if (rel.startsWith("assets/sci/")) {
+        rel = rel.replace(/^assets\/sci\//, "content/assets/sci/");
+      }
+
+      // 파일명만 있으면
+      if (!rel.includes("/")) rel = "content/assets/sci/" + rel;
+
       return "/" + rel;
     }
-    // ✅ 과거 데이터 호환: /content/assets/... -> /assets/...
-    if (s.startsWith("/content/assets/")) return s.replace(/^\/content\/assets\//, "/assets/");
-    return s;
-  };
 
-  const resolveImgSrc = p => {
-    if (!p) return "";
-    const s = rawToSitePath(String(p).trim());
-    if (!s) return "";
-    return isAbs(s) ? s : "../" + s.replace(/^\.?\//, "");
-  };
+    // 2) 외부 URL
+    if (isHttp(s)) return s;
+
+    // 3) 로컬 경로 정리
+    s = s.replace(/^\.?\//, "").replace(/^\/+/, "");
+
+    // assets/sci -> content/assets/sci
+    if (s.startsWith("assets/sci/")) {
+      s = s.replace(/^assets\/sci\//, "content/assets/sci/");
+    }
+
+    // 파일명만 있는 경우
+    if (!s.includes("/")) {
+      s = "content/assets/sci/" + s;
+    }
+
+    // 이미 content/assets/sci면 그대로
+    if (s.startsWith("content/assets/sci/")) {
+      return "/" + s;
+    }
+
+    // 기타 경로는 그대로
+    return "/" + s;
+  }
 
   /* =========================
      핵심: 그룹 자동 생성 로직
@@ -440,57 +456,56 @@
     return `
       <article class="pub-card">
         ${img.replace('class="thumb"', 'class="thumb pub-thumb"')}
-<div class="pub-body">
-
-        <div>
-         <h3 class="pub-title">
-  ${escapeHTML(title)}
-  ${note ? `<span class="pub-note-inline"> ${escapeHTML(note)}</span>` : ""}
-</h3>
-          <div class="pub-authors">${renderAuthors(authors)}</div>
-          <div class="pub-line">${line}</div>
-          ${btn}
+        <div class="pub-body">
+          <div>
+            <h3 class="pub-title">
+              ${escapeHTML(title)}
+              ${note ? `<span class="pub-note-inline"> ${escapeHTML(note)}</span>` : ""}
+            </h3>
+            <div class="pub-authors">${renderAuthors(authors)}</div>
+            <div class="pub-line">${line}</div>
+            ${btn}
+          </div>
         </div>
       </article>
     `;
   }
 
-function renderAuthors(authors){
-  // 기존 데이터(문자열) 호환
-  if(typeof authors === "string") return escapeHTML(authors);
+  function renderAuthors(authors){
+    // 기존 데이터(문자열) 호환
+    if(typeof authors === "string") return escapeHTML(authors);
 
-  // roles -> 기호 매핑
-  const roleMarks = (roles) => {
-    if(!Array.isArray(roles)) return "";
-    let mark = "";
-    if(roles.includes("co-first")) mark += "†";
-    if(roles.includes("corresponding")) mark += "*";
-    return mark ? `<sup class="author-mark">${mark}</sup>` : "";
-  };
+    // roles -> 기호 매핑
+    const roleMarks = (roles) => {
+      if(!Array.isArray(roles)) return "";
+      let mark = "";
+      if(roles.includes("co-first")) mark += "†";
+      if(roles.includes("corresponding")) mark += "*";
+      return mark ? `<sup class="author-mark">${mark}</sup>` : "";
+    };
 
-  // 새 데이터(배열) 처리
-  if(Array.isArray(authors)){
-    return authors
-      .filter(a => a && (a.name || typeof a === "string"))
-      .map(a => {
-        // 문자열 author도 지원
-        if(typeof a === "string"){
-          return `<span class="author">${escapeHTML(a)}</span>`;
-        }
+    // 새 데이터(배열) 처리
+    if(Array.isArray(authors)){
+      return authors
+        .filter(a => a && (a.name || typeof a === "string"))
+        .map(a => {
+          // 문자열 author도 지원
+          if(typeof a === "string"){
+            return `<span class="author">${escapeHTML(a)}</span>`;
+          }
 
-        const name = a.name || "";
-        const isLab = !!a.is_lab;
-        const cls = isLab ? "author lab-author" : "author";
-        const mark = roleMarks(a.roles);
+          const name = a.name || "";
+          const isLab = !!a.is_lab;
+          const cls = isLab ? "author lab-author" : "author";
+          const mark = roleMarks(a.roles);
 
-        return `<span class="${cls}">${escapeHTML(name)}${mark}</span>`;
-      })
-      .join(", ");
+          return `<span class="${cls}">${escapeHTML(name)}${mark}</span>`;
+        })
+        .join(", ");
+    }
+
+    return "";
   }
-
-  return "";
-}
-
 
   /* =========================
      init
@@ -529,7 +544,7 @@ function renderAuthors(authors){
   }
 
   loadSCI();
-</script>
+  </script>
 
 </body>
 </html>

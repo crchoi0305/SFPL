@@ -123,36 +123,54 @@
   }
 
   // ===== 이미지 src를 "로컬 경로 우선 + 실패 시 raw URL"로 세팅하기 위한 해석기 =====
-  function resolveImgSources(v) {
-    if (!v) return { primary: "", fallback: "" };
-    const src = (typeof v === "string") ? v : (v && typeof v === "object" ? (v.src || v.image || "") : "");
-    const s = String(src || "").trim();
-    if (!s) return { primary: "", fallback: "" };
+function resolveImgSources(v) {
+  if (!v) return { primary: "", fallback: "" };
+  const src = (typeof v === "string") ? v : (v && typeof v === "object" ? (v.src || v.image || "") : "");
+  const s = String(src || "").trim();
+  if (!s) return { primary: "", fallback: "" };
 
-    // 1) raw URL로 저장된 경우: 같은 파일을 로컬 경로로 먼저 시도
-    if (isHttpUrl(s) && s.startsWith(GH_RAW_BASE + "/")) {
-      let rel = s.slice((GH_RAW_BASE + "/").length); // e.g. assets/news/... or content/assets/news/...
-      // ✅ 과거 데이터 호환: content/assets/news -> assets/news 로 보정
-      rel = rel.replace(/^content\/assets\/news\//, "assets/news/");
-      const primary = (basePrefix + rel).replace(/\/\/+/, "/");
-      return { primary, fallback: s };
+  // ✅ 실제 저장 폴더가 content/assets/news 인 상황을 우선 사용
+  const preferContentAssets = (rel) => {
+    rel = rel.replace(/^\/+/, ""); // leading slash 제거
+
+    // assets/news/... -> content/assets/news/... 로 매핑
+    if (rel.startsWith("assets/news/")) {
+      rel = rel.replace(/^assets\/news\//, "content/assets/news/");
     }
 
-    // 2) 외부 URL이면 그대로 사용
-    if (isHttpUrl(s)) return { primary: s, fallback: "" };
+    // 이미 content/assets/news/...면 그대로
+    if (rel.startsWith("content/assets/news/")) {
+      // ok
+    }
 
-    // 3) 로컬 경로로 우선 시도
-    let clean = s.replace(/^\.?\//, "").replace(/^\/+/, "");
+    // 파일명만 오면 content/assets/news/파일명 으로
+    if (!rel.includes("/")) {
+      rel = "content/assets/news/" + rel;
+    }
 
-    // ✅ 파일명만 오는 경우 -> assets/news로 보정
-    if (!clean.includes("/")) clean = "assets/news/" + clean;
-    // ✅ 과거 데이터 호환: content/assets/news -> assets/news
-    clean = clean.replace(/^content\/assets\/news\//, "assets/news/");
+    return rel;
+  };
 
-    const primary = (basePrefix + clean).replace(/\/\/+/, "/");
-    const fallback = `${GH_RAW_BASE}/${clean}`;
-    return { primary, fallback };
+  // 1) raw URL로 저장된 경우: 같은 파일을 로컬 경로로 먼저 시도
+  if (isHttpUrl(s) && s.startsWith(GH_RAW_BASE + "/")) {
+    let rel = s.slice((GH_RAW_BASE + "/").length); // e.g. assets/news/... or content/assets/news/...
+    rel = preferContentAssets(rel);
+    const primary = (basePrefix + rel).replace(/\/\/+/, "/");
+    return { primary, fallback: s };
   }
+
+  // 2) 외부 URL이면 그대로 사용
+  if (isHttpUrl(s)) return { primary: s, fallback: "" };
+
+  // 3) 로컬 경로 우선 + raw fallback 생성
+  let clean = s.replace(/^\.?\//, "").replace(/^\/+/, "");
+  clean = preferContentAssets(clean);
+
+  const primary = (basePrefix + clean).replace(/\/\/+/, "/");
+  const fallback = `${GH_RAW_BASE}/${clean}`;
+  return { primary, fallback };
+}
+
 
   function setImgWithFallback(img, sources) {
     if (!img || !sources) return;
