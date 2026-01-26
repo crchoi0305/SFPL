@@ -17,8 +17,8 @@ public_folder: "/assets"
 collections:
   - name: "current"
     label: "People - Current"
-    media_folder: "assets/members"
-    public_folder: "/assets/members"
+    media_folder: "content/assets/members"
+    public_folder: "/content/assets/members"
     files:
       - file: "content/current.json"
         label: "Current Members"
@@ -39,8 +39,8 @@ collections:
 
   - name: "news"
     label: "News"
-    media_folder: "assets/news"
-    public_folder: "/assets/news"
+    media_folder: "content/assets/news"
+    public_folder: "/content/assets/news"
     files:
       - file: "content/news.json"
         label: "News Posts"
@@ -83,8 +83,8 @@ collections:
 
   - name: "photos"
     label: "Photos"
-    media_folder: "assets/photos"
-    public_folder: "/assets/photos"
+    media_folder: "content/assets/photos"
+    public_folder: "/content/assets/photos"
     files:
       - file: "content/photos.json"
         label: "Photo Albums"
@@ -124,8 +124,8 @@ collections:
       - file: "content/sci.json"
         label: "Publications Data"
         name: "sci_publications"
-        media_folder: "assets/sci"
-        public_folder: "/assets/sci"
+        media_folder: "content/assets/sci"
+        public_folder: "/content/assets/sci"
         fields:
           - label: "Publications"
             name: "publications"
