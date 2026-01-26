@@ -19,26 +19,24 @@
       </div>
     </section>
 
-<section class="page-wrap">
-  <div class="card page-hero">
-    <!-- ✅ 최신 News 4개 출력 자리 -->
-    <div class="home-news">
-      <div class="home-news-head">
-        <h3 class="home-news-title">Latest News</h3>
-        <a class="home-news-more" href="news.html">View all →</a>
+    <section class="page-wrap">
+      <div class="card page-hero">
+        <div class="home-news">
+          <div class="home-news-head">
+            <h3 class="home-news-title">Latest News</h3>
+            <a class="home-news-more" href="news.html">View all →</a>
+          </div>
+          <div id="latestNews" class="home-news-list" aria-label="Latest news list">
+            <!-- JS render -->
+          </div>
+        </div>
       </div>
-      <div id="latestNews" class="home-news-list" aria-label="Latest news list">
-        <!-- JS render -->
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
   </main>
 
-<div id="site-footer"></div>
+  <div id="site-footer"></div>
 
-
- <script>
+<script>
   (function () {
     const hash = window.location.hash || "";
     const hasToken = hash.includes("recovery_token=") || hash.includes("invite_token=");
@@ -53,7 +51,7 @@
     }
   })();
 
-  // 1) header 로드 (index.html과 같은 폴더면 header.html)
+  // header load
   fetch("header.html")
     .then(res => res.text())
     .then(html => {
@@ -73,7 +71,6 @@
         .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
         .forEach((el) => el.addEventListener("click", (e) => e.preventDefault()));
 
-      // ✅ Mobile submenu (People/Achievement): 클릭 시 열기/닫기
       document.querySelectorAll('#mobileNav .m-link[data-toggle="sub"]').forEach((link) => {
         link.addEventListener('click', (e) => {
           e.preventDefault();
@@ -84,20 +81,20 @@
     })
     .catch(err => console.error("header load failed:", err));
 
-    fetch("footer.html")
-  .then(res => {
-    if (!res.ok) throw new Error("footer.html load failed");
-    return res.text();
-  })
-  .then(html => {
-    document.getElementById("site-footer").innerHTML = html;
-    const y = document.getElementById("year");
-    if (y) y.textContent = new Date().getFullYear();
-  })
-  .catch(err => console.error(err));
+  // footer load
+  fetch("footer.html")
+    .then(res => {
+      if (!res.ok) throw new Error("footer.html load failed");
+      return res.text();
+    })
+    .then(html => {
+      document.getElementById("site-footer").innerHTML = html;
+      const y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear();
+    })
+    .catch(err => console.error(err));
 
-
-  // ✅ index 홈에서 최신 News 4개만 출력
+  // latest news
   const latestWrap = document.getElementById("latestNews");
 
   function safeDate(d) {
@@ -114,24 +111,41 @@
     return m;
   }
 
-  function isAbsPath(p) {
-    return /^https?:\/\//i.test(p) || String(p).startsWith("/");
-  }
+  function isHttpUrl(p){ return /^https?:\/\//i.test(String(p)); }
 
-  // ✅ 중요: index.html 기준 이미지 경로 보정
+  // ✅ 핵심: 이미지는 항상 content/assets/news 기준으로 읽기
+  // - CMS가 "/assets/news/..", "assets/news/..", "news/..", "파일명만", "/content/assets/news/.." 등
+  //   어떤 값을 주더라도 최종적으로 "/content/assets/news/.." 로 통일.
   function normalizeImgSrc(v) {
     if (!v) return "";
-    const src = (typeof v === "string") ? v : (v && typeof v === "object" ? v.src : "");
-    if (!src) return "";
-    if (isAbsPath(src)) return src;                 // "/assets/..." or "https://..."
-    return String(src).replace(/^\.?\//, "");       // "assets/..." 형태로 정리
+    const src = (typeof v === "string") ? v : (v && typeof v === "object" ? (v.src || v.image || "") : "");
+    const s = String(src || "").trim();
+    if (!s) return "";
+
+    // 외부 URL은 그대로
+    if (isHttpUrl(s)) return s;
+
+    // 앞의 ./, / 제거
+    let clean = s.replace(/^\.?\//, "").replace(/^\/+/, "");
+
+    // 이미 content/assets/news 로 들어오는 경우
+    if (clean.startsWith("content/assets/news/")) return "/" + clean;
+
+    // /assets/news/... 또는 assets/news/...
+    clean = clean.replace(/^assets\/news\//, "");
+    clean = clean.replace(/^content\/assets\/news\//, "");
+
+    // news/... 로 오는 경우도 제거
+    clean = clean.replace(/^news\//, "");
+
+    // 파일명만 남았든, 하위폴더가 있든 최종적으로 content/assets/news 아래로
+    return "/content/assets/news/" + clean;
   }
 
-  // ✅ 카드 안에 필요한 CSS를 JS가 자동 주입(붙여넣기만 하게)
+  // CSS auto inject
   (function injectHomeNewsCSS(){
     if (document.getElementById("home-news-carousel-css")) return;
     const css = `
-      /* ===== Home Latest News carousel (auto injected) ===== */
       .home-news-item { cursor: pointer; }
       .home-news-desc{
         color:#555; line-height:1.6; margin-top: 8px; white-space: pre-wrap;
@@ -154,12 +168,12 @@
         flex-shrink: 0;
         display:flex;
         align-items:center;
-        justify-content:center;   /* ✅ 가운데 정렬 */
+        justify-content:center;
       }
       .home-news-slide img{
         width: 100%;
-        max-width: 720px;         /* ✅ 데스크탑에서 너무 커지지 않게 */
-        height: 220px;            /* ✅ 조금 크게 */
+        max-width: 720px;
+        height: 220px;
         object-fit: cover;
         display:block;
       }
@@ -182,7 +196,7 @@
       @media (max-width: 640px){
         .home-news-slide img{
           max-width: 100%;
-          height: 200px;          /* ✅ 모바일도 큼직하게 */
+          height: 200px;
         }
       }
     `;
@@ -204,7 +218,7 @@
     const max = track.children.length;
     if (max <= 1) return;
     const cur = parseInt(track.dataset.index || "0", 10);
-    const next = (cur + dir + max) % max; // ✅ 루프
+    const next = (cur + dir + max) % max;
     setHomeIndex(track, dots, next);
   }
 
@@ -227,7 +241,6 @@
     top.appendChild(title);
     item.appendChild(top);
 
-    // ✅ desc 우선 출력, 없으면 body 첫줄
     if (p.desc) {
       const desc = document.createElement("div");
       desc.className = "home-news-desc";
@@ -243,7 +256,6 @@
       }
     }
 
-    // ✅ images 캐러셀 + dots + swipe + auto slide
     const imgsRaw = Array.isArray(p.images) ? p.images : [];
     const imgs = imgsRaw.map(normalizeImgSrc).filter(Boolean);
 
@@ -260,7 +272,7 @@
         slide.className = "home-news-slide";
 
         const img = document.createElement("img");
-        img.src = src;
+        img.src = src;  // ✅ /content/assets/news/... 로 고정됨
         img.alt = `${p.title || "News"} - ${i + 1}`;
         img.loading = "lazy";
 
@@ -287,7 +299,6 @@
       });
       item.appendChild(dots);
 
-      // auto slide
       const INTERVAL = 3500;
       let timer = null;
 
@@ -306,11 +317,9 @@
         startAuto();
       };
 
-      // hover stop
       item.addEventListener("mouseenter", stopAuto);
       item.addEventListener("mouseleave", startAuto);
 
-      // swipe
       let startX = null;
       track.addEventListener("touchstart", e => {
         startX = e.touches[0].clientX;
@@ -325,14 +334,12 @@
         startAuto();
       }, { passive: true });
 
-      // 카드 클릭과 캐러셀 조작 충돌 방지
       carousel.addEventListener("click", (e) => e.stopPropagation());
       dots.addEventListener("click", (e) => e.stopPropagation());
 
       startAuto();
     }
 
-    // 클릭하면 news.html로 이동
     item.addEventListener("click", () => {
       window.location.href = "news.html";
     });
@@ -370,8 +377,6 @@
 
   loadLatestNews();
 </script>
-
-
 
 </body>
 </html>

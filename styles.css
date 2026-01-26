@@ -886,10 +886,18 @@ main {
 }
 
 
-.carousel-img{
-  aspect-ratio: 16 / 9;
+.carousel-slide{
+  aspect-ratio: 16 / 9;      /* 틀 고정 */
 }
 
+.carousel-img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;         /* ✅ 꽉 채우기(일부 잘릴 수 있음) */
+  object-position: center;
+  border-radius: 14px;
+  display: block;
+}
 /* ===== SCI compact card overrides ===== */
 
 .thumb{
@@ -1103,4 +1111,84 @@ main {
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+/* ===== Latest News carousel: fill like photo album ===== */
+
+/* 캐러셀 영역을 고정 프레임으로 */
+.home-news-carousel{
+  background: #fff !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+/* 1) 슬라이드 = 프레임(틀) */
+.home-news-slide{
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  flex: 0 0 100%;
+  overflow: hidden;         /* ✅ 프레임 밖 잘리는 부분 숨김 */
+  border-radius: 12px;      /* 선택(카드 느낌 맞추기) */
+}
+
+/* 2) 이미지 = 프레임을 채우되, 기준은 항상 "정중앙" */
+.home-news-slide img{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 50% 50%; /* ✅ center를 더 명시적으로 */
+}
+
+/* 모바일은 더 덜 잘리게 비율 변경 (선택) */
+@media (max-width: 640px){
+  .home-news-slide{ aspect-ratio: 4 / 3; }
+}
+
+/* ===== FIX: Home Latest News carousel 이미지를 카드 가로폭 꽉 채우기 ===== */
+.home-news-carousel{
+  width: 100% !important;
+}
+
+.home-news-track{
+  width: 100% !important;
+}
+
+.home-news-slide{
+  width: 100% !important;
+  flex: 0 0 100% !important;
+  aspect-ratio: 16 / 9 !important;  /* 포토앨범처럼 프레임 */
+  overflow: hidden !important;
+  border-radius: 14px !important;
+}
+
+.home-news-slide img{
+  width: 100% !important;
+  height: 100% !important;
+
+  /* ✅ "가로 안 꽉참" 원인 제거 */
+  max-width: none !important;
+  max-height: none !important;
+
+  display: block !important;
+  object-fit: cover !important;          /* 꽉 채우기(잘릴 수 있음) */
+  object-position: 50% 50% !important;
+}
+
+/* ===== Home Latest News: 가로는 꽉, 세로는 유동(안잘림) ===== */
+.home-news-slide{
+  aspect-ratio: auto !important;   /* ✅ 프레임 고정 제거 */
+  height: auto !important;
+  overflow: visible !important;    /* 잘림 방지 */
+}
+
+.home-news-slide img{
+  width: 100% !important;          /* ✅ 가로 꽉 */
+  height: auto !important;         /* ✅ 세로는 이미지 비율대로 */
+  max-width: none !important;
+  max-height: none !important;
+
+  object-fit: contain !important;  /* ✅ 절대 안 잘림 */
+  display: block !important;
+  border-radius: 14px !important;
 }
