@@ -1,10 +1,10 @@
 {
   "albums": [
     {
-      "date": "2026.01.23",
-      "title": "test",
+      "title": "123",
+      "date": "2026.01.26",
       "images": [
-        "/assets/photos/2025-1.png"
+        "/assets/photos/kakaotalk_20251017_145439301_12.jpg"
       ]
     }
   ]
