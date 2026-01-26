@@ -1183,7 +1183,7 @@ main {
 }
 
 .home-news-slide img{
-  width: 100% !important;          /* ✅ 가로 꽉 */
+  width: 50% !important;          /* ✅ 가로 꽉 */
   height: auto !important;         /* ✅ 세로는 이미지 비율대로 */
   max-width: none !important;
   max-height: none !important;
