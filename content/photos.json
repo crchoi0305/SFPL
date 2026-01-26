@@ -102,6 +102,73 @@
         "/content/assets/photos/6_3.jpg",
         "/content/assets/photos/6_4.jpg"
       ]
+    },
+    {
+      "date": "2025.09.29",
+      "title": "2025 고분자학회 추계학술대회",
+      "images": [
+        "/content/assets/photos/7_1.jpg",
+        "/content/assets/photos/7_2.jpg",
+        "/content/assets/photos/7_3.jpg",
+        "/content/assets/photos/7_4.jpg"
+      ]
+    },
+    {
+      "date": "2025.10.30",
+      "title": "멋진 카이스트 방문기",
+      "images": [
+        null,
+        "/content/assets/photos/8_1.jpeg",
+        "/content/assets/photos/8_2.jpeg",
+        "/content/assets/photos/8_3.jpg",
+        "/content/assets/photos/8_4.jpg",
+        "/content/assets/photos/8_5.jpeg"
+      ]
+    },
+    {
+      "date": "2025.11.27",
+      "title": "멋진 디펜스를 마무리하고 회식",
+      "images": [
+        "/content/assets/photos/9_1.jpg",
+        "/content/assets/photos/9_2.jpg"
+      ]
+    },
+    {
+      "date": "2025.12.23",
+      "title": "기가막힌 화이트엘리펀트~",
+      "images": [
+        "/content/assets/photos/10_1.jpg",
+        "/content/assets/photos/10_2.jpg",
+        "/content/assets/photos/10_3.jpg"
+      ]
+    },
+    {
+      "date": "2025.02.24",
+      "title": "2025 겨울엠티",
+      "images": [
+        "/content/assets/photos/11_1.png",
+        "/content/assets/photos/11_2.jpg",
+        "/content/assets/photos/11_3.jpg",
+        "/content/assets/photos/11_4.jpg"
+      ]
+    },
+    {
+      "date": "2025.12.31",
+      "title": "2025년도 생일 축하 모음",
+      "images": [
+        "/content/assets/photos/kakaotalk_20250806_140430206.jpg",
+        "/content/assets/photos/kakaotalk_20250730_182835619_04.jpg",
+        "/content/assets/photos/kakaotalk_20250730_182835619_01.jpg",
+        "/content/assets/photos/kakaotalk_20250513_174059484.jpg",
+        "/content/assets/photos/kakaotalk_20250513_145612618_11.jpg",
+        "/content/assets/photos/kakaotalk_20250331_140658368_04.jpg",
+        "/content/assets/photos/kakaotalk_20250331_140658368_01.png",
+        "/content/assets/photos/kakaotalk_20240910_175019368.jpg",
+        "/content/assets/photos/kakaotalk_20240910_174028000_01.jpg",
+        "/content/assets/photos/kakaotalk_20240910_174028000.jpg",
+        "/content/assets/photos/kakaotalk_20240910_174001298.jpg",
+        "/content/assets/photos/kakaotalk_20240910_172751096_03.jpg"
+      ]
     }
   ]
 }
