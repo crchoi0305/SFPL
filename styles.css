@@ -1206,3 +1206,53 @@ main {
     background: #fff;                /* 여백 배경 */
   }
 }
+
+/* ===============================
+   Mobile: reduce side gutters HARD
+   =============================== */
+@media (max-width: 640px){
+
+  /* 1) 페이지/컨테이너 계열: padding을 강제로 작게 */
+  body.page-flex,
+  body.page-flex main,
+  body.page-flex .page-wrap,
+  body.page-flex .container,
+  body.page-flex main .container,
+  body.page-flex .page-wrap .container{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  /* 2) 섹션/블록이 자체적으로 좌우 padding을 갖는 경우 제거 */
+  section,
+  .section,
+  .home-section,
+  .content,
+  .page-content{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* 3) 히어로/큰 카드가 width 제한/중앙정렬로 답답하게 보이는 경우 */
+  .hero,
+  .hero-card,
+  .home-hero,
+  .main-hero,
+  .top-hero{
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 10px !important;
+    margin-right: 100px !important;
+  }
+
+}
+
+/* ===============================
+   Mobile: page-hero side padding fix
+   =============================== */
+@media (max-width: 640px) {
+  .card.page-hero {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
