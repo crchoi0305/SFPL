@@ -4,44 +4,37 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Photo | SFPL</title>
-  <!-- ✅ GitHub Pages(/repo/...)에서도 깨지지 않도록 경로는 JS에서 base를 계산해 보정 -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body class="page-flex">
-
-  <!-- ✅ 공통 헤더 삽입 위치 -->
   <div id="site-header"></div>
 
-<main class="page-wrap photo-wrap">
-  <div class="photo-container">
-    <h1 class="page-title">Photos</h1>
-    <section id="photoGrid" class="photo-grid"></section>
-  </div>
-</main>
+  <main class="page-wrap photo-wrap">
+    <div class="photo-container">
+      <h1 class="page-title">Photos</h1>
+      <section id="photoGrid" class="photo-grid"></section>
+    </div>
+  </main>
 
-<div id="site-footer"></div>
-
+  <div id="site-footer"></div>
 
   <script>
-  // ===== footer year =====
-  const y = document.getElementById("year");
-  if (y) y.textContent = new Date().getFullYear();
-
-  // ===== GitHub Pages(/<repo>/...) 호스팅 대비 base prefix 계산 =====
-  // 예) https://user.github.io/repo/photo.html  -> basePrefix = "/repo/"
-  // 예) https://domain.com/photo.html          -> basePrefix = "/"
+  // ===== GitHub Pages(/<repo>/...) + Custom domain(/) 모두 대응 basePrefix =====
+  // - 커스텀 도메인: basePrefix="/"
+  // - GitHub Pages(user.github.io/<repo>/...): basePrefix="/<repo>/"
   const basePrefix = (() => {
-    const p = location.pathname;
-    return p.endsWith('/') ? p : p.replace(/\/[^\/]*$/, '/')
+    const parts = location.pathname.split("/").filter(Boolean);
+    if (location.hostname.endsWith("github.io")) {
+      const repo = parts[0] || "";
+      return "/" + repo + "/";
+    }
+    return "/";
   })();
 
   // ===== header load =====
   fetch(basePrefix + "header.html")
-    .then(res => {
-      if (!res.ok) throw new Error("header.html load failed");
-      return res.text();
-    })
+    .then(res => { if (!res.ok) throw new Error("header.html load failed"); return res.text(); })
     .then(html => {
       document.getElementById("site-header").innerHTML = html;
 
@@ -68,20 +61,17 @@
           });
         });
     })
-    .catch(err => console.error(err));
+    .catch(console.error);
 
-    fetch(basePrefix + "footer.html")
-  .then(res => {
-    if (!res.ok) throw new Error("footer.html load failed");
-    return res.text();
-  })
-  .then(html => {
-    document.getElementById("site-footer").innerHTML = html;
-    const y = document.getElementById("year");
-    if (y) y.textContent = new Date().getFullYear();
-  })
-  .catch(err => console.error(err));
-
+  // ===== footer load =====
+  fetch(basePrefix + "footer.html")
+    .then(res => { if (!res.ok) throw new Error("footer.html load failed"); return res.text(); })
+    .then(html => {
+      document.getElementById("site-footer").innerHTML = html;
+      const y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear();
+    })
+    .catch(console.error);
 
   // ===== inject CSS for layout + carousel =====
   (function ensurePhotoCSSOnce(){
@@ -89,14 +79,8 @@
     const style = document.createElement("style");
     style.id = "photoCarouselCSS";
     style.textContent = `
-      /* ✅ page wrapper: max 1200, center, header gap 5px */
       main.page-wrap { margin-top: 5px !important; }
-      main.page-wrap .container {
-        max-width: 1200px;
-        margin: 0 auto;
-      }
 
-      /* ✅ album grid: desktop 2 columns, mobile 1 column */
       .photo-grid{
         display:grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -118,12 +102,13 @@
         font-size: 24px;
         letter-spacing: -0.02em;
       }
-
-      /* ✅ carousel (works for both desktop + mobile, swipe on mobile) */
-      .carousel{
-        position: relative;
-        width: 100%;
+      .album-date{
+        font-size: 13px;
+        color: rgba(0,0,0,.55);
+        margin-bottom: 6px;
       }
+
+      .carousel{ position: relative; width: 100%; }
       .carousel-track{
         display:flex;
         overflow-x:auto;
@@ -134,11 +119,7 @@
         scrollbar-width: none;
       }
       .carousel-track::-webkit-scrollbar{ display:none; }
-
-      .carousel-slide{
-        flex: 0 0 100%;
-        scroll-snap-align: center;
-      }
+      .carousel-slide{ flex: 0 0 100%; scroll-snap-align: center; }
 
       .carousel-img{
         width:100%;
@@ -149,7 +130,6 @@
         object-position: center top;
       }
 
-      /* ✅ dots */
       .carousel-dots{
         display:flex;
         justify-content:center;
@@ -166,7 +146,6 @@
       }
       .dot.active{ background: rgba(0,0,0,.75); }
 
-      /* ✅ optional arrows (desktop convenience) */
       .carousel-controls{
         display:grid;
         grid-template-columns: 36px 1fr 36px;
@@ -185,7 +164,7 @@
       }
       @media (max-width: 640px){
         .carousel-controls{ grid-template-columns: 1fr; }
-        .carousel-btn{ display:none; } /* 모바일은 스와이프 중심 */
+        .carousel-btn{ display:none; }
       }
 
       .album-empty, .album-empty-wide{
@@ -197,11 +176,10 @@
   })();
 
   // ===== helpers =====
-  // ===== GitHub Raw (이미지 CDN처럼 사용) 설정 =====
-const GH_OWNER  = "crchoi0305";
-const GH_REPO   = "SFPL";
-const GH_BRANCH = "main";
-const GH_RAW_BASE = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}`;
+  const GH_OWNER  = "crchoi0305";
+  const GH_REPO   = "SFPL";
+  const GH_BRANCH = "main";
+  const GH_RAW_BASE = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}`;
 
   const grid = document.getElementById("photoGrid");
 
@@ -216,98 +194,74 @@ const GH_RAW_BASE = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${
     return /^https?:\/\//i.test(String(p));
   }
 
-// ===== 이미지 src를 "로컬 경로 우선 + 실패 시 raw URL"로 세팅하기 위한 해석기 =====
-// - Admin에서 raw.githubusercontent.com URL로 저장되더라도
-//   화면에서는 가능하면 같은 repo의 로컬 파일(/<repo>/assets/...)을 먼저 로드하고,
-//   로컬이 없으면 raw URL로 자동 fallback 합니다.
-function resolveImgSources(v) {
-  if (!v) return { primary: "", fallback: "" };
+  // ✅ date: "YYYY.MM.DD" 형태에 정확히 맞는 파서
+  function parseAlbumDate(d){
+    if (!d) return 0;
+    const s = String(d).trim().replace(/\./g, "-"); // 2024.04.03 -> 2024-04-03
+    const t = Date.parse(s);
+    return Number.isFinite(t) ? t : 0;
+  }
 
-  const src =
-    (typeof v === "string") ? v :
-    (v && typeof v === "object" ? (v.image || v.src || "") : "");
-
-  const s = String(src || "").trim();
-  if (!s) return { primary: "", fallback: "" };
-
-  // ✅ 우리가 실제로 파일을 올리는 폴더 (지금 상황 기준)
-  //    content/assets/photos 에 커밋되고 있고,
-  //    https://.../content/assets/photos/1.jpg 가 잘 열린다고 했으니
-  //    화면에서도 이 경로를 우선 사용하도록 한다.
-  const preferContentAssets = (rel) => {
-    rel = rel.replace(/^\/+/, ""); // leading slash 제거
-
-    // (1) assets/photos/... 이면 -> content/assets/photos/... 로 매핑
-    if (rel.startsWith("assets/photos/")) {
-      rel = rel.replace(/^assets\/photos\//, "content/assets/photos/");
-    }
-
-    // (2) 이미 content/assets/photos/...면 그대로
-    if (rel.startsWith("content/assets/photos/")) {
-      // ok
-    }
-
-    // (3) 파일명만 오면 -> content/assets/photos/파일명 으로
-    if (!rel.includes("/")) {
-      rel = "content/assets/photos/" + rel;
-    }
-
+  // ✅ rel 정규화: content/content 제거 + leading slash 처리
+  function normalizeRelPath(p){
+    let rel = String(p || "").trim();
+    rel = rel.replace(/^https?:\/\/[^/]+\/?/, ""); // 혹시 도메인이 섞여오면 제거(안전)
+    rel = rel.replace(/^\/+/, "");                // "/content/..." -> "content/..."
+    rel = rel.replace(/^content\/content\//, "content/");
+    rel = rel.replace(/^\.?\//, "");
     return rel;
-  };
+  }
 
-  // 1) raw URL로 저장된 경우: 같은 파일을 로컬 경로로 먼저 시도
-  if (isHttpUrl(s) && s.startsWith(GH_RAW_BASE + "/")) {
-    let rel = s.slice((GH_RAW_BASE + "/").length); // e.g. assets/photos/... or content/assets/photos/...
-    rel = preferContentAssets(rel);
+  // ===== 이미지: "절대경로(/content/...)" 우선 + 실패 시 raw fallback =====
+  function resolveImgSources(v) {
+    if (!v) return { primary: "", fallback: "" };
 
-    const primary = (basePrefix + rel).replace(/\/\/+/, "/");
-    const fallback = s; // 원래 raw 그대로 fallback
+    const src =
+      (typeof v === "string") ? v :
+      (v && typeof v === "object" ? (v.image || v.src || "") : "");
+
+    const s = String(src || "").trim();
+    if (!s) return { primary: "", fallback: "" };
+
+    // 1) 외부 URL이면 그대로 (fallback 없음)
+    if (isHttpUrl(s) && !s.startsWith(GH_RAW_BASE + "/")) {
+      return { primary: s, fallback: "" };
+    }
+
+    // 2) raw URL로 저장된 경우: rel 뽑아서 로컬(/content/...) 먼저, raw fallback
+    if (isHttpUrl(s) && s.startsWith(GH_RAW_BASE + "/")) {
+      let rel = s.slice((GH_RAW_BASE + "/").length); // e.g. content/assets/photos/...
+      rel = normalizeRelPath(rel);
+
+      const primary = (basePrefix + rel).replace(/\/\/+/, "/"); // GitHub Pages 대응
+      const fallback = s;
+      return { primary, fallback };
+    }
+
+    // 3) 로컬 경로: JSON이 "/content/assets/photos/..." 형태라면
+    //    -> primary는 그대로, fallback은 raw로
+    const rel = normalizeRelPath(s);
+    const primary = s.startsWith("/") ? s : (basePrefix + rel).replace(/\/\/+/, "/");
+    const fallback = `${GH_RAW_BASE}/${rel}`;
     return { primary, fallback };
   }
 
-  // 2) 외부 URL이면 그대로 사용(로컬 변환 불가)
-  if (isHttpUrl(s)) return { primary: s, fallback: "" };
+  function setImgWithFallback(img, sources) {
+    if (!img || !sources) return;
 
-  // 3) 상대/절대경로는 로컬을 primary로, raw를 fallback로 생성
-  let clean = s
-    .replace(/^\.?\//, "")   // "./" 제거
-    .replace(/^\/+/, "");    // "/" 제거
+    const primary = sources.primary || "";
+    const fallback = sources.fallback || "";
 
-  clean = preferContentAssets(clean);
+    img.src = primary || fallback || "";
 
-  const primary = (basePrefix + clean).replace(/\/\/+/, "/");
-
-  // raw fallback도 content/assets/photos 기준으로 맞춘다
-  const fallback = `${GH_RAW_BASE}/${clean}`;
-
-  return { primary, fallback };
-}
-
-
-function setImgWithFallback(img, sources) {
-  if (!img || !sources) return;
-
-  const primary = sources.primary || "";
-  const fallback = sources.fallback || "";
-
-  img.src = primary || fallback || "";
-
-  img.onerror = () => {
-    // 1) raw fallback 시도
-    if (fallback && img.src !== fallback) {
-      img.src = fallback;
-      return;
-    }
-    // 2) 마지막으로 assets/photos도 한 번 시도 (미래 대비)
-    if (primary.includes("/content/assets/photos/")) {
-      const alt = primary.replace("/content/assets/photos/", "/assets/photos/");
-      if (img.src !== alt) img.src = alt;
-    }
-    img.onerror = null;
-  };
-}
-
-
+    img.onerror = () => {
+      if (fallback && img.src !== fallback) {
+        img.src = fallback;
+        return;
+      }
+      img.onerror = null;
+    };
+  }
 
   function scrollToIndex(track, i){
     const slides = track.querySelectorAll(".carousel-slide");
@@ -349,32 +303,27 @@ function setImgWithFallback(img, sources) {
   }
 
   // ===== build album carousel =====
-function buildCarousel(album) {
-  const card = el("article", "album-card");
+  function buildCarousel(album) {
+    const card = el("article", "album-card");
 
-  // ✅ header block (date + title)
-  const header = el("div", "album-header");
+    const header = el("div", "album-header");
 
-  if (album.date) {
-    const dateText = el("div", "album-date");
-    dateText.textContent = String(album.date);
-    header.appendChild(dateText);
-  }
+    if (album.date) {
+      const dateText = el("div", "album-date");
+      dateText.textContent = String(album.date);
+      header.appendChild(dateText);
+    }
 
-  const title = el("h2", "album-title");
-  title.textContent = album.title || "Untitled";
-  header.appendChild(title);
+    const title = el("h2", "album-title");
+    title.textContent = album.title || "Untitled";
+    header.appendChild(title);
 
-  card.appendChild(header);
-
-  // ... 이하 기존 코드 그대로 (carousel 생성)
-
+    card.appendChild(header);
 
     const wrap = el("div", "carousel");
     const track = el("div", "carousel-track");
     track.dataset.index = "0";
 
-    // ✅ 핵심: src 경로 보정
     const raw = Array.isArray(album.images) ? album.images : [];
     const imgs = raw.map(resolveImgSources).filter(o => (o && (o.primary || o.fallback)));
 
@@ -397,7 +346,6 @@ function buildCarousel(album) {
       return card;
     }
 
-    // dots
     const dots = el("div", "carousel-dots");
     imgs.forEach((_, i) => {
       const d = el("button", "dot" + (i === 0 ? " active" : ""), "");
@@ -406,7 +354,6 @@ function buildCarousel(album) {
       dots.appendChild(d);
     });
 
-    // controls (desktop arrows + dots)
     const controls = el("div", "carousel-controls");
     const prev = el("button", "carousel-btn", "‹");
     const next = el("button", "carousel-btn", "›");
@@ -426,7 +373,6 @@ function buildCarousel(album) {
     controls.appendChild(next);
     card.appendChild(controls);
 
-    // sync dots with scroll (mobile swipe 포함)
     bindScrollSync(track, dots);
 
     return card;
@@ -435,17 +381,19 @@ function buildCarousel(album) {
   // ===== init =====
   async function init() {
     try {
-      // ✅ cache-bust
       const res = await fetch(basePrefix + "content/photos.json?v=" + Date.now(), { cache: "no-store" });
       if (!res.ok) throw new Error("photos.json load failed");
 
       const data = await res.json();
-      const albums = Array.isArray(data.albums) ? data.albums : [];
+      const albums = Array.isArray(data.albums) ? data.albums.slice() : [];
 
       if (!albums.length) {
         grid.appendChild(el("div", "album-empty-wide", "등록된 앨범이 없습니다."));
         return;
       }
+
+      // ✅ 날짜 최신순(내림차순)
+      albums.sort((a, b) => parseAlbumDate(b.date) - parseAlbumDate(a.date));
 
       albums.forEach(a => grid.appendChild(buildCarousel(a)));
     } catch (e) {
@@ -455,8 +403,6 @@ function buildCarousel(album) {
   }
 
   init();
-</script>
-
-
+  </script>
 </body>
 </html>

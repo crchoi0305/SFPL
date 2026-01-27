@@ -10,14 +10,15 @@ backend:
 
 local_backend: false
 
-# ✅ 이미지 업로드는 repo 루트의 assets로 통일
+# 기본 업로드 위치(컬렉션별 media_folder가 있으면 그 설정이 우선)
 media_folder: "assets"
 public_folder: "/assets"
 
 collections:
   - name: "current"
     label: "People - Current"
-    media_folder: "content/assets/members"
+    # ✅ 루트 기준 절대경로로 고정 (content/content/... 방지)
+    media_folder: "/content/assets/members"
     public_folder: "/content/assets/members"
     files:
       - file: "content/current.json"
@@ -39,7 +40,8 @@ collections:
 
   - name: "news"
     label: "News"
-    media_folder: "content/assets/news"
+    # ✅ 루트 기준 절대경로로 고정
+    media_folder: "/content/assets/news"
     public_folder: "/content/assets/news"
     files:
       - file: "content/news.json"
@@ -83,7 +85,8 @@ collections:
 
   - name: "photos"
     label: "Photos"
-    media_folder: "content/assets/photos"
+    # ✅ 루트 기준 절대경로로 고정 (content/content/... 방지)
+    media_folder: "/content/assets/photos"
     public_folder: "/content/assets/photos"
     files:
       - file: "content/photos.json"
@@ -124,7 +127,8 @@ collections:
       - file: "content/sci.json"
         label: "Publications Data"
         name: "sci_publications"
-        media_folder: "content/assets/sci"
+        # ✅ files 내부에서도 절대경로로 고정
+        media_folder: "/content/assets/sci"
         public_folder: "/content/assets/sci"
         fields:
           - label: "Publications"
