@@ -117,7 +117,6 @@
       "date": "2025.10.30",
       "title": "멋진 카이스트 방문기",
       "images": [
-        null,
         "/content/assets/photos/8_1.jpeg",
         "/content/assets/photos/8_2.jpeg",
         "/content/assets/photos/8_3.jpg",
@@ -168,13 +167,6 @@
         "/content/assets/photos/kakaotalk_20240910_174028000.jpg",
         "/content/assets/photos/kakaotalk_20240910_174001298.jpg",
         "/content/assets/photos/kakaotalk_20240910_172751096_03.jpg"
-      ]
-    },
-    {
-      "date": "2026.01.27",
-      "title": "test",
-      "images": [
-        "/content/assets/photos/kakaotalk_20240409_155459897_04.jpg"
       ]
     }
   ]
