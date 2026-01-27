@@ -1234,16 +1234,17 @@ main {
   }
 
   /* 3) 히어로/큰 카드가 width 제한/중앙정렬로 답답하게 보이는 경우 */
-  .hero,
-  .hero-card,
-  .home-hero,
-  .main-hero,
-  .top-hero{
-    width: 100% !important;
-    max-width: none !important;
-    margin-left: 10px !important;
-    margin-right: 100px !important;
-  }
+.hero,
+.hero-card,
+.home-hero,
+.main-hero,
+.top-hero{
+  max-width: none !important;
+  width: calc(100% - 20px) !important; /* ✅ 좌우 10px씩 여백 */
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 
 }
 
