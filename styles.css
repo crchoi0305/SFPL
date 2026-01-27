@@ -710,7 +710,7 @@ main {
       padding: 18px;
     }
     .person-photo{
-      width: 200%;
+      width: 100%;
       height: auto;
       max-height: 320px;
     }
@@ -1195,4 +1195,14 @@ main {
 
 .news-desc{
   white-space: pre-wrap;   /* \n 줄바꿈 그대로 표시 */
+}
+
+@media (max-width: 640px){
+  .people-grid .person-photo{
+    width: 100% !important;
+    max-width: 420px !important;
+    max-height: 320px !important;
+    object-fit: contain !important;  /* ✅ 안 잘림 */
+    background: #fff;                /* 여백 배경 */
+  }
 }
