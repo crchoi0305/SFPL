@@ -1212,16 +1212,7 @@ main {
    =============================== */
 @media (max-width: 640px){
 
-  /* 1) 페이지/컨테이너 계열: padding을 강제로 작게 */
-  body.page-flex,
-  body.page-flex main,
-  body.page-flex .page-wrap,
-  body.page-flex .container,
-  body.page-flex main .container,
-  body.page-flex .page-wrap .container{
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-  }
+
 
   /* 2) 섹션/블록이 자체적으로 좌우 padding을 갖는 경우 제거 */
   section,
