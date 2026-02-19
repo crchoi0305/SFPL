@@ -1,13 +1,6 @@
 {
   "albums": [
     {
-      "date": "2023.10.11",
-      "title": "2023 고분자학회 추계 학술대회",
-      "images": [
-        "/content/assets/photos/kakaotalk_20251017_145439301_12.jpg"
-      ]
-    },
-    {
       "title": "연구실 멤버들과 벚꽃 구경 (단란하다~)",
       "date": "2024.04.02",
       "images": [
@@ -167,6 +160,65 @@
         "/content/assets/photos/kakaotalk_20240910_174028000.jpg",
         "/content/assets/photos/kakaotalk_20240910_174001298.jpg",
         "/content/assets/photos/kakaotalk_20240910_172751096_03.jpg"
+      ]
+    },
+    {
+      "date": "2023.10.11",
+      "title": "고분자학회 추계 학술대회",
+      "images": [
+        "/content/assets/photos/100.jpg",
+        "/content/assets/photos/100_1.jpg",
+        "/content/assets/photos/100_2.jpg",
+        "/content/assets/photos/100_3.jpg"
+      ]
+    },
+    {
+      "date": "2024.02.16",
+      "title": "학부연구생 학사 졸업식",
+      "images": [
+        "/content/assets/photos/101_1.jpg",
+        "/content/assets/photos/101_2.jpg",
+        "/content/assets/photos/101_3.jpg"
+      ]
+    },
+    {
+      "date": "2024.03.29",
+      "title": "고분자공학과 MT",
+      "images": [
+        "/content/assets/photos/102_1.jpg",
+        "/content/assets/photos/102_2.jpg",
+        "/content/assets/photos/102_3.jpg",
+        "/content/assets/photos/102_4.jpg"
+      ]
+    },
+    {
+      "date": "2024.02.28",
+      "title": "SFPL 엠티",
+      "images": [
+        "/content/assets/photos/103_1.jpg",
+        "/content/assets/photos/103_2.jpg",
+        "/content/assets/photos/103_3.jpg",
+        "/content/assets/photos/103_4.jpg",
+        "/content/assets/photos/103_5.jpg",
+        "/content/assets/photos/103_6.jpg"
+      ]
+    },
+    {
+      "date": "2024.05.15",
+      "title": "스승의날 축하드립니다",
+      "images": [
+        "/content/assets/photos/104.jpg",
+        "/content/assets/photos/104_1.jpeg",
+        "/content/assets/photos/104_2.jpeg"
+      ]
+    },
+    {
+      "date": "2023.12.25",
+      "title": "크리스마스 파티",
+      "images": [
+        "/content/assets/photos/105.jpg",
+        "/content/assets/photos/105_2.jpg",
+        "/content/assets/photos/105_1.jpg"
       ]
     }
   ]
