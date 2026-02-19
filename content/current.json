@@ -1,28 +1,13 @@
 {
   "members": [
     {
-      "name": "강나원 (MS candidate)",
-      "photo": "/assets/members/member_1.jpg",
-      "bs": "Kumon National Institute of Technology (2020~2024)",
-      "email": "knawon2@kumoh.ac.kr",
-      "research": "Depolymerization",
-      "bio": "2001년에 태어나서부터 쭉 대구에 거주하고 현재 금오공대 고분자공학과에서 공부하고있습니다. 우리는 플라스틱 시대에 살고있고 플라스틱의 가장 큰 이점이었던 내구성과 생물학적안정성은 어쩌면 당연한 이유로 우리에게 환경오염의 문제로 다시 돌아오게 되었습니다. 이러한 문제를 해결하는 것 또한 고분자공학전공이 해야할 일 이라고 생각했습니다. 따라서 최청룡교수님 연구실에서 친환경 기능성 고분자에 대한 연구를 시작하게 되었습니다. "
-    },
-    {
       "name": "전여진 (MS candidate)",
       "bs": "Kumon National Institute of Technology (2020~2024)",
       "email": "yjjeon@kumoh.ac.kr",
       "bio": "2001년 충청북도 청주에서 태어나, 모든 10대의 삶을 청주에서 보냈습니다. 중학교 화학 선생님의 영향으로 처음 화학에 대한 흥미를 갖게 되었고, 2020년, 코로나 19와 함께 경상북도 구미의 금오공과대학교의 고분자공학과에서 대학 생활을 시작했습니다. 칼럼 및 다큐멘터리 시청이 취미인 저는 지구 환경에 관한 영상을 많이 접할 수 있었습니다. 우리의 삶을 윤택하게 하는 고분자는 지구를 서서히 망가뜨리고 있다는 사실을 알게 되었고, 환경과 전공인 고분자의 융합에 대해 생각하게 되었습니다. 앞으로 저는 지구와 인간이 공존할 수 있는 방법을 고분자공학에서 찾아보고자 합니다. 현재 친환경 기능성 고분자 연구실에서 최청룡 교수님과 함께 지속 가능한 고분자와 고분자 재활용에 대해 공부하고 있습니다.",
       "research": "Synthesis of Sustainable Polymers",
-      "photo": "/assets/members/member_6.png"
-    },
-    {
-      "name": "전종혁 (MS candidate)",
-      "bs": "Kumon National Institute of Technology (2018~2024)",
-      "photo": "/assets/members/member_7.png",
-      "email": "gost829@kumoh.ac.kr ",
-      "research": "Synthesis of Bio-based Polymer",
-      "bio": "1999년에 대한민국 대구에서 태어나 현재 울산으로 이사해 지금까지 살아 왔습니다. 중학교때부터 화학에 관심을 가지게 되었고 친구들에게 가르쳐주는 것이 즐거웠기에 화학 교사가 되고자 했습니다. 현재 금오공대 고분자 공학과에서 학부연구생으로써 최청룡 교수님의 지도아래 분해가능 고분자 소재에 대해 연구하게 되었고, 앞으로 스스로가 더 발전된 모습을 보일 수 있도록 노력할 것입니다."
+      "photo": "/assets/members/member_6.png",
+      "ms": "MS: Kumon National Institute of Technology (2024~2026)"
     },
     {
       "name": "이성민 (MS candidate)",
