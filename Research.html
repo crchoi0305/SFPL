@@ -113,7 +113,7 @@
 
 <body class="page-flex bg-[#fcfcfd]">
 
-  <!-- ✅ 공통 헤더 삽입 위치 -->
+  <!-- ✅ 공통 헤더가 들어갈 자리 -->
   <div id="site-header"></div>
 
   <main class="container page-wrap">
@@ -228,63 +228,62 @@
 
   <div id="site-footer"></div>
 
-  <script>
-    // ===== GitHub Pages(/<repo>/...) 호스팅 대비 base prefix 계산 =====
-    const basePrefix = (() => {
-      const p = location.pathname;
-      return p.endsWith('/') ? p : p.replace(/\/[^\/]*$/, '/');
-    })();
+<script>
+  function bindHeaderInteractions() {
+    const btn = document.querySelector(".nav-toggle");
+    const mobileNav = document.getElementById("mobileNav");
 
-    // ===== header load =====
-    fetch(basePrefix + "header.html")
-      .then(res => {
-        if (!res.ok) throw new Error("header.html load failed");
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById("site-header").innerHTML = html;
+    if (btn && mobileNav) {
+      btn.addEventListener("click", () => {
+        const open = mobileNav.classList.toggle("open");
+        btn.setAttribute("aria-expanded", String(open));
+      });
+    }
 
-        // hamburger toggle
-        const btn = document.querySelector(".nav-toggle");
-        const mobileNav = document.getElementById("mobileNav");
-        if (btn && mobileNav) {
-          btn.addEventListener("click", () => {
-            const open = mobileNav.classList.toggle("open");
-            btn.setAttribute("aria-expanded", String(open));
-          });
-        }
+    // dropdown / prevent jump
+    document
+      .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
+      .forEach(el => el.addEventListener("click", e => e.preventDefault()));
 
-        // prevent jump for dropdown toggles (desktop + mobile '#')
-        document
-          .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
-          .forEach((el) => el.addEventListener("click", (e) => e.preventDefault()));
+    // mobile submenu toggle
+    document
+      .querySelectorAll("#mobileNav [data-toggle='sub']")
+      .forEach(t => {
+        t.addEventListener("click", e => {
+          e.preventDefault();
+          const sub = t.nextElementSibling;
+          if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
+        });
+      });
 
-        // mobile submenu toggle (data-toggle="sub" 사용)
-        document
-          .querySelectorAll("#mobileNav [data-toggle='sub']")
-          .forEach((t) => {
-            t.addEventListener("click", (e) => {
-              e.preventDefault();
-              const sub = t.nextElementSibling;
-              if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
-            });
-          });
-      })
-      .catch(err => console.error(err));
+    // active 표시(선택)
+    document.querySelectorAll(".nav-link, .m-link").forEach(a => a.classList.remove("active"));
+    const desk = document.querySelector('.nav-link[href="/research.html"]');
+    if (desk) desk.classList.add("active");
+    const mob = document.querySelector('#mobileNav .m-link[href="/research.html"]');
+    if (mob) mob.classList.add("active");
+  }
 
-    // ===== footer load =====
-    fetch(basePrefix + "footer.html")
-      .then(res => {
-        if (!res.ok) throw new Error("footer.html load failed");
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById("site-footer").innerHTML = html;
-        const y = document.getElementById("year");
-        if (y) y.textContent = new Date().getFullYear();
-      })
-      .catch(err => console.error(err));
-  </script>
+  async function loadFragment(id, file) {
+    const res = await fetch(file, { cache: "no-store" });
+    if (!res.ok) throw new Error(file + " load failed: " + res.status);
+    const html = await res.text();
+    document.getElementById(id).innerHTML = html;
+  }
+
+  (async () => {
+    try {
+      await loadFragment("site-header", "header.html");
+      bindHeaderInteractions();
+
+      await loadFragment("site-footer", "footer.html");
+      const y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear();
+    } catch (e) {
+      console.error(e);
+    }
+  })();
+</script>
 
 </body>
 </html>
