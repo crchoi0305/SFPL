@@ -8,6 +8,7 @@
   <!-- 아이콘 및 폰트 추가 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     /* 고급스러운 학술 레이아웃을 위한 커스텀 스타일 */
     .research-grid-item {
@@ -19,7 +20,7 @@
       transform: translateY(-5px);
       box-shadow: 0 20px 40px rgba(0,0,0,0.05);
     }
-    
+
     /* 분야별 시그니처 컬러 테두리 */
     .item-biomass:hover { border-left-color: #10b981; }
     .item-recycling:hover { border-left-color: #3b82f6; }
@@ -48,7 +49,7 @@
     .research-grid-item:hover .image-frame img {
       transform: scale(1.05);
     }
-    
+
     .image-frame::after {
       content: "";
       position: absolute;
@@ -75,10 +76,37 @@
     }
 
     /* 기존 카드 스타일 덮어쓰기 */
-    .page-body { 
-      background: transparent !important; 
-      box-shadow: none !important; 
-      padding: 0 !important; 
+    .page-body {
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+
+    /* =========================
+       Mobile spacing: tightest
+       (desktop untouched)
+       ========================= */
+    @media (max-width: 768px) {
+      /* 카드 padding: 모바일에서만 강하게 축소 */
+      .research-grid-item {
+        padding: 1rem !important;   /* 16px */
+        border-radius: 1.5rem !important;
+      }
+
+      /* Hero 섹션 상하 여백 축소 */
+      main .py-16 {
+        padding-top: 2.5rem !important;    /* 40px */
+        padding-bottom: 2.5rem !important; /* 40px */
+      }
+
+      /* 이미지 프레임: 모바일에서 높이 더 줄임 */
+      .image-frame {
+        aspect-ratio: 4 / 3; /* 가장 타이트 */
+        border-radius: 1rem;
+      }
+
+      /* 스크롤 인디케이터 살짝 축소 */
+      .scroll-indicator { height: 32px; }
     }
   </style>
 </head>
@@ -89,39 +117,38 @@
   <div id="site-header"></div>
 
   <main class="container page-wrap">
-    
+
     <!-- Hero Section -->
     <section class="py-16 text-center">
-      <h1 class="text-xs font-black tracking-[0.3em] text-blue-600 uppercase mb-4">Research</h1>
-      <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Research Areas</h2>
-      <p class="text-slate-500 max-w-2xl mx-auto leading-relaxed">
-        #Sustainable_polymer_design  /  #Closed-loop_recycling  /  #Biodegradable plastic  /  #Functional Polymer  /  #Block Copolymer Self-assembly
+      <h1 class="text-xs font-black tracking-[0.3em] text-blue-600 uppercase mb-3 md:mb-4">Research</h1>
+      <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4 md:mb-6">Research Areas</h2>
+      <p class="text-slate-500 max-w-2xl mx-auto leading-relaxed text-sm md:text-base">
+        #Sustainable_polymer_design / #Closed-loop_recycling / #Biodegradable plastic / #Functional Polymer / #Block Copolymer Self-assembly
       </p>
-      <div class="mt-10 scroll-indicator"></div>
+      <div class="mt-6 md:mt-10 scroll-indicator"></div>
     </section>
 
     <!-- Research Content Section -->
-    <div class="space-y-12 pb-24">
-      
+    <div class="space-y-6 md:space-y-12 pb-16 md:pb-24">
+
       <!-- Area 1: Biomass -->
       <article class="research-grid-item item-biomass bg-slate-50/50 p-8 md:p-12 rounded-[2rem]">
-        <div class="grid md:grid-cols-12 gap-12 items-center">
+        <div class="grid md:grid-cols-12 gap-4 md:gap-12 items-center">
           <div class="md:col-span-7">
-            <div class="flex items-center gap-3 mb-6">
+            <div class="flex items-center gap-3 mb-3 md:mb-6">
               <span class="badge-tag bg-green-100 text-green-700">Sustainable</span>
               <span class="text-slate-400 font-mono text-xs">01 / 04</span>
             </div>
-            <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">
+            <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3 md:mb-6">
               바이오매스 기반 고분자 합성 및 개질
             </h3>
-            <p class="text-slate-600 leading-relaxed text-lg mb-8">
+            <p class="text-slate-600 leading-relaxed text-base md:text-lg mb-2 md:mb-8">
               천연 유래 바이오매스를 원료로 하여 석유 의존도를 낮춘 친환경 고분자를 설계합니다. 분자 수준의 정밀한 개질을 통해 기존 소재를 대체할 수 있는 독창적인 물성을 확보합니다.
             </p>
           </div>
           <div class="md:col-span-5">
             <div class="image-frame group">
-              <!-- 생성된 이미지 URL 적용 (Area 1) -->
-              <img src="https://i.ibb.co/B5MtSKqw/biopolymer.jpg">
+              <img src="https://i.ibb.co/B5MtSKqw/biopolymer.jpg" alt="Biomass polymer">
             </div>
           </div>
         </div>
@@ -129,23 +156,22 @@
 
       <!-- Area 2: Upcycling -->
       <article class="research-grid-item item-recycling bg-slate-50/50 p-8 md:p-12 rounded-[2rem]">
-        <div class="grid md:grid-cols-12 gap-12 items-center">
+        <div class="grid md:grid-cols-12 gap-4 md:gap-12 items-center">
           <div class="md:col-span-7 md:order-2">
-            <div class="flex items-center gap-3 mb-6">
+            <div class="flex items-center gap-3 mb-3 md:mb-6">
               <span class="badge-tag bg-blue-100 text-blue-700">Recycling</span>
               <span class="text-slate-400 font-mono text-xs">02 / 04</span>
             </div>
-            <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">
+            <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3 md:mb-6">
               고분자 재활용 및 자원 순환
             </h3>
-            <p class="text-slate-600 leading-relaxed text-lg mb-8">
+            <p class="text-slate-600 leading-relaxed text-base md:text-lg mb-2 md:mb-8">
               폐플라스틱을 단순히 재사용하는 단계를 넘어, 화학적 해중합을 통해 고부가가치 화학 물질로 전환하는 업사이클링 기술을 연구합니다.
             </p>
           </div>
           <div class="md:col-span-5 md:order-1">
             <div class="image-frame group">
-              <!-- 생성된 이미지 URL 적용 (Area 2) -->
-              <img src="https://i.ibb.co/7xWyvJ5z/recycling.jpg">
+              <img src="https://i.ibb.co/7xWyvJ5z/recycling.jpg" alt="Recycling">
             </div>
           </div>
         </div>
@@ -153,25 +179,22 @@
 
       <!-- Area 3: Biodegradable -->
       <article class="research-grid-item item-biodegradable bg-slate-50/50 p-8 md:p-12 rounded-[2rem]">
-        <div class="grid md:grid-cols-12 gap-12 items-center">
+        <div class="grid md:grid-cols-12 gap-4 md:gap-12 items-center">
           <div class="md:col-span-7">
-            <div class="flex items-center gap-3 mb-6">
+            <div class="flex items-center gap-3 mb-3 md:mb-6">
               <span class="badge-tag bg-teal-100 text-teal-700">Biodegradation</span>
               <span class="text-slate-400 font-mono text-xs">03 / 04</span>
             </div>
-            <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">
+            <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3 md:mb-6">
               생분해성 고분자 설계
             </h3>
-            <p class="text-slate-600 leading-relaxed text-lg mb-8">
+            <p class="text-slate-600 leading-relaxed text-base md:text-lg mb-2 md:mb-8">
               사용 환경에 따라 분해 속도를 제어할 수 있는 차세대 생분해성 소재를 개발합니다. 기계적 물성 보완을 통해 실질적인 적용이 가능한 친환경 고분자 소재를 연구합니다.
             </p>
           </div>
           <div class="md:col-span-5">
             <div class="image-frame group">
-              <!-- 기존 아이콘 유지 또는 추가 이미지 적용 가능 -->
-                <img src="https://i.ibb.co/Jwf9nCRt/biodegradation.jpg">
-
-              </div>
+              <img src="https://i.ibb.co/Jwf9nCRt/biodegradation.jpg" alt="Biodegradation">
             </div>
           </div>
         </div>
@@ -179,23 +202,22 @@
 
       <!-- Area 4: Functional / Self-assembly -->
       <article class="research-grid-item item-nano bg-slate-50/50 p-8 md:p-12 rounded-[2rem]">
-        <div class="grid md:grid-cols-12 gap-12 items-center">
+        <div class="grid md:grid-cols-12 gap-4 md:gap-12 items-center">
           <div class="md:col-span-7 md:order-2">
-            <div class="flex items-center gap-3 mb-6">
+            <div class="flex items-center gap-3 mb-3 md:mb-6">
               <span class="badge-tag bg-purple-100 text-purple-700">Functional</span>
               <span class="text-slate-400 font-mono text-xs">04 / 04</span>
             </div>
-            <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">
+            <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3 md:mb-6">
               기능성 고분자 및 블록공중합체 자기조립
             </h3>
-            <p class="text-slate-600 leading-relaxed text-lg mb-8">
+            <p class="text-slate-600 leading-relaxed text-base md:text-lg mb-2 md:mb-8">
               다양한 응용분야에서 요구되는 고기능성 고분자 소재를 합성하고 응용합니다. 블록 공중합체의 나노 상분리를 제어하여 정교한 나노 구조체를 제조합니다. 자극 반응성 고분자와의 결합을 통해 스마트 첨단 기능성 소재 응용 기술을 탐구합니다.
             </p>
           </div>
           <div class="md:col-span-5 md:order-1">
             <div class="image-frame group">
-                <img src="https://i.ibb.co/xtytwQ8S/functional.jpg">
-              </div>
+              <img src="https://i.ibb.co/xtytwQ8S/functional.jpg" alt="Functional polymer">
             </div>
           </div>
         </div>
@@ -207,28 +229,61 @@
   <div id="site-footer"></div>
 
   <script>
-    const loadComponent = async (id, file) => {
-      try {
-        const response = await fetch(`./${file}`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const html = await response.text();
-        const container = document.getElementById(id);
-        if (container) {
-          container.innerHTML = html;
-          if (id === 'site-footer') {
-            const y = document.getElementById("year");
-            if (y) y.textContent = new Date().getFullYear();
-          }
-        }
-      } catch (err) {
-        console.error(`Failed to load ${file}:`, err);
-      }
-    };
+    // ===== GitHub Pages(/<repo>/...) 호스팅 대비 base prefix 계산 =====
+    const basePrefix = (() => {
+      const p = location.pathname;
+      return p.endsWith('/') ? p : p.replace(/\/[^\/]*$/, '/');
+    })();
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadComponent("site-header", "header.html");
-      loadComponent("site-footer", "footer.html");
-    });
+    // ===== header load =====
+    fetch(basePrefix + "header.html")
+      .then(res => {
+        if (!res.ok) throw new Error("header.html load failed");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("site-header").innerHTML = html;
+
+        // hamburger toggle
+        const btn = document.querySelector(".nav-toggle");
+        const mobileNav = document.getElementById("mobileNav");
+        if (btn && mobileNav) {
+          btn.addEventListener("click", () => {
+            const open = mobileNav.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(open));
+          });
+        }
+
+        // prevent jump for dropdown toggles (desktop + mobile '#')
+        document
+          .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
+          .forEach((el) => el.addEventListener("click", (e) => e.preventDefault()));
+
+        // mobile submenu toggle (data-toggle="sub" 사용)
+        document
+          .querySelectorAll("#mobileNav [data-toggle='sub']")
+          .forEach((t) => {
+            t.addEventListener("click", (e) => {
+              e.preventDefault();
+              const sub = t.nextElementSibling;
+              if (sub && sub.classList.contains("m-sub")) sub.classList.toggle("open");
+            });
+          });
+      })
+      .catch(err => console.error(err));
+
+    // ===== footer load =====
+    fetch(basePrefix + "footer.html")
+      .then(res => {
+        if (!res.ok) throw new Error("footer.html load failed");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("site-footer").innerHTML = html;
+        const y = document.getElementById("year");
+        if (y) y.textContent = new Date().getFullYear();
+      })
+      .catch(err => console.error(err));
   </script>
 
 </body>
