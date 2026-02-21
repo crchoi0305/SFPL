@@ -8,8 +8,6 @@
 </head>
 
 <body class="page-flex">
-
-  <!-- ✅ 공통 헤더가 들어갈 자리 -->
   <div id="site-header"></div>
 
   <main class="page-wrap">
@@ -26,8 +24,6 @@
 
 <script>
   // ===== GitHub Pages(/<repo>/...) + Custom domain(/) 모두 대응 basePrefix =====
-  // - 커스텀 도메인: basePrefix="/"
-  // - GitHub Pages(user.github.io/<repo>/...): basePrefix="/<repo>/"
   const basePrefix = (() => {
     const parts = location.pathname.split("/").filter(Boolean);
     if (location.hostname.endsWith("github.io")) {
@@ -39,14 +35,10 @@
 
   // ===== header load =====
   fetch(basePrefix + "header.html")
-    .then(res => {
-      if (!res.ok) throw new Error("header.html load failed");
-      return res.text();
-    })
+    .then(res => { if (!res.ok) throw new Error("header.html load failed"); return res.text(); })
     .then(html => {
       document.getElementById("site-header").innerHTML = html;
 
-      // hamburger toggle
       const btn = document.querySelector(".nav-toggle");
       const mobileNav = document.getElementById("mobileNav");
       if (btn && mobileNav) {
@@ -56,12 +48,10 @@
         });
       }
 
-      // prevent jump for dropdown toggles (desktop + mobile '#')
       document
         .querySelectorAll(".dropdown-toggle, .mobile-nav .m-link[href='#']")
         .forEach((el) => el.addEventListener("click", (e) => e.preventDefault()));
 
-      // mobile submenu toggle (data-toggle="sub" 사용)
       document
         .querySelectorAll("#mobileNav [data-toggle='sub']")
         .forEach((t) => {
@@ -76,10 +66,7 @@
 
   // ===== footer load =====
   fetch(basePrefix + "footer.html")
-    .then(res => {
-      if (!res.ok) throw new Error("footer.html load failed");
-      return res.text();
-    })
+    .then(res => { if (!res.ok) throw new Error("footer.html load failed"); return res.text(); })
     .then(html => {
       document.getElementById("site-footer").innerHTML = html;
       const y = document.getElementById("year");
@@ -87,7 +74,7 @@
     })
     .catch(err => console.error(err));
 
-  // ===== news render =====
+  // ===== helpers =====
   const list = document.getElementById("newsList");
 
   function el(tag, cls, text) {
@@ -98,7 +85,6 @@
   }
 
   function safeDate(d) {
-    // supports: YYYY-MM-DD, YYYY.MM.DD, YYYY/MM/DD
     if (!d) return 0;
     const s = String(d).trim().replaceAll(".", "-").replaceAll("/", "-");
     const t = Date.parse(s);
@@ -106,7 +92,6 @@
   }
 
   function formatDate(d) {
-    // YYYY-MM-DD -> YYYY.MM.DD (보이기용), 이미 점(.)이면 그대로
     if (!d) return "";
     const m = String(d).trim();
     if (/^\d{4}-\d{2}-\d{2}$/.test(m)) return m.replaceAll("-", ".");
@@ -117,323 +102,103 @@
     return /^https?:\/\//i.test(String(p));
   }
 
-  // Netlify Image CDN helper: 내부 경로(/content/...)만 변환
+  // ===== Netlify Image CDN (photo와 동일한 스타일) =====
   function nlImg(url, w, q = 72, fm = "webp") {
     if (!url) return "";
     const s = String(url).trim();
     if (!s) return "";
-    if (isHttpUrl(s)) return s; // 외부 URL은 그대로
+    if (isHttpUrl(s)) return s;               // 외부 URL은 그대로
     const u = encodeURI(s.startsWith("/") ? s : ("/" + s)); // "/" 유지
     return `/.netlify/images?url=${u}&w=${w}&q=${q}&fm=${fm}`;
   }
 
-  // ===== GitHub Raw fallback 설정(로컬이 깨졌을 때만) =====
+  // ===== GitHub Raw fallback (로컬 경로가 깨졌을 때만) =====
   const GH_OWNER  = "crchoi0305";
   const GH_REPO   = "SFPL";
   const GH_BRANCH = "main";
   const GH_RAW_BASE = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}`;
 
-  // 이미지 src를 "로컬 우선 + 실패 시 raw"로 해석
+  // news 이미지 경로 정규화: 어떤 입력이 와도 "/content/assets/news/..." 형태로
+  function normalizeNewsRelPath(p){
+    let rel = String(p || "").trim();
+    rel = rel.replace(/^https?:\/\/[^/]+\/?/, ""); // 도메인 섞이면 제거
+    rel = rel.replace(/^\/+/, "");
+    rel = rel.replace(/^\.?\//, "");
+
+    // content/content 제거
+    rel = rel.replace(/^content\/content\//, "content/");
+
+    // assets/news -> content/assets/news
+    if (rel.startsWith("assets/news/")) rel = rel.replace(/^assets\/news\//, "content/assets/news/");
+    // news/ -> content/assets/news/
+    if (rel.startsWith("news/")) rel = rel.replace(/^news\//, "content/assets/news/");
+    // 파일명만 -> content/assets/news/파일명
+    if (!rel.includes("/")) rel = "content/assets/news/" + rel;
+
+    // 이미 content/assets/news/ 이면 OK
+    if (!rel.startsWith("content/assets/news/")) {
+      // 혹시 assets/.. 등 이상한 케이스는 강제로 news 아래로
+      rel = "content/assets/news/" + rel.replace(/^content\/assets\/news\//, "");
+    }
+    return rel;
+  }
+
   function resolveImgSources(v) {
     if (!v) return { primary: "", fallback: "" };
-    const src = (typeof v === "string") ? v : (v && typeof v === "object" ? (v.src || v.image || "") : "");
+
+    const src = (typeof v === "string")
+      ? v
+      : (v && typeof v === "object" ? (v.src || v.image || "") : "");
+
     const s = String(src || "").trim();
     if (!s) return { primary: "", fallback: "" };
 
-    const preferContentAssets = (rel) => {
-      rel = rel.replace(/^\/+/, ""); // leading slash 제거
-
-      // assets/news/... -> content/assets/news/... 로 매핑
-      if (rel.startsWith("assets/news/")) {
-        rel = rel.replace(/^assets\/news\//, "content/assets/news/");
-      }
-
-      // 이미 content/assets/news/...면 그대로
-      // 파일명만 오면 content/assets/news/파일명 으로
-      if (!rel.includes("/")) {
-        rel = "content/assets/news/" + rel;
-      }
-
-      // news/... 로 들어오는 것도 흡수
-      if (rel.startsWith("news/")) {
-        rel = rel.replace(/^news\//, "content/assets/news/");
-      }
-
-      // content/content 제거
-      rel = rel.replace(/^content\/content\//, "content/");
-
-      return rel;
-    };
-
-    // 1) raw URL로 저장된 경우: 같은 파일을 로컬 경로로 먼저 시도
+    // 1) raw URL로 저장된 경우: 로컬 먼저, raw fallback
     if (isHttpUrl(s) && s.startsWith(GH_RAW_BASE + "/")) {
       let rel = s.slice((GH_RAW_BASE + "/").length);
-      rel = preferContentAssets(rel);
+      rel = normalizeNewsRelPath(rel);
+
       const primary = (basePrefix + rel).replace(/\/\/+/g, "/");
-      return { primary, fallback: s };
+      const fallback = s;
+      return { primary, fallback };
     }
 
-    // 2) 외부 URL이면 그대로 사용
+    // 2) 외부 URL이면 그대로
     if (isHttpUrl(s)) return { primary: s, fallback: "" };
 
-    // 3) 로컬 경로 우선 + raw fallback 생성
-    let clean = s.replace(/^\.?\//, "").replace(/^\/+/, "");
-    clean = preferContentAssets(clean);
-
-    const primary = (basePrefix + clean).replace(/\/\/+/g, "/");
-    const fallback = `${GH_RAW_BASE}/${clean}`;
+    // 3) 로컬 경로: 정규화 후 primary, raw fallback 생성
+    const rel = normalizeNewsRelPath(s);
+    const primary = (basePrefix + rel).replace(/\/\/+/g, "/");
+    const fallback = `${GH_RAW_BASE}/${rel}`;
     return { primary, fallback };
   }
 
-  // ===== 아이폰 디코딩 병목 해결: "첫 장만 로드 + 넘길 때 로드" =====
-  function hydrateImg(img){
-    if (!img || img.dataset.hydrated === "1") return;
+  // ✅ 핵심: primary가 로컬(/...)이면 Netlify Image CDN으로 가볍게 받아오고, 실패 시 raw fallback
+  function setImgWithFallback(img, sources) {
+    if (!img || !sources) return;
 
-    const src = img.dataset.src || "";
-    if (src) img.src = src;
+    const primary = sources.primary || "";
+    const fallback = sources.fallback || "";
 
-    const srcset = img.dataset.srcset || "";
-    if (srcset) img.srcset = srcset;
-
-    const sizes = img.dataset.sizes || "";
-    if (sizes) img.sizes = sizes;
-
-    img.dataset.hydrated = "1";
-  }
-
-  // 모바일 캐러셀: 현재/이웃만 로드
-  function hydrateNewsAround(track, idx, radius = 1){
-    const slides = [...track.querySelectorAll(".news-slide")];
-    for (let k = idx - radius; k <= idx + radius; k++){
-      if (k < 0 || k >= slides.length) continue;
-      const img = slides[k].querySelector("img.news-img");
-      hydrateImg(img);
-    }
-  }
-
-  // 데스크탑 갤러리: 앞에서부터 n장만 즉시 로드
-  function hydrateGalleryN(gallery, n = 2){
-    if (!gallery) return;
-    const imgs = [...gallery.querySelectorAll("img.news-img")];
-    imgs.slice(0, n).forEach(hydrateImg);
-  }
-
-  // ====== mobile carousel CSS ======
-  function ensureCarouselCSSOnce() {
-    if (document.getElementById("newsCarouselCSS")) return;
-
-    const style = document.createElement("style");
-    style.id = "newsCarouselCSS";
-    style.textContent = `
-      /* desktop: 기존 gallery */
-      .news-gallery { display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:center; }
-      .news-imglink { display:block; }
-      .news-img { display:block; height:auto; max-width:100%; border-radius:12px; }
-
-      /* mobile: carousel */
-      @media (max-width: 640px){
-        .news-gallery { display:block; } /* 모바일에선 carousel로 치환 */
-        .news-carousel { position:relative; width:100%; }
-        .news-track {
-          display:flex;
-          overflow-x:auto;
-          scroll-snap-type:x mandatory;
-          -webkit-overflow-scrolling: touch;
-          gap:12px;
-          padding: 8px 0 4px;
-          scrollbar-width:none;
-        }
-        .news-track::-webkit-scrollbar{ display:none; }
-
-        .news-slide{
-          flex: 0 0 100%;
-          scroll-snap-align:center;
-        }
-
-        .news-slide a{ display:block; }
-        .news-slide img{
-          width:100%;
-          height:auto;
-          display:block;
-          border-radius:14px;
-          object-fit:cover;
-        }
-
-        .news-dots{
-          display:flex;
-          justify-content:center;
-          gap:8px;
-          padding: 10px 0 0;
-        }
-        .news-dot{
-          width:7px; height:7px;
-          border-radius:999px;
-          background: rgba(0,0,0,.25);
-          border:0;
-          padding:0;
-        }
-        .news-dot.is-active{
-          background: rgba(0,0,0,.75);
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  function buildCarousel(imgs, titleText) {
-    ensureCarouselCSSOnce();
-
-    const wrap = el("div", "news-carousel");
-
-    const track = el("div", "news-track");
-    track.setAttribute("role", "group");
-    track.setAttribute("aria-label", "News images");
-    track.dataset.index = "0";
-
-    const dots = el("div", "news-dots");
-
-    const slides = imgs.map((srcObj, i) => {
-      const slide = el("div", "news-slide");
-
-      const a = document.createElement("a");
-      a.href = (srcObj.primary || srcObj.fallback);
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.className = "news-imglink";
-
-      const img = document.createElement("img");
-      img.className = "news-img";
-      img.alt = (titleText ? titleText + " - " : "") + (i + 1);
-      img.loading = "lazy";
-      img.decoding = "async";
-
-      // ✅ 즉시 src를 넣지 않고 data-*에 저장 (photo 방식)
-      const primary = srcObj.primary || "";
-      const fallback = srcObj.fallback || "";
-
-      // 로컬 경로면 Netlify Image CDN 사용
-      if (primary && String(primary).trim().startsWith("/")) {
-        img.dataset.src = nlImg(primary, 900);
-        img.dataset.srcset = `${nlImg(primary, 600)} 600w, ${nlImg(primary, 900)} 900w, ${nlImg(primary, 1200)} 1200w`;
-        img.dataset.sizes = "100vw";
-      } else {
-        // 외부 URL이면 그대로
-        img.dataset.src = primary || fallback || "";
-        img.dataset.sizes = "100vw";
-      }
-
-      // 실패 시 raw fallback (로드가 시작된 뒤에만 의미 있음)
-      img.onerror = () => {
-        if (fallback && img.src !== fallback) {
-          img.src = fallback;
-          return;
-        }
-        img.onerror = null;
-      };
-
-      // ✅ 첫 장만 즉시 로드
-      if (i === 0) hydrateImg(img);
-
-      a.appendChild(img);
-      slide.appendChild(a);
-      track.appendChild(slide);
-
-      const dot = document.createElement("button");
-      dot.type = "button";
-      dot.className = "news-dot" + (i === 0 ? " is-active" : "");
-      dot.setAttribute("aria-label", "Go to image " + (i + 1));
-      dot.addEventListener("click", () => {
-        const left = slide.offsetLeft - track.offsetLeft;
-        track.scrollTo({ left, behavior: "smooth" });
-      });
-      dots.appendChild(dot);
-
-      return slide;
-    });
-
-    function setActive(idx) {
-      const children = dots.children;
-      for (let i = 0; i < children.length; i++) {
-        children[i].classList.toggle("is-active", i === idx);
-      }
+    if (primary && primary.startsWith("/")) {
+      // 뉴스 카드 이미지 표시 사이즈 기준(가로 폭)로 리사이즈
+      img.src = nlImg(primary, 900);
+      img.srcset = `${nlImg(primary, 600)} 600w, ${nlImg(primary, 900)} 900w, ${nlImg(primary, 1200)} 1200w`;
+      img.sizes = "(max-width: 640px) 92vw, (max-width: 1200px) 800px, 900px";
+    } else {
+      img.src = primary || fallback || "";
     }
 
-    // 현재 스크롤 위치 기준으로 가장 가까운 슬라이드 찾기 + 주변만 hydrate
-    let raf = null;
-    track.addEventListener("scroll", () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const center = track.scrollLeft + track.clientWidth / 2;
-        let bestIdx = 0;
-        let bestDist = Infinity;
-        slides.forEach((s, i) => {
-          const sCenter = s.offsetLeft - track.offsetLeft + s.clientWidth / 2;
-          const dist = Math.abs(center - sCenter);
-          if (dist < bestDist) { bestDist = dist; bestIdx = i; }
-        });
+    img.loading = "lazy";
+    img.decoding = "async";
 
-        track.dataset.index = String(bestIdx);
-        setActive(bestIdx);
-
-        // ✅ 현재/이웃만 로드
-        hydrateNewsAround(track, bestIdx, 1);
-      });
-    }, { passive: true });
-
-    wrap.appendChild(track);
-    if (imgs.length > 1) wrap.appendChild(dots);
-
-    // ✅ 초기: 0번 주변만 살짝 프리로드(원치 않으면 radius=0)
-    hydrateNewsAround(track, 0, 1);
-
-    return wrap;
-  }
-
-  function buildDesktopGallery(imgs, titleText) {
-    const gallery = el("div", "news-gallery");
-
-    imgs.forEach((srcObj, i) => {
-      const a = document.createElement("a");
-      a.href = (srcObj.primary || srcObj.fallback);
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.className = "news-imglink";
-
-      const img = document.createElement("img");
-      img.className = "news-img";
-      img.alt = (titleText ? titleText + " - " : "") + (i + 1);
-      img.loading = "lazy";
-      img.decoding = "async";
-
-      const primary = srcObj.primary || "";
-      const fallback = srcObj.fallback || "";
-
-      // ✅ 데스크탑도 data-*에 저장 후, 앞부분만 hydrate (photo 방식의 축소판)
-      if (primary && String(primary).trim().startsWith("/")) {
-        img.dataset.src = nlImg(primary, 900);
-        img.dataset.srcset = `${nlImg(primary, 600)} 600w, ${nlImg(primary, 900)} 900w, ${nlImg(primary, 1200)} 1200w`;
-        img.dataset.sizes = "(max-width: 1200px) 90vw, 800px";
-      } else {
-        img.dataset.src = primary || fallback || "";
-        img.dataset.sizes = "(max-width: 1200px) 90vw, 800px";
+    img.onerror = () => {
+      if (fallback && img.src !== fallback) {
+        img.src = fallback;
+        return;
       }
-
-      img.onerror = () => {
-        if (fallback && img.src !== fallback) {
-          img.src = fallback;
-          return;
-        }
-        img.onerror = null;
-      };
-
-      a.appendChild(img);
-      gallery.appendChild(a);
-    });
-
-    // ✅ 초기: 2장만 즉시 로드 (더 가볍게=1, 더 부드럽게=3)
-    hydrateGalleryN(gallery, 2);
-
-    return gallery;
+      img.onerror = null;
+    };
   }
 
   function renderPost(p) {
@@ -446,16 +211,14 @@
     head.appendChild(title);
     card.appendChild(head);
 
-    // desc
     if (p.desc) {
       const desc = el("p", "news-desc", p.desc);
       card.appendChild(desc);
     }
 
-    // body (bullets)
-    const bodyWrap = el("div", "news-body");
     const lines = Array.isArray(p.body) ? p.body : (p.body ? [String(p.body)] : []);
     if (lines.length) {
+      const bodyWrap = el("div", "news-body");
       const ul = el("ul", "news-bullets");
       lines.forEach(t => {
         const li = document.createElement("li");
@@ -463,20 +226,31 @@
         ul.appendChild(li);
       });
       bodyWrap.appendChild(ul);
+      card.appendChild(bodyWrap);
     }
-    if (bodyWrap.childNodes.length) card.appendChild(bodyWrap);
 
-    // images
+    // images (캐러셀 없음: 그냥 갤러리)
     const imgsRaw = Array.isArray(p.images) ? p.images : [];
     const imgs = imgsRaw.map(resolveImgSources).filter(o => (o && (o.primary || o.fallback)));
 
     if (imgs.length) {
-      const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
-      if (isMobile) {
-        card.appendChild(buildCarousel(imgs, p.title || ""));
-      } else {
-        card.appendChild(buildDesktopGallery(imgs, p.title || ""));
-      }
+      const gallery = el("div", "news-gallery");
+      imgs.forEach((srcObj, i) => {
+        const a = document.createElement("a");
+        a.href = (srcObj.primary || srcObj.fallback);
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.className = "news-imglink";
+
+        const img = document.createElement("img");
+        img.className = "news-img";
+        setImgWithFallback(img, srcObj);
+        img.alt = (p.title ? p.title + " - " : "") + (i + 1);
+
+        a.appendChild(img);
+        gallery.appendChild(a);
+      });
+      card.appendChild(gallery);
     }
 
     // links
@@ -513,19 +287,7 @@
         return;
       }
 
-      // 렌더
-      list.innerHTML = "";
       posts.forEach(p => list.appendChild(renderPost(p)));
-
-      // 리사이즈/회전 시: 모바일/데스크탑 전환 때문에 재렌더
-      let t = null;
-      window.addEventListener("resize", () => {
-        clearTimeout(t);
-        t = setTimeout(() => {
-          list.innerHTML = "";
-          posts.forEach(p => list.appendChild(renderPost(p)));
-        }, 150);
-      });
     } catch (e) {
       console.error(e);
       list.appendChild(el("div", "news-empty", "News 데이터를 불러오지 못했습니다. (content/news.json 확인)"));
@@ -534,6 +296,5 @@
 
   init();
 </script>
-
 </body>
 </html>
