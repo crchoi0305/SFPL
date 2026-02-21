@@ -113,7 +113,6 @@
 
   function isHttpUrl(p){ return /^https?:\/\//i.test(String(p)); }
 
-
   // Netlify Image CDN helper (A안): 원본은 유지하고, 전송되는 이미지만 리사이즈/압축/포맷 변환
   // - 내부 경로(/content/...)는 /.netlify/images 로 감싸서 요청
   // - 외부 URL(http/https)은 그대로 사용
@@ -122,14 +121,12 @@
     const s = String(url).trim();
     if (!s) return "";
     if (isHttpUrl(s)) return s;
-    // Netlify Image CDN expects url=... (site-relative path is OK)
-    const u = encodeURIComponent(s.startsWith("/") ? s : ("/" + s));
+    // "/" 유지 (encodeURIComponent 대신 encodeURI)
+    const u = encodeURI(s.startsWith("/") ? s : ("/" + s));
     return `/.netlify/images?url=${u}&w=${w}&q=${q}&fm=${fm}`;
   }
 
   // ✅ 핵심: 이미지는 항상 content/assets/news 기준으로 읽기
-  // - CMS가 "/assets/news/..", "assets/news/..", "news/..", "파일명만", "/content/assets/news/.." 등
-  //   어떤 값을 주더라도 최종적으로 "/content/assets/news/.." 로 통일.
   function normalizeImgSrc(v) {
     if (!v) return "";
     const src = (typeof v === "string") ? v : (v && typeof v === "object" ? (v.src || v.image || "") : "");
@@ -220,12 +217,40 @@
     document.head.appendChild(style);
   })();
 
+  // ===== 아이폰 디코딩 병목 해결: 첫 장만 로드 + 넘길 때 로드 =====
+  function hydrateImg(img){
+    if (!img || img.dataset.hydrated === "1") return;
+
+    const src = img.dataset.src || "";
+    if (src) img.src = src;
+
+    const srcset = img.dataset.srcset || "";
+    if (srcset) img.srcset = srcset;
+
+    const sizes = img.dataset.sizes || "";
+    if (sizes) img.sizes = sizes;
+
+    img.dataset.hydrated = "1";
+  }
+
+  function hydrateHomeAround(track, idx, radius = 1){
+    const slides = [...track.querySelectorAll(".home-news-slide")];
+    for (let k = idx - radius; k <= idx + radius; k++){
+      if (k < 0 || k >= slides.length) continue;
+      const img = slides[k].querySelector("img");
+      hydrateImg(img);
+    }
+  }
+
   function setHomeIndex(track, dots, i){
     const max = track.children.length;
     const next = Math.max(0, Math.min(max - 1, i));
     track.style.transform = `translateX(${-next * 100}%)`;
     track.dataset.index = String(next);
     [...dots.children].forEach((d, k) => d.classList.toggle("active", k === next));
+
+    // ✅ 현재 슬라이드(+양옆 1장)만 로드
+    hydrateHomeAround(track, next, 1);
   }
 
   function stepHome(track, dots, dir){
@@ -286,15 +311,20 @@
         slide.className = "home-news-slide";
 
         const img = document.createElement("img");
-        // Netlify Image CDN으로 전송 이미지 최적화 (원본 파일은 그대로 유지)
-        img.src = nlImg(src, 720);
-        img.srcset = `${nlImg(src, 480)} 480w, ${nlImg(src, 720)} 720w, ${nlImg(src, 960)} 960w`;
-        img.sizes = "(max-width: 640px) 100vw, 720px";
+
+        // ✅ 즉시 src를 넣지 않고 data-*에 저장
+        img.dataset.src = nlImg(src, 720);
+        img.dataset.srcset = `${nlImg(src, 480)} 480w, ${nlImg(src, 720)} 720w, ${nlImg(src, 960)} 960w`;
+        img.dataset.sizes = "(max-width: 640px) 100vw, 720px";
+
         img.alt = `${p.title || "News"} - ${i + 1}`;
         img.loading = "lazy";
         img.decoding = "async";
         img.width = 720;
         img.height = 220;
+
+        // ✅ 첫 장만 즉시 로드
+        if (i === 0) hydrateImg(img);
 
         slide.appendChild(img);
         track.appendChild(slide);
@@ -356,6 +386,9 @@
 
       carousel.addEventListener("click", (e) => e.stopPropagation());
       dots.addEventListener("click", (e) => e.stopPropagation());
+
+      // ✅ 초기: 0번 주변만 살짝 프리로드(원치 않으면 radius=0으로)
+      hydrateHomeAround(track, 0, 1);
 
       startAuto();
     }
