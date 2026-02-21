@@ -8,145 +8,106 @@
 </head>
 
 <body class="page-flex">
+
+  <!-- ✅ 공통 헤더 삽입 위치 -->
   <div id="site-header"></div>
 
   <main>
     <div class="container page-wrap">
       <h1 class="page-title">Current members</h1>
-      <div id="currentGrid" class="people-grid" aria-label="Current members list"></div>
+      <p><div id="currentGrid" class="people-grid" aria-label="Current members list"></div></p>
     </div>
   </main>
 
-  <div id="site-footer"></div>
+<div id="site-footer"></div>
+
 
 <script>
-  // ===== helpers =====
-  function el(tag, cls, text) {
-    const x = document.createElement(tag);
-    if (cls) x.className = cls;
-    if (text != null) x.textContent = text;
-    return x;
-  }
-
-  function isHttpUrl(p) {
-    return /^https?:\/\//i.test(String(p));
-  }
-
-  // Netlify Image CDN: 내부 경로(/content/...)만 변환
-  function nlImg(url, w, q = 72, fm = "webp") {
-    if (!url) return "";
-    const s = String(url).trim();
-    if (!s) return "";
-    if (isHttpUrl(s)) return s; // 외부 URL은 그대로
-    const u = encodeURI(s.startsWith("/") ? s : ("/" + s)); // "/" 유지
-    return `/.netlify/images?url=${u}&w=${w}&q=${q}&fm=${fm}`;
-  }
-
-  // GitHub Raw fallback (로컬 경로가 깨졌을 때만)
-  const GH_OWNER  = "crchoi0305";
-  const GH_REPO   = "SFPL";
-  const GH_BRANCH = "main";
-  const GH_RAW_BASE = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}`;
-
-  function pickMembers(data) {
-    if (Array.isArray(data.members)) return data.members;
-    if (Array.isArray(data.people)) return data.people;
-    if (Array.isArray(data.items)) return data.items;
-    return [];
-  }
-
-  function pickSrc(v) {
-    if (!v) return "";
-    if (typeof v === "string") return v;
-    if (typeof v === "object" && v.src) return v.src;
-    return "";
-  }
-
-  function addLabeledRow(parent, labelText, valueText, cls) {
-    if (!valueText) return;
-    const row = el("div", cls || "person-row");
-    row.appendChild(el("span", "label", labelText));
-    row.appendChild(el("span", "value", valueText));
-    parent.appendChild(row);
-  }
-
-  // current 멤버 사진 경로 정규화
-  // - 어떤 형태든 최종적으로 "/content/assets/..." 형태로 맞춰서 Netlify 이미지 CDN을 태움
-  function normalizeMemberPhotoPath(src) {
-    if (!src) return "";
-
-    const s = String(src).trim();
-    if (!s) return "";
-
-    // 외부 URL은 그대로
-    if (isHttpUrl(s)) return s;
-
-    // "../content/..." 같은 상대경로 -> "/content/..." 로 통일
-    let clean = s.replace(/^\.?\//, "").replace(/^\/+/, "");
-    clean = clean.replace(/^\.\.\//g, ""); // "../content/..." -> "content/..."
-
-    // 이미 content/...면 OK
-    if (clean.startsWith("content/")) return "/" + clean;
-
-    // assets/... 또는 people/... 같은 케이스가 오면 content 아래로 붙이기
-    if (clean.startsWith("assets/")) return "/content/" + clean;
-    if (clean.startsWith("people/")) return "/" + clean; // people 폴더 직접이면 그대로
-
-    // 파일명만 오면(드물지만) content/assets/current/ 아래라고 가정 (필요하면 바꿔)
-    if (!clean.includes("/")) return "/content/assets/current/" + clean;
-
-    // 그 외는 그냥 루트 기준으로
-    return "/" + clean;
-  }
-
-  function setMemberImgOptimized(img, rawSrc) {
-    const primary = normalizeMemberPhotoPath(rawSrc);
-
-    // 외부 URL이면 그대로
-    if (isHttpUrl(primary)) {
-      img.src = primary;
-      img.loading = "lazy";
-      img.decoding = "async";
-      return;
-    }
-
-    // 로컬 경로면 Netlify Image CDN 적용
-    // 카드 사진은 보통 작게 보이니 w를 크게 줄일 수 있음 (예: 480~720)
-    img.src = nlImg(primary, 720);
-    img.srcset = `${nlImg(primary, 360)} 360w, ${nlImg(primary, 720)} 720w, ${nlImg(primary, 960)} 960w`;
-    img.sizes = "(max-width: 640px) 92vw, 520px";
-    img.loading = "lazy";
-    img.decoding = "async";
-
-    // fallback: raw github (혹시 로컬이 깨졌을 때만)
-    const rel = primary.replace(/^\/+/, ""); // "content/..."
-    const fallback = `${GH_RAW_BASE}/${rel}`;
-    img.onerror = () => {
-      if (fallback && img.src !== fallback) {
-        img.src = fallback;
-        return;
-      }
-      img.onerror = null;
-    };
-  }
-
-  // ===== Current members JSON 로드 & 렌더 =====
+  // ✅ Current members JSON 로드 & 렌더
   (function () {
     const wrap = document.getElementById("currentGrid");
     if (!wrap) return;
+
+    function el(tag, cls, text) {
+      const x = document.createElement(tag);
+      if (cls) x.className = cls;
+      if (text != null) x.textContent = text;
+      return x;
+    }
+
+    function pickMembers(data) {
+      if (Array.isArray(data.members)) return data.members;
+      if (Array.isArray(data.people)) return data.people;
+      if (Array.isArray(data.items)) return data.items;
+      return [];
+    }
+
+    function pickSrc(v) {
+      if (!v) return "";
+      if (typeof v === "string") return v;
+      if (typeof v === "object" && v.src) return v.src;
+      return "";
+    }
+    // ===== Netlify Image CDN (용량만 줄이기) =====
+function isHttpUrl(p) {
+  return /^https?:\/\//i.test(String(p));
+}
+
+// 로컬 경로면 /.netlify/images 로 최적화해서 내려받기
+function nlImg(url, w, q = 72, fm = "webp") {
+  if (!url) return "";
+  const s = String(url).trim();
+  if (!s) return "";
+  if (isHttpUrl(s)) return s; // 외부 URL은 그대로
+  const u = encodeURI(s.startsWith("/") ? s : ("/" + s)); // "/" 유지
+  return `/.netlify/images?url=${u}&w=${w}&q=${q}&fm=${fm}`;
+}
+
+// 현재 페이지(/people/current.html) 기준으로 상대경로를 "절대경로"로 변환
+// 예: "../content/a.jpg" -> "/content/a.jpg"
+function toAbsPath(p){
+  if (!p) return "";
+  const s = String(p).trim();
+  if (!s) return "";
+  if (isHttpUrl(s)) return s;
+  return new URL(s, window.location.href).pathname.replace(/\/\/+/g, "/");
+}
+    
+    function addLabeledRow(parent, labelText, valueText, cls) {
+      if (!valueText) return;
+      const row = el("div", cls || "person-row");
+      row.appendChild(el("span", "label", labelText));
+      row.appendChild(el("span", "value", valueText));
+      parent.appendChild(row);
+    }
 
     function renderCard(m) {
       const card = el("article", "person-card");
 
       // 왼쪽 사진
-      const imgSrc = pickSrc(m.photo || m.image || m.avatar);
-      if (imgSrc) {
-        const img = document.createElement("img");
-        img.className = "person-photo";
-        setMemberImgOptimized(img, imgSrc);
-        img.alt = m.name ? `${m.name} photo` : "member photo";
-        card.appendChild(img);
-      }
+const imgSrc = pickSrc(m.photo || m.image || m.avatar);
+if (imgSrc) {
+  const img = document.createElement("img");
+  img.className = "person-photo";
+
+  const abs = toAbsPath(imgSrc);
+
+  if (abs && abs.startsWith("/")) {
+    // 로컬 파일이면 Netlify Image CDN으로 최적화
+    img.src = nlImg(abs, 720);
+    img.srcset = `${nlImg(abs, 360)} 360w, ${nlImg(abs, 720)} 720w, ${nlImg(abs, 960)} 960w`;
+    img.sizes = "(max-width: 640px) 92vw, 520px";
+  } else {
+    // 외부 URL이면 그대로 사용
+    img.src = abs || imgSrc;
+  }
+
+  img.alt = m.name ? `${m.name} photo` : "member photo";
+  img.loading = "lazy";
+  img.decoding = "async";
+
+  card.appendChild(img);
+}
 
       // 오른쪽 텍스트 영역
       const text = el("div", "person-text");
@@ -155,7 +116,7 @@
       // 이름
       text.appendChild(el("div", "person-name", m.name || "Unnamed"));
 
-      // 학위/학력
+      // 학위/학력 (config.yml에 bs, ms가 있으니 출력)  :contentReference[oaicite:0]{index=0}
       const bsText = m.bs || "";
       const msText = m.ms || "";
       if (bsText || msText) {
@@ -165,27 +126,31 @@
         text.appendChild(edu);
       }
 
-      // Research
-      const researchText = m.research || m.research_field || m.field || m.interest || m.topic || "";
+      // ✅ Research (필드명이 research로 들어오므로 최우선 출력)
+      // 혹시 다른 키로 들어오는 경우도 대비해서 fallback 허용
+      const researchText =
+        m.research || m.research_field || m.field || m.interest || m.topic || "";
       addLabeledRow(text, "Research:", researchText, "person-research");
 
       // Bio
-      const bioText = m.bio || "";
-      if (bioText) {
-        const row = el("div", "person-bio");
-        row.innerHTML = `<span class="label">자기소개:</span> <span class="value"></span>`;
-        row.querySelector(".value").textContent = bioText;
-        text.appendChild(row);
-      }
+    const bioText = m.bio || "";
+if (bioText) {
+  const row = el("div", "person-bio");
+  row.innerHTML = `<span class="label">자기소개:</span> <span class="value"></span>`;
+  row.querySelector(".value").textContent = bioText;
+  text.appendChild(row);
+}
 
-      // Email (텍스트로만)
-      const emailText = m.email || "";
-      if (emailText) {
-        const row = el("div", "person-email");
-        row.appendChild(el("span", "label", "Email:"));
-        row.appendChild(el("span", "value", emailText));
-        text.appendChild(row);
-      }
+
+      // ✅ Email: 하이퍼링크 제거 (그냥 텍스트로 출력)
+const emailText = m.email || "";
+if (emailText) {
+  const row = el("div", "person-email");
+  row.appendChild(el("span", "label", "Email:"));
+  row.appendChild(el("span", "value", emailText)); // ✅ 텍스트로만 출력
+  text.appendChild(row);
+}
+
 
       return card;
     }
@@ -215,9 +180,16 @@
     load();
   })();
 
-  // ===== header/footer load =====
+  /* footer year */
+  const y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
+
+  /* header load (people/current.html → 상위 폴더) */
   fetch("../header.html")
-    .then(res => { if (!res.ok) throw new Error("header.html load failed"); return res.text(); })
+    .then(res => {
+      if (!res.ok) throw new Error("header.html load failed");
+      return res.text();
+    })
     .then(html => {
       document.getElementById("site-header").innerHTML = html;
 
@@ -257,15 +229,21 @@
     })
     .catch(err => console.error(err));
 
-  fetch("../footer.html")
-    .then(res => { if (!res.ok) throw new Error("footer.html load failed"); return res.text(); })
-    .then(html => {
-      document.getElementById("site-footer").innerHTML = html;
-      const y = document.getElementById("year");
-      if (y) y.textContent = new Date().getFullYear();
-    })
-    .catch(err => console.error(err));
+    fetch("../footer.html")
+  .then(res => {
+    if (!res.ok) throw new Error("footer.html load failed");
+    return res.text();
+  })
+  .then(html => {
+    document.getElementById("site-footer").innerHTML = html;
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+  })
+  .catch(err => console.error(err));
+
 </script>
+
+
 
 </body>
 </html>
