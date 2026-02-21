@@ -246,19 +246,45 @@
     return { primary, fallback };
   }
 
-  function setImgWithFallback(img, sources) {
+  
+  // Netlify Image CDN helper (A안): 원본은 유지하고, 전송되는 이미지만 리사이즈/압축/포맷 변환
+  function nlImg(url, w, q = 72, fm = "webp") {
+    if (!url) return "";
+    const s = String(url).trim();
+    if (!s) return "";
+    if (/^https?:\/\//i.test(s)) return s; // external URL 그대로
+    const u = encodeURIComponent(s.startsWith("/") ? s : ("/" + s));
+    return `/.netlify/images?url=${u}&w=${w}&q=${q}&fm=${fm}`;
+  }
+
+function setImgWithFallback(img, sources) {
     if (!img || !sources) return;
 
     const primary = sources.primary || "";
     const fallback = sources.fallback || "";
 
-    img.src = primary || fallback || "";
+    // 내부 경로(primary가 /로 시작)면 Netlify Image CDN으로 최적화해서 로드
+    if (primary && String(primary).trim().startsWith("/")) {
+      img.src = nlImg(primary, 1200);
+      img.srcset = `${nlImg(primary, 800)} 800w, ${nlImg(primary, 1200)} 1200w, ${nlImg(primary, 1600)} 1600w`;
+      img.sizes = "(max-width: 820px) 100vw, 50vw";
+    } else {
+      // 외부 URL 또는 예외 케이스는 기존 방식 유지
+      img.src = primary || fallback || "";
+    }
+
+    img.loading = "lazy";
+    img.decoding = "async";
 
     img.onerror = () => {
+      // primary가 실패하면 raw fallback로(기존 동작 유지)
       if (fallback && img.src !== fallback) {
         img.src = fallback;
         return;
       }
+      img.onerror = null;
+    };
+  }
       img.onerror = null;
     };
   }

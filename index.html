@@ -113,6 +113,20 @@
 
   function isHttpUrl(p){ return /^https?:\/\//i.test(String(p)); }
 
+
+  // Netlify Image CDN helper (A안): 원본은 유지하고, 전송되는 이미지만 리사이즈/압축/포맷 변환
+  // - 내부 경로(/content/...)는 /.netlify/images 로 감싸서 요청
+  // - 외부 URL(http/https)은 그대로 사용
+  function nlImg(url, w, q = 70, fm = "webp") {
+    if (!url) return "";
+    const s = String(url).trim();
+    if (!s) return "";
+    if (isHttpUrl(s)) return s;
+    // Netlify Image CDN expects url=... (site-relative path is OK)
+    const u = encodeURIComponent(s.startsWith("/") ? s : ("/" + s));
+    return `/.netlify/images?url=${u}&w=${w}&q=${q}&fm=${fm}`;
+  }
+
   // ✅ 핵심: 이미지는 항상 content/assets/news 기준으로 읽기
   // - CMS가 "/assets/news/..", "assets/news/..", "news/..", "파일명만", "/content/assets/news/.." 등
   //   어떤 값을 주더라도 최종적으로 "/content/assets/news/.." 로 통일.
@@ -272,9 +286,15 @@
         slide.className = "home-news-slide";
 
         const img = document.createElement("img");
-        img.src = src;  // ✅ /content/assets/news/... 로 고정됨
+        // Netlify Image CDN으로 전송 이미지 최적화 (원본 파일은 그대로 유지)
+        img.src = nlImg(src, 720);
+        img.srcset = `${nlImg(src, 480)} 480w, ${nlImg(src, 720)} 720w, ${nlImg(src, 960)} 960w`;
+        img.sizes = "(max-width: 640px) 100vw, 720px";
         img.alt = `${p.title || "News"} - ${i + 1}`;
         img.loading = "lazy";
+        img.decoding = "async";
+        img.width = 720;
+        img.height = 220;
 
         slide.appendChild(img);
         track.appendChild(slide);
