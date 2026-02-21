@@ -194,14 +194,41 @@
     return /^https?:\/\//i.test(String(p));
   }
 
+  // Netlify Image CDN helper
   function nlImg(url, w, q = 72, fm = "webp") {
-  if (!url) return "";
-  const s = String(url).trim();
-  if (!s) return "";
-  if (/^https?:\/\//i.test(s)) return s; // 외부 URL은 그대로
-  const u = encodeURI(s.startsWith("/") ? s : ("/" + s)); // "/" 유지
-  return `/.netlify/images?url=${u}&w=${w}&q=${q}&fm=${fm}`;
-}
+    if (!url) return "";
+    const s = String(url).trim();
+    if (!s) return "";
+    if (/^https?:\/\//i.test(s)) return s; // 외부 URL은 그대로
+    const u = encodeURI(s.startsWith("/") ? s : ("/" + s)); // "/" 유지
+    return `/.netlify/images?url=${u}&w=${w}&q=${q}&fm=${fm}`;
+  }
+
+  // ===== lazy hydration (아이폰 디코딩 병목 해결) =====
+  function hydrateImg(img){
+    if (!img || img.dataset.hydrated === "1") return;
+
+    const src = img.dataset.src || "";
+    if (src) img.src = src;
+
+    const srcset = img.dataset.srcset || "";
+    if (srcset) img.srcset = srcset;
+
+    const sizes = img.dataset.sizes || "";
+    if (sizes) img.sizes = sizes;
+
+    img.dataset.hydrated = "1";
+  }
+
+  function hydrateAround(track, idx, radius = 1){
+    const slides = [...track.querySelectorAll(".carousel-slide")];
+    for (let k = idx - radius; k <= idx + radius; k++){
+      if (k < 0 || k >= slides.length) continue;
+      const img = slides[k].querySelector("img.carousel-img");
+      hydrateImg(img);
+    }
+  }
+
   // ✅ date: "YYYY.MM.DD" 형태에 정확히 맞는 파서
   function parseAlbumDate(d){
     if (!d) return 0;
@@ -254,34 +281,36 @@
     return { primary, fallback };
   }
 
+  // ✅ 이제는 "즉시 로드"가 아니라 "data-* 저장"만 한다 (첫 장/필요 시점에 hydrate)
   function setImgWithFallback(img, sources) {
-  if (!img || !sources) return;
+    if (!img || !sources) return;
 
-  const primary = sources.primary || "";
-  const fallback = sources.fallback || "";
+    const primary = sources.primary || "";
+    const fallback = sources.fallback || "";
 
-  // primary가 로컬 절대경로면 Netlify Image CDN으로 최적화해서 로드
-  if (primary && String(primary).trim().startsWith("/")) {
-    img.src = nlImg(primary, 1200);
-    img.srcset = `${nlImg(primary, 800)} 800w, ${nlImg(primary, 1200)} 1200w, ${nlImg(primary, 1600)} 1600w`;
-    img.sizes = "(max-width: 820px) 100vw, 50vw";
-  } else {
-    // 외부 URL 등은 원래대로
-    img.src = primary || fallback || "";
-  }
-
-  img.loading = "lazy";
-  img.decoding = "async";
-
-  // 실패 시 raw fallback로 1회 전환
-  img.onerror = () => {
-    if (fallback && img.src !== fallback) {
-      img.src = fallback;
-      return;
+    // primary가 로컬 절대경로면 Netlify Image CDN으로 최적화 URL을 만들어 data-*에 저장
+    if (primary && String(primary).trim().startsWith("/")) {
+      img.dataset.src = nlImg(primary, 1200);
+      img.dataset.srcset = `${nlImg(primary, 800)} 800w, ${nlImg(primary, 1200)} 1200w, ${nlImg(primary, 1600)} 1600w`;
+      img.dataset.sizes = "(max-width: 820px) 100vw, 50vw";
+    } else {
+      // 외부 URL 등은 원래대로
+      img.dataset.src = primary || fallback || "";
+      img.dataset.sizes = "(max-width: 820px) 100vw, 50vw";
     }
-    img.onerror = null;
-  };
-}
+
+    img.loading = "lazy";
+    img.decoding = "async";
+
+    // 실제 로드가 시작된 뒤 실패하면 raw fallback로 1회 전환
+    img.onerror = () => {
+      if (fallback && img.src !== fallback) {
+        img.src = fallback;
+        return;
+      }
+      img.onerror = null;
+    };
+  }
 
   function scrollToIndex(track, i){
     const slides = track.querySelectorAll(".carousel-slide");
@@ -290,6 +319,9 @@
     const left = target.offsetLeft - track.offsetLeft;
     track.scrollTo({ left, behavior: "smooth" });
     track.dataset.index = String(idx);
+
+    // ✅ 이동한 슬라이드(및 좌우 1장)만 로드
+    hydrateAround(track, idx, 1);
   }
 
   function setActiveDot(dots, idx){
@@ -318,6 +350,9 @@
 
         track.dataset.index = String(bestIdx);
         setActiveDot(dots, bestIdx);
+
+        // ✅ 스크롤로 인덱스가 바뀌면 그 주변만 로드
+        hydrateAround(track, bestIdx, 1);
       });
     }, { passive: true });
   }
@@ -351,11 +386,21 @@
       const slide = el("div", "carousel-slide");
       const img = document.createElement("img");
       img.className = "carousel-img";
+
+      // ✅ data-*에만 저장 (즉시 로드 X)
       setImgWithFallback(img, sources);
+
       img.alt = `${album.title || "Album"} - ${i + 1}`;
-      img.loading = "lazy";
       slide.appendChild(img);
       track.appendChild(slide);
+
+      // ✅ 첫 장만 즉시 로드 + 좌우 1장까지 프리로드(체감 부드럽게)
+      if (i === 0) {
+        hydrateImg(img);
+        // 첫 장 기준으로 이웃도 미리 로드
+        // (초기 과부하를 더 줄이고 싶으면 radius를 0으로 바꿔도 됨)
+        // hydrateAround(track, 0, 1);  // track이 아직 DOM에 붙기 전이라 아래에서 한 번에 처리
+      }
     });
 
     wrap.appendChild(track);
@@ -395,6 +440,10 @@
 
     bindScrollSync(track, dots);
 
+    // ✅ 카드가 만들어진 시점에서 첫 슬라이드 주변만(0±1) 로드해서 넘김이 부드럽게
+    // 초기 과부하가 걱정되면 radius=0으로 줄이기
+    hydrateAround(track, 0, 1);
+
     return card;
   }
 
@@ -423,6 +472,6 @@
   }
 
   init();
-  </script>
+</script>
 </body>
 </html>
