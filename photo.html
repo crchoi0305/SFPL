@@ -195,7 +195,7 @@
   }
 
   // Netlify Image CDN helper
-  function nlImg(url, w, q = 72, fm = "webp") {
+  function nlImg(url, w, q = 72) {
     if (!url) return "";
     const s = String(url).trim();
     if (!s) return "";
