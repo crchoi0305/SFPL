@@ -13,8 +13,8 @@
   <div id="site-header"></div>
 
   <main class="page-wrap">
-         <div class="page-wrap-wide news-wrap">
-                <h1 class="page-title">News</h1>
+    <div class="page-wrap-wide news-wrap">
+      <h1 class="page-title">News</h1>
 
       <section id="newsList" class="news-list" aria-label="News archive">
         <!-- JS render -->
@@ -22,18 +22,19 @@
     </div>
   </main>
 
-<div id="site-footer"></div>
-
+  <div id="site-footer"></div>
 
 <script>
-  // ===== footer year =====
-  const y = document.getElementById("year");
-  if (y) y.textContent = new Date().getFullYear();
-
-  // ===== GitHub Pages(/<repo>/...) 호스팅 대비 base prefix 계산 =====
+  // ===== GitHub Pages(/<repo>/...) + Custom domain(/) 모두 대응 basePrefix =====
+  // - 커스텀 도메인: basePrefix="/"
+  // - GitHub Pages(user.github.io/<repo>/...): basePrefix="/<repo>/"
   const basePrefix = (() => {
-    const p = location.pathname;
-    return p.endsWith('/') ? p : p.replace(/\/[^\/]*$/, '/');
+    const parts = location.pathname.split("/").filter(Boolean);
+    if (location.hostname.endsWith("github.io")) {
+      const repo = parts[0] || "";
+      return "/" + repo + "/";
+    }
+    return "/";
   })();
 
   // ===== header load =====
@@ -73,18 +74,18 @@
     })
     .catch(err => console.error(err));
 
-    fetch(basePrefix + "footer.html")
-  .then(res => {
-    if (!res.ok) throw new Error("footer.html load failed");
-    return res.text();
-  })
-  .then(html => {
-    document.getElementById("site-footer").innerHTML = html;
-    const y = document.getElementById("year");
-    if (y) y.textContent = new Date().getFullYear();
-  })
-  .catch(err => console.error(err));
-
+  // ===== footer load =====
+  fetch(basePrefix + "footer.html")
+    .then(res => {
+      if (!res.ok) throw new Error("footer.html load failed");
+      return res.text();
+    })
+    .then(html => {
+      document.getElementById("site-footer").innerHTML = html;
+      const y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear();
+    })
+    .catch(err => console.error(err));
 
   // ===== news render =====
   const list = document.getElementById("newsList");
@@ -112,80 +113,112 @@
     return m;
   }
 
-  // ===== GitHub Raw (이미지 CDN처럼 사용) 설정 =====
+  function isHttpUrl(p) {
+    return /^https?:\/\//i.test(String(p));
+  }
+
+  // Netlify Image CDN helper: 내부 경로(/content/...)만 변환
+  function nlImg(url, w, q = 72, fm = "webp") {
+    if (!url) return "";
+    const s = String(url).trim();
+    if (!s) return "";
+    if (isHttpUrl(s)) return s; // 외부 URL은 그대로
+    const u = encodeURI(s.startsWith("/") ? s : ("/" + s)); // "/" 유지
+    return `/.netlify/images?url=${u}&w=${w}&q=${q}&fm=${fm}`;
+  }
+
+  // ===== GitHub Raw fallback 설정(로컬이 깨졌을 때만) =====
   const GH_OWNER  = "crchoi0305";
   const GH_REPO   = "SFPL";
   const GH_BRANCH = "main";
   const GH_RAW_BASE = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}`;
 
-  function isHttpUrl(p) {
-    return /^https?:\/\//i.test(String(p));
+  // 이미지 src를 "로컬 우선 + 실패 시 raw"로 해석
+  function resolveImgSources(v) {
+    if (!v) return { primary: "", fallback: "" };
+    const src = (typeof v === "string") ? v : (v && typeof v === "object" ? (v.src || v.image || "") : "");
+    const s = String(src || "").trim();
+    if (!s) return { primary: "", fallback: "" };
+
+    const preferContentAssets = (rel) => {
+      rel = rel.replace(/^\/+/, ""); // leading slash 제거
+
+      // assets/news/... -> content/assets/news/... 로 매핑
+      if (rel.startsWith("assets/news/")) {
+        rel = rel.replace(/^assets\/news\//, "content/assets/news/");
+      }
+
+      // 이미 content/assets/news/...면 그대로
+      // 파일명만 오면 content/assets/news/파일명 으로
+      if (!rel.includes("/")) {
+        rel = "content/assets/news/" + rel;
+      }
+
+      // news/... 로 들어오는 것도 흡수
+      if (rel.startsWith("news/")) {
+        rel = rel.replace(/^news\//, "content/assets/news/");
+      }
+
+      // content/content 제거
+      rel = rel.replace(/^content\/content\//, "content/");
+
+      return rel;
+    };
+
+    // 1) raw URL로 저장된 경우: 같은 파일을 로컬 경로로 먼저 시도
+    if (isHttpUrl(s) && s.startsWith(GH_RAW_BASE + "/")) {
+      let rel = s.slice((GH_RAW_BASE + "/").length);
+      rel = preferContentAssets(rel);
+      const primary = (basePrefix + rel).replace(/\/\/+/g, "/");
+      return { primary, fallback: s };
+    }
+
+    // 2) 외부 URL이면 그대로 사용
+    if (isHttpUrl(s)) return { primary: s, fallback: "" };
+
+    // 3) 로컬 경로 우선 + raw fallback 생성
+    let clean = s.replace(/^\.?\//, "").replace(/^\/+/, "");
+    clean = preferContentAssets(clean);
+
+    const primary = (basePrefix + clean).replace(/\/\/+/g, "/");
+    const fallback = `${GH_RAW_BASE}/${clean}`;
+    return { primary, fallback };
   }
 
-  // ===== 이미지 src를 "로컬 경로 우선 + 실패 시 raw URL"로 세팅하기 위한 해석기 =====
-function resolveImgSources(v) {
-  if (!v) return { primary: "", fallback: "" };
-  const src = (typeof v === "string") ? v : (v && typeof v === "object" ? (v.src || v.image || "") : "");
-  const s = String(src || "").trim();
-  if (!s) return { primary: "", fallback: "" };
+  // ===== 아이폰 디코딩 병목 해결: "첫 장만 로드 + 넘길 때 로드" =====
+  function hydrateImg(img){
+    if (!img || img.dataset.hydrated === "1") return;
 
-  // ✅ 실제 저장 폴더가 content/assets/news 인 상황을 우선 사용
-  const preferContentAssets = (rel) => {
-    rel = rel.replace(/^\/+/, ""); // leading slash 제거
+    const src = img.dataset.src || "";
+    if (src) img.src = src;
 
-    // assets/news/... -> content/assets/news/... 로 매핑
-    if (rel.startsWith("assets/news/")) {
-      rel = rel.replace(/^assets\/news\//, "content/assets/news/");
-    }
+    const srcset = img.dataset.srcset || "";
+    if (srcset) img.srcset = srcset;
 
-    // 이미 content/assets/news/...면 그대로
-    if (rel.startsWith("content/assets/news/")) {
-      // ok
-    }
+    const sizes = img.dataset.sizes || "";
+    if (sizes) img.sizes = sizes;
 
-    // 파일명만 오면 content/assets/news/파일명 으로
-    if (!rel.includes("/")) {
-      rel = "content/assets/news/" + rel;
-    }
-
-    return rel;
-  };
-
-  // 1) raw URL로 저장된 경우: 같은 파일을 로컬 경로로 먼저 시도
-  if (isHttpUrl(s) && s.startsWith(GH_RAW_BASE + "/")) {
-    let rel = s.slice((GH_RAW_BASE + "/").length); // e.g. assets/news/... or content/assets/news/...
-    rel = preferContentAssets(rel);
-    const primary = (basePrefix + rel).replace(/\/\/+/, "/");
-    return { primary, fallback: s };
+    img.dataset.hydrated = "1";
   }
 
-  // 2) 외부 URL이면 그대로 사용
-  if (isHttpUrl(s)) return { primary: s, fallback: "" };
-
-  // 3) 로컬 경로 우선 + raw fallback 생성
-  let clean = s.replace(/^\.?\//, "").replace(/^\/+/, "");
-  clean = preferContentAssets(clean);
-
-  const primary = (basePrefix + clean).replace(/\/\/+/, "/");
-  const fallback = `${GH_RAW_BASE}/${clean}`;
-  return { primary, fallback };
-}
-
-
-  function setImgWithFallback(img, sources) {
-    if (!img || !sources) return;
-    const primary = sources.primary || "";
-    const fallback = sources.fallback || "";
-    img.src = primary || fallback || "";
-    if (primary && fallback && primary !== fallback) {
-      img.onerror = () => {
-        img.onerror = null;
-        img.src = fallback;
-      };
+  // 모바일 캐러셀: 현재/이웃만 로드
+  function hydrateNewsAround(track, idx, radius = 1){
+    const slides = [...track.querySelectorAll(".news-slide")];
+    for (let k = idx - radius; k <= idx + radius; k++){
+      if (k < 0 || k >= slides.length) continue;
+      const img = slides[k].querySelector("img.news-img");
+      hydrateImg(img);
     }
   }
 
-  // ====== mobile carousel helpers ======
+  // 데스크탑 갤러리: 앞에서부터 n장만 즉시 로드
+  function hydrateGalleryN(gallery, n = 2){
+    if (!gallery) return;
+    const imgs = [...gallery.querySelectorAll("img.news-img")];
+    imgs.slice(0, n).forEach(hydrateImg);
+  }
+
+  // ====== mobile carousel CSS ======
   function ensureCarouselCSSOnce() {
     if (document.getElementById("newsCarouselCSS")) return;
 
@@ -255,6 +288,7 @@ function resolveImgSources(v) {
     const track = el("div", "news-track");
     track.setAttribute("role", "group");
     track.setAttribute("aria-label", "News images");
+    track.dataset.index = "0";
 
     const dots = el("div", "news-dots");
 
@@ -268,12 +302,39 @@ function resolveImgSources(v) {
       a.className = "news-imglink";
 
       const img = document.createElement("img");
-      setImgWithFallback(img, srcObj);
+      img.className = "news-img";
       img.alt = (titleText ? titleText + " - " : "") + (i + 1);
       img.loading = "lazy";
-      img.className = "news-img";
-      a.appendChild(img);
+      img.decoding = "async";
 
+      // ✅ 즉시 src를 넣지 않고 data-*에 저장 (photo 방식)
+      const primary = srcObj.primary || "";
+      const fallback = srcObj.fallback || "";
+
+      // 로컬 경로면 Netlify Image CDN 사용
+      if (primary && String(primary).trim().startsWith("/")) {
+        img.dataset.src = nlImg(primary, 900);
+        img.dataset.srcset = `${nlImg(primary, 600)} 600w, ${nlImg(primary, 900)} 900w, ${nlImg(primary, 1200)} 1200w`;
+        img.dataset.sizes = "100vw";
+      } else {
+        // 외부 URL이면 그대로
+        img.dataset.src = primary || fallback || "";
+        img.dataset.sizes = "100vw";
+      }
+
+      // 실패 시 raw fallback (로드가 시작된 뒤에만 의미 있음)
+      img.onerror = () => {
+        if (fallback && img.src !== fallback) {
+          img.src = fallback;
+          return;
+        }
+        img.onerror = null;
+      };
+
+      // ✅ 첫 장만 즉시 로드
+      if (i === 0) hydrateImg(img);
+
+      a.appendChild(img);
       slide.appendChild(a);
       track.appendChild(slide);
 
@@ -282,7 +343,6 @@ function resolveImgSources(v) {
       dot.className = "news-dot" + (i === 0 ? " is-active" : "");
       dot.setAttribute("aria-label", "Go to image " + (i + 1));
       dot.addEventListener("click", () => {
-        // 해당 슬라이드로 스크롤
         const left = slide.offsetLeft - track.offsetLeft;
         track.scrollTo({ left, behavior: "smooth" });
       });
@@ -291,7 +351,6 @@ function resolveImgSources(v) {
       return slide;
     });
 
-    // dots active sync
     function setActive(idx) {
       const children = dots.children;
       for (let i = 0; i < children.length; i++) {
@@ -299,7 +358,7 @@ function resolveImgSources(v) {
       }
     }
 
-    // 현재 스크롤 위치 기준으로 가장 가까운 슬라이드 찾기
+    // 현재 스크롤 위치 기준으로 가장 가까운 슬라이드 찾기 + 주변만 hydrate
     let raf = null;
     track.addEventListener("scroll", () => {
       if (raf) cancelAnimationFrame(raf);
@@ -312,13 +371,69 @@ function resolveImgSources(v) {
           const dist = Math.abs(center - sCenter);
           if (dist < bestDist) { bestDist = dist; bestIdx = i; }
         });
+
+        track.dataset.index = String(bestIdx);
         setActive(bestIdx);
+
+        // ✅ 현재/이웃만 로드
+        hydrateNewsAround(track, bestIdx, 1);
       });
     }, { passive: true });
 
     wrap.appendChild(track);
     if (imgs.length > 1) wrap.appendChild(dots);
+
+    // ✅ 초기: 0번 주변만 살짝 프리로드(원치 않으면 radius=0)
+    hydrateNewsAround(track, 0, 1);
+
     return wrap;
+  }
+
+  function buildDesktopGallery(imgs, titleText) {
+    const gallery = el("div", "news-gallery");
+
+    imgs.forEach((srcObj, i) => {
+      const a = document.createElement("a");
+      a.href = (srcObj.primary || srcObj.fallback);
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.className = "news-imglink";
+
+      const img = document.createElement("img");
+      img.className = "news-img";
+      img.alt = (titleText ? titleText + " - " : "") + (i + 1);
+      img.loading = "lazy";
+      img.decoding = "async";
+
+      const primary = srcObj.primary || "";
+      const fallback = srcObj.fallback || "";
+
+      // ✅ 데스크탑도 data-*에 저장 후, 앞부분만 hydrate (photo 방식의 축소판)
+      if (primary && String(primary).trim().startsWith("/")) {
+        img.dataset.src = nlImg(primary, 900);
+        img.dataset.srcset = `${nlImg(primary, 600)} 600w, ${nlImg(primary, 900)} 900w, ${nlImg(primary, 1200)} 1200w`;
+        img.dataset.sizes = "(max-width: 1200px) 90vw, 800px";
+      } else {
+        img.dataset.src = primary || fallback || "";
+        img.dataset.sizes = "(max-width: 1200px) 90vw, 800px";
+      }
+
+      img.onerror = () => {
+        if (fallback && img.src !== fallback) {
+          img.src = fallback;
+          return;
+        }
+        img.onerror = null;
+      };
+
+      a.appendChild(img);
+      gallery.appendChild(a);
+    });
+
+    // ✅ 초기: 2장만 즉시 로드 (더 가볍게=1, 더 부드럽게=3)
+    hydrateGalleryN(gallery, 2);
+
+    return gallery;
   }
 
   function renderPost(p) {
@@ -331,13 +446,13 @@ function resolveImgSources(v) {
     head.appendChild(title);
     card.appendChild(head);
 
-    // ✅ desc 출력 (문단)
+    // desc
     if (p.desc) {
       const desc = el("p", "news-desc", p.desc);
       card.appendChild(desc);
     }
 
-    // body (bullets) - 기존 호환 유지
+    // body (bullets)
     const bodyWrap = el("div", "news-body");
     const lines = Array.isArray(p.body) ? p.body : (p.body ? [String(p.body)] : []);
     if (lines.length) {
@@ -351,35 +466,16 @@ function resolveImgSources(v) {
     }
     if (bodyWrap.childNodes.length) card.appendChild(bodyWrap);
 
-    // images row
+    // images
     const imgsRaw = Array.isArray(p.images) ? p.images : [];
     const imgs = imgsRaw.map(resolveImgSources).filter(o => (o && (o.primary || o.fallback)));
 
     if (imgs.length) {
-      // ✅ 모바일: 캐러셀 / 데스크탑: 기존 갤러리
       const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
-
       if (isMobile) {
         card.appendChild(buildCarousel(imgs, p.title || ""));
       } else {
-        const gallery = el("div", "news-gallery");
-        imgs.forEach((srcObj, i) => {
-          const a = document.createElement("a");
-          a.href = (srcObj.primary || srcObj.fallback);
-          a.target = "_blank";
-          a.rel = "noopener";
-          a.className = "news-imglink";
-
-          const img = document.createElement("img");
-          setImgWithFallback(img, srcObj);
-          img.alt = (p.title ? p.title + " - " : "") + (i + 1);
-          img.loading = "lazy";
-          img.className = "news-img";
-          a.appendChild(img);
-
-          gallery.appendChild(a);
-        });
-        card.appendChild(gallery);
+        card.appendChild(buildDesktopGallery(imgs, p.title || ""));
       }
     }
 
@@ -405,13 +501,11 @@ function resolveImgSources(v) {
 
   async function init() {
     try {
-      // ✅ cache-bust 포함
       const res = await fetch(basePrefix + "content/news.json?v=" + Date.now(), { cache: "no-store" });
       if (!res.ok) throw new Error("news.json load failed");
       const data = await res.json();
       const posts = Array.isArray(data.posts) ? data.posts : [];
 
-      // 최신이 위로: date 내림차순
       posts.sort((a, b) => safeDate(b.date) - safeDate(a.date));
 
       if (!posts.length) {
@@ -419,16 +513,15 @@ function resolveImgSources(v) {
         return;
       }
 
+      // 렌더
+      list.innerHTML = "";
       posts.forEach(p => list.appendChild(renderPost(p)));
 
-      // ✅ 리사이즈로 모바일/데스크탑 전환 시(회전 포함) 다시 그리기
-      // (캐러셀 <-> 갤러리 전환이 필요해서 간단히 한번 재렌더)
+      // 리사이즈/회전 시: 모바일/데스크탑 전환 때문에 재렌더
       let t = null;
       window.addEventListener("resize", () => {
         clearTimeout(t);
         t = setTimeout(() => {
-          if (!list) return;
-          // 현재 렌더된 DOM을 지우고 동일 데이터로 다시 렌더
           list.innerHTML = "";
           posts.forEach(p => list.appendChild(renderPost(p)));
         }, 150);
@@ -441,8 +534,6 @@ function resolveImgSources(v) {
 
   init();
 </script>
-
-
 
 </body>
 </html>
