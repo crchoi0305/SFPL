@@ -194,6 +194,22 @@
     return /^https?:\/\//i.test(String(p));
   }
 
+  // ===== Netlify Image CDN resize helper =====
+// 원본은 그대로 두고, 출력만 작은 버전으로
+function resizedImg(url, width = 1200, quality = 70) {
+  if (!url) return "";
+  const s = String(url).trim();
+  if (!s) return "";
+
+  // 외부 URL이면 그대로 사용
+  if (/^https?:\/\//i.test(s)) return s;
+
+  // 로컬 절대경로 보장
+  const path = s.startsWith("/") ? s : "/" + s;
+
+  return `/.netlify/images?url=${encodeURI(path)}&w=${width}&q=${quality}&fm=webp`;
+}
+
   // ✅ date: "YYYY.MM.DD" 형태에 정확히 맞는 파서
   function parseAlbumDate(d){
     if (!d) return 0;
@@ -247,21 +263,26 @@
   }
 
   function setImgWithFallback(img, sources) {
-    if (!img || !sources) return;
+  if (!img || !sources) return;
 
-    const primary = sources.primary || "";
-    const fallback = sources.fallback || "";
+  const primary = sources.primary || "";
+  const fallback = sources.fallback || "";
 
+  // ✅ 여기서 원본 대신 "리사이즈된 버전" 사용
+  if (primary && primary.startsWith("/")) {
+    img.src = resizedImg(primary, 1200, 70);
+  } else {
     img.src = primary || fallback || "";
-
-    img.onerror = () => {
-      if (fallback && img.src !== fallback) {
-        img.src = fallback;
-        return;
-      }
-      img.onerror = null;
-    };
   }
+
+  img.onerror = () => {
+    if (fallback && img.src !== fallback) {
+      img.src = fallback;
+      return;
+    }
+    img.onerror = null;
+  };
+}
 
   function scrollToIndex(track, i){
     const slides = track.querySelectorAll(".carousel-slide");
