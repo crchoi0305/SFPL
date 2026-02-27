@@ -19,7 +19,7 @@
 
   <div id="site-footer"></div>
 
-  <script>
+ <script>
   // ===== GitHub Pages(/<repo>/...) + Custom domain(/) 모두 대응 basePrefix =====
   // - 커스텀 도메인: basePrefix="/"
   // - GitHub Pages(user.github.io/<repo>/...): basePrefix="/<repo>/"
@@ -195,25 +195,21 @@
   }
 
   // ===== Netlify Image CDN resize helper =====
-// 원본은 그대로 두고, 출력만 작은 버전으로
-function resizedImg(url, width = 1200, quality = 70) {
-  if (!url) return "";
-  const s = String(url).trim();
-  if (!s) return "";
+  // 원본은 그대로 두고, 출력만 작은 버전으로
+  function resizedImg(url, width = 1200, quality = 70) {
+    if (!url) return "";
+    const s = String(url).trim();
+    if (!s) return "";
+    if (/^https?:\/\//i.test(s)) return s; // 외부 URL은 그대로
 
-  // 외부 URL이면 그대로 사용
-  if (/^https?:\/\//i.test(s)) return s;
-
-  // 로컬 절대경로 보장
-  const path = s.startsWith("/") ? s : "/" + s;
-
-  return `/.netlify/images?url=${encodeURI(path)}&w=${width}&q=${quality}&fm=webp`;
-}
+    const path = s.startsWith("/") ? s : "/" + s;
+    return `/.netlify/images?url=${encodeURI(path)}&w=${width}&q=${quality}&fm=webp`;
+  }
 
   // ✅ date: "YYYY.MM.DD" 형태에 정확히 맞는 파서
   function parseAlbumDate(d){
     if (!d) return 0;
-    const s = String(d).trim().replace(/\./g, "-"); // 2024.04.03 -> 2024-04-03
+    const s = String(d).trim().replace(/\./g, "-");
     const t = Date.parse(s);
     return Number.isFinite(t) ? t : 0;
   }
@@ -221,8 +217,8 @@ function resizedImg(url, width = 1200, quality = 70) {
   // ✅ rel 정규화: content/content 제거 + leading slash 처리
   function normalizeRelPath(p){
     let rel = String(p || "").trim();
-    rel = rel.replace(/^https?:\/\/[^/]+\/?/, ""); // 혹시 도메인이 섞여오면 제거(안전)
-    rel = rel.replace(/^\/+/, "");                // "/content/..." -> "content/..."
+    rel = rel.replace(/^https?:\/\/[^/]+\/?/, "");
+    rel = rel.replace(/^\/+/, "");
     rel = rel.replace(/^content\/content\//, "content/");
     rel = rel.replace(/^\.?\//, "");
     return rel;
@@ -239,50 +235,77 @@ function resizedImg(url, width = 1200, quality = 70) {
     const s = String(src || "").trim();
     if (!s) return { primary: "", fallback: "" };
 
-    // 1) 외부 URL이면 그대로 (fallback 없음)
+    // 1) 외부 URL이면 그대로
     if (isHttpUrl(s) && !s.startsWith(GH_RAW_BASE + "/")) {
       return { primary: s, fallback: "" };
     }
 
-    // 2) raw URL로 저장된 경우: rel 뽑아서 로컬(/content/...) 먼저, raw fallback
+    // 2) raw URL이면: 로컬 우선 + raw fallback
     if (isHttpUrl(s) && s.startsWith(GH_RAW_BASE + "/")) {
-      let rel = s.slice((GH_RAW_BASE + "/").length); // e.g. content/assets/photos/...
+      let rel = s.slice((GH_RAW_BASE + "/").length);
       rel = normalizeRelPath(rel);
 
-      const primary = (basePrefix + rel).replace(/\/\/+/, "/"); // GitHub Pages 대응
+      const primary = (basePrefix + rel).replace(/\/\/+/, "/");
       const fallback = s;
       return { primary, fallback };
     }
 
-    // 3) 로컬 경로: JSON이 "/content/assets/photos/..." 형태라면
-    //    -> primary는 그대로, fallback은 raw로
+    // 3) 로컬 경로: primary 로컬 + raw fallback
     const rel = normalizeRelPath(s);
     const primary = s.startsWith("/") ? s : (basePrefix + rel).replace(/\/\/+/, "/");
     const fallback = `${GH_RAW_BASE}/${rel}`;
     return { primary, fallback };
   }
 
-  function setImgWithFallback(img, sources) {
-  if (!img || !sources) return;
+  // ====== 핵심: "초기 2장만" 실제 src를 넣고, 나머지는 data-src로 보관 ======
+  function setImgWithDeferredLoad(img, sources, shouldLoadNow) {
+    if (!img || !sources) return;
 
-  const primary = sources.primary || "";
-  const fallback = sources.fallback || "";
+    const primary = sources.primary || "";
+    const fallback = sources.fallback || "";
 
-  // ✅ 여기서 원본 대신 "리사이즈된 버전" 사용
-  if (primary && primary.startsWith("/")) {
-    img.src = resizedImg(primary, 1200, 70);
-  } else {
-    img.src = primary || fallback || "";
+    // 로컬 절대경로면 Netlify CDN으로 경량화
+    const finalSrc = (primary && primary.startsWith("/"))
+      ? resizedImg(primary, 1200, 70)
+      : (primary || fallback || "");
+
+    if (shouldLoadNow) {
+      img.src = finalSrc;
+    } else {
+      img.dataset.src = finalSrc; // 나중에 로드
+    }
+
+    img.loading = "lazy";
+    img.decoding = "async";
+
+    img.onerror = () => {
+      // 실패 시 raw fallback로 1회 전환
+      if (fallback && img.src !== fallback) {
+        img.src = fallback;
+        return;
+      }
+      img.onerror = null;
+    };
   }
 
-  img.onerror = () => {
-    if (fallback && img.src !== fallback) {
-      img.src = fallback;
-      return;
+  function hydrateImg(img){
+    if (!img) return;
+    if (img.src) return;                // 이미 로드됨
+    const ds = img.dataset.src || "";
+    if (!ds) return;
+    img.src = ds;
+    delete img.dataset.src;
+  }
+
+  // 현재 인덱스 기준으로 주변(radius)만 로드
+  function hydrateAround(track, idx, radius = 1){
+    const slides = [...track.querySelectorAll(".carousel-slide")];
+    for (let k = idx - radius; k <= idx + radius; k++){
+      if (k < 0 || k >= slides.length) continue;
+      const img = slides[k].querySelector("img.carousel-img");
+      hydrateImg(img);
     }
-    img.onerror = null;
-  };
-}
+  }
 
   function scrollToIndex(track, i){
     const slides = track.querySelectorAll(".carousel-slide");
@@ -291,6 +314,9 @@ function resizedImg(url, width = 1200, quality = 70) {
     const left = target.offsetLeft - track.offsetLeft;
     track.scrollTo({ left, behavior: "smooth" });
     track.dataset.index = String(idx);
+
+    // ✅ 넘길 때 해당 장 + 좌우 1장만 로드
+    hydrateAround(track, idx, 1);
   }
 
   function setActiveDot(dots, idx){
@@ -319,6 +345,9 @@ function resizedImg(url, width = 1200, quality = 70) {
 
         track.dataset.index = String(bestIdx);
         setActiveDot(dots, bestIdx);
+
+        // ✅ 스크롤로 인덱스가 바뀌면 주변만 로드
+        hydrateAround(track, bestIdx, 1);
       });
     }, { passive: true });
   }
@@ -352,9 +381,11 @@ function resizedImg(url, width = 1200, quality = 70) {
       const slide = el("div", "carousel-slide");
       const img = document.createElement("img");
       img.className = "carousel-img";
-      setImgWithFallback(img, sources);
       img.alt = `${album.title || "Album"} - ${i + 1}`;
-      img.loading = "lazy";
+
+      // ✅ 초기 2장만 즉시 로드, 나머지는 data-src로 대기
+      setImgWithDeferredLoad(img, sources, i < 2);
+
       slide.appendChild(img);
       track.appendChild(slide);
     });
@@ -396,6 +427,9 @@ function resizedImg(url, width = 1200, quality = 70) {
 
     bindScrollSync(track, dots);
 
+    // ✅ 첫 화면 체감 부드럽게: 0번 기준 주변만(0~1) 확실히 로드
+    hydrateAround(track, 0, 1);
+
     return card;
   }
 
@@ -413,9 +447,7 @@ function resizedImg(url, width = 1200, quality = 70) {
         return;
       }
 
-      // ✅ 날짜 최신순(내림차순)
       albums.sort((a, b) => parseAlbumDate(b.date) - parseAlbumDate(a.date));
-
       albums.forEach(a => grid.appendChild(buildCarousel(a)));
     } catch (e) {
       console.error(e);
@@ -424,6 +456,6 @@ function resizedImg(url, width = 1200, quality = 70) {
   }
 
   init();
-  </script>
+</script>
 </body>
 </html>
