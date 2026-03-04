@@ -3,6 +3,27 @@
     {
       "authors": [
         {
+          "is_lab": false,
+          "name": "K.W.Kim",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": true,
+          "name": "S.Lee",
+          "roles": [
+            "co-first"
+          ]
+        },
+        {
+          "is_lab": false,
+          "name": "J.K.Kim",
+          "roles": [
+            "corresponding"
+          ]
+        },
+        {
           "is_lab": true,
           "name": "C.Choi",
           "roles": [
@@ -11,12 +32,12 @@
         }
       ],
       "year": "2026",
-      "title": "Recent advances in hydrophilic polymeric coatings for antifogging",
-      "venue": "Prog. Org. Coat.",
-      "bib": "210, 109711",
-      "doi": "https://doi.org/10.1016/j.porgcoat.2025.109711",
-      "note": "[JCR < 7%]",
-      "image": "/assets/sci/prog.org.coat.-2026_109711.jpg"
+      "title": "One-pot and Closed-Loop Recycling of Biomass-Derived Soft Electronics Toward Zero e-waste",
+      "venue": "Small",
+      "bib": "Early view",
+      "note": "[Featured as Back Cover]",
+      "doi": "https://doi.org/10.1002/smll.202511832",
+      "image": "/content/assets/sci/published.jpg"
     },
     {
       "authors": [
@@ -72,27 +93,6 @@
     {
       "authors": [
         {
-          "is_lab": false,
-          "name": "K.W.Kim",
-          "roles": [
-            "co-first"
-          ]
-        },
-        {
-          "is_lab": true,
-          "name": "S.Lee",
-          "roles": [
-            "co-first"
-          ]
-        },
-        {
-          "is_lab": false,
-          "name": "J.K.Kim",
-          "roles": [
-            "corresponding"
-          ]
-        },
-        {
           "is_lab": true,
           "name": "C.Choi",
           "roles": [
@@ -101,12 +101,12 @@
         }
       ],
       "year": "2026",
-      "title": "One-pot and Closed-Loop Recycling of Biomass-Derived Soft Electronics Toward Zero e-waste",
-      "venue": "Small",
-      "bib": "Early view",
-      "note": "[Featured as Back Cover]",
-      "doi": "https://doi.org/10.1002/smll.202511832",
-      "image": "https://onlinelibrary.wiley.com/cms/asset/0f4bde7b-dcde-4d4e-9761-60c4f43e31ea/smll71793-gra-0001-m.jpg"
+      "title": "Recent advances in hydrophilic polymeric coatings for antifogging",
+      "venue": "Prog. Org. Coat.",
+      "bib": "210, 109711",
+      "doi": "https://doi.org/10.1016/j.porgcoat.2025.109711",
+      "note": "[JCR < 7%]",
+      "image": "/assets/sci/prog.org.coat.-2026_109711.jpg"
     },
     {
       "authors": [
