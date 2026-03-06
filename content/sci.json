@@ -1479,11 +1479,17 @@
       "authors": [
         {
           "is_lab": false,
-          "name": "J.Jang"
+          "name": "J.Jang",
+          "roles": [
+            "co-first"
+          ]
         },
         {
           "is_lab": true,
-          "name": "C.Choi"
+          "name": "C.Choi",
+          "roles": [
+            "co-first"
+          ]
         },
         {
           "is_lab": false,
