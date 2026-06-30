@@ -37,7 +37,7 @@
     {
       "date": "2025.10.02",
       "title": "2025 고분자학회 추계학술대회 발표",
-      "desc": "석사과정 이성민 학생이 2025 고분자학회 추계학술대회에서 구두발표를 하였습니다. 전여진, 정재환 학생은 포스터를 발표하였으며, 정재환 학생은 우수포스터상을 수상하였습니다. 축하합니다.",
+      "desc": "석사과정 이성민 학생이 2025 고분자학회 추계학술대회에서 구두발표를 하였습니다. 전여진, 정재환 학생은 포스터를 발표하였으며, 정재환 학생은 최우수포스터상을 수상하였습니다. 축하합니다.",
       "images": [
         "/assets/news/2025-1.png",
         "/assets/news/2025-2.png",
@@ -47,7 +47,10 @@
     {
       "date": "2025.12.15",
       "title": "논문 게재",
-      "desc": "석사과정 이성민 학생이 1저자로 참여한 연구가 SCI저널 Small (JCR 상위 8%)에 게재되었으며 표지논문으로 선정되었습니다. 축하합니다.\nTitle: One-pot and Closed-Loop Recycling of Biomass-Derived Soft Electronics Toward Zero e-waste"
+      "desc": "석사과정 이성민 학생이 1저자로 참여한 연구가 SCI저널 Small (JCR 상위 8%)에 게재되었으며 표지논문으로 선정되었습니다. 축하합니다.\nTitle: One-pot and Closed-Loop Recycling of Biomass-Derived Soft Electronics Toward Zero e-waste",
+      "images": [
+        "/content/assets/news/published.jpg"
+      ]
     },
     {
       "date": "2025.12.24",
@@ -68,6 +71,45 @@
       "desc": "강나원, 전종혁, 전여진, 정재환 학생이 무사히 석사학위를 받았습니다. 김수림, 임종화 학생은 학사 학위를 수여했습니다.\n고생많았고 또 축하합니다~",
       "images": [
         "/content/assets/news/kakaotalk_20260220_203659134_08.jpg"
+      ]
+    },
+    {
+      "date": "2025.12.16",
+      "title": "장학금 수여",
+      "desc": "정재환 학생이 이공계 국가우수 장학생에 선발되어 장학금과 장학증서를 수여하였습니다. 축하합니다~",
+      "images": [
+        "/content/assets/news/정재환_장학증서.jpg"
+      ]
+    },
+    {
+      "date": "2026.03.25",
+      "title": "2026 춘계 접착 및 계면학회 발표",
+      "desc": "석사과정 강유빈, 김민정 학생이 2026 접착및계면학회 춘계학술대회에서 포스터발표를 하였습니다. 강유빈 학생은 우수포스터상을 수상하였습니다. 축하합니다.",
+      "images": [
+        "/content/assets/news/poster-award_ybk.png",
+        "/content/assets/news/poster_ybk.jpg",
+        "/content/assets/news/poster_mjk.jpg"
+      ]
+    },
+    {
+      "title": "2026 고분자학회 춘계학술대회 발표",
+      "date": "2026.04.08",
+      "desc": "석사과정 강유빈 학생이 2026 고분자학회 추계학술대회에서 구두발표를 하였습니다. 이성민, 김민정 학생은 포스터를 발표하였으며, 이성민, 강유빈 학생은 각각 최우수포스터상, 우수구두발표상을 수상하였습니다. 축하합니다!",
+      "images": [
+        "/content/assets/news/kakaotalk_20260415_152041859.jpg",
+        "/content/assets/news/img_3635.jpg",
+        "/content/assets/news/kakaotalk_20260415_135438960.jpg",
+        "/content/assets/news/kakaotalk_20260415_173744820.png",
+        "/content/assets/news/유빈상.jpg"
+      ]
+    },
+    {
+      "date": "2026.06.17",
+      "title": "2026 ESG실천 친환경 캠페인 우수상 수상",
+      "desc": "석사과정 이성민 학생이 경상북도가 주최하고, SK AX가 협력하는 2026 ESG실천 친환경 캠페인에 참가하여 우수상을 수상하였습니다~ 매우 축하합니다!",
+      "images": [
+        "/content/assets/news/ㄲㄱ.jpg",
+        "/content/assets/news/ㅇㄹㅇㄹ.jpg"
       ]
     }
   ]
