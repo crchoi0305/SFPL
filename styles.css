@@ -887,7 +887,9 @@ main {
 
 
 .carousel-slide{
-  aspect-ratio: 16 / 9;      /* 틀 고정 */
+  aspect-ratio: 3 / 2;       /* 틀 고정 (photo.html 인젝션 CSS와 동일하게 유지) */
+  border-radius: 14px;
+  overflow: hidden;
 }
 
 .carousel-img{
