@@ -282,7 +282,8 @@
         overflow: hidden !important;
         border-radius: 0 !important;
       }
-      .home-news-carousel.portrait .home-news-slide{ aspect-ratio: 4 / 5 !important; }
+      /* 메인 미리보기용이라 세로 프레임도 1:1 로 (앨범 페이지는 4:5) */
+      .home-news-carousel.portrait .home-news-slide{ aspect-ratio: 1 / 1 !important; }
       .home-news-slide::before{
         content:"" !important;
         position:absolute !important;
@@ -338,7 +339,7 @@
 
       @media (max-width: 640px){
         .home-news-carousel .home-news-slide{ aspect-ratio: 4 / 3 !important; }
-        .home-news-carousel.portrait .home-news-slide{ aspect-ratio: 4 / 5 !important; }
+        .home-news-carousel.portrait .home-news-slide{ aspect-ratio: 1 / 1 !important; }
       }
     `;
     const style = document.createElement("style");
