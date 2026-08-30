@@ -1,0 +1,21 @@
+# Netlify configuration for the SFPL lab site.
+#
+# The site is plain static HTML served from the repo root. The only build
+# step is `scripts/optimize-images.mjs`, which downsizes/recompresses any
+# oversized images under content/assets/ and assets/ before the deploy is
+# published. This keeps large CMS uploads (phone photos, publisher
+# graphics) from bloating the repo and slowing the Netlify Image CDN's
+# first transform.
+#
+# The script is idempotent: images already within 1920px and a sane byte
+# budget are skipped, so repeated builds never re-compress the same file
+# (no generational quality loss).
+#
+# Redirects stay in the _redirects file.
+
+[build]
+  command = "npm run optimize"
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "20"

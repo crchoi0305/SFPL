@@ -1,0 +1,14 @@
+{
+  "name": "sfpl-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sustainable/Functional Polymer Lab website - static site with build-time image optimization",
+  "type": "module",
+  "scripts": {
+    "optimize": "node scripts/optimize-images.mjs",
+    "build": "npm run optimize"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}
