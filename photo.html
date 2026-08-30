@@ -117,6 +117,7 @@
         gap: 12px;
         padding: 6px 2px 4px;
         scrollbar-width: none;
+        min-height: 320px;                 /* 이미지 로드 전에도 스크롤 높이 확보 */
       }
       .carousel-track::-webkit-scrollbar{ display:none; }
       .carousel-slide{ flex: 0 0 100%; scroll-snap-align: center; }
@@ -124,10 +125,12 @@
       .carousel-img{
         width:100%;
         height:auto;
+        min-height: 240px;                 /* 로드 전 자리 유지 → 지연 로딩이 실제로 동작 */
         display:block;
         border-radius: 14px;
         object-fit: contain;
         object-position: center top;
+        background: rgba(0,0,0,.04);
       }
 
       .carousel-dots{
@@ -196,7 +199,7 @@
 
   // ===== Netlify Image CDN resize helper =====
   // 원본은 그대로 두고, 출력만 작은 버전으로
-  function resizedImg(url, width = 1200, quality = 70) {
+  function resizedImg(url, width = 1000, quality = 68) {
     if (!url) return "";
     const s = String(url).trim();
     if (!s) return "";
@@ -266,7 +269,7 @@
 
     // 로컬 절대경로면 Netlify CDN으로 경량화
     const finalSrc = (primary && primary.startsWith("/"))
-      ? resizedImg(primary, 1200, 70)
+      ? resizedImg(primary, 1000, 68)
       : (primary || fallback || "");
 
     if (shouldLoadNow) {
@@ -383,8 +386,8 @@
       img.className = "carousel-img";
       img.alt = `${album.title || "Album"} - ${i + 1}`;
 
-      // ✅ 초기 2장만 즉시 로드, 나머지는 data-src로 대기
-      setImgWithDeferredLoad(img, sources, i < 2);
+      // ✅ 모든 이미지는 지연 로드 (앨범이 화면에 들어올 때 IntersectionObserver로 로드)
+      setImgWithDeferredLoad(img, sources, false);
 
       slide.appendChild(img);
       track.appendChild(slide);
@@ -427,8 +430,8 @@
 
     bindScrollSync(track, dots);
 
-    // ✅ 첫 화면 체감 부드럽게: 0번 기준 주변만(0~1) 확실히 로드
-    hydrateAround(track, 0, 1);
+    // ✅ 앨범이 뷰포트에 접근할 때만 첫 장(+좌우 1장)을 로드하도록 훅 저장
+    card._hydrateFirst = () => hydrateAround(track, 0, 1);
 
     return card;
   }
@@ -448,7 +451,27 @@
       }
 
       albums.sort((a, b) => parseAlbumDate(b.date) - parseAlbumDate(a.date));
-      albums.forEach(a => grid.appendChild(buildCarousel(a)));
+
+      const cards = albums.map(a => {
+        const c = buildCarousel(a);
+        grid.appendChild(c);
+        return c;
+      });
+
+      // 앨범 카드가 뷰포트 근처(600px)에 오면 그 앨범의 첫 이미지들을 로드
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const c = entry.target;
+            io.unobserve(c);
+            if (typeof c._hydrateFirst === "function") c._hydrateFirst();
+          });
+        }, { rootMargin: "600px 0px" });
+        cards.forEach(c => io.observe(c));
+      } else {
+        cards.forEach(c => { if (typeof c._hydrateFirst === "function") c._hydrateFirst(); });
+      }
     } catch (e) {
       console.error(e);
       grid.appendChild(el("div", "album-empty-wide", "Photo 데이터를 불러오지 못했습니다. (content/photos.json 확인)"));
