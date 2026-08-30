@@ -119,23 +119,39 @@
       }
       .carousel-track::-webkit-scrollbar{ display:none; }
 
-      /* 모든 사진을 동일한 3:2 프레임에 채웁니다(가운데 기준, 일부 잘릴 수 있음)
-         -> 사진 원본 비율이 달라도 앨범 안에서 크기가 통일됩니다. */
+      /* 앨범 안에서 모든 사진이 같은 크기가 되도록 프레임을 고정합니다.
+         - 기본(가로 사진만 있는 앨범): 3:2 가로 프레임
+         - 세로 사진이 하나라도 있는 앨범(.album-portrait): 4:5 세로 프레임
+         사진은 잘리지 않고(contain) 프레임 안에 들어가며, 남는 여백은
+         같은 사진을 흐리게 깔아 채웁니다. */
       .carousel-slide{
+        position: relative;
         flex: 0 0 100%;
         scroll-snap-align: center;
         aspect-ratio: 3 / 2;
         border-radius: 14px;
         overflow: hidden;
-        background: rgba(0,0,0,.06);
+        background: #eef0f3;
+      }
+      .album-portrait .carousel-slide{ aspect-ratio: 4 / 5; }
+
+      .carousel-slide::before{
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--fill, none) center / cover no-repeat;
+        filter: blur(24px) brightness(.82);
+        transform: scale(1.18);
+        z-index: 0;
       }
       .carousel-img{
+        position: relative;
+        z-index: 1;
         width:100%;
         height:100%;
         display:block;
-        object-fit: cover;
+        object-fit: contain;
         object-position: center;
-        background: rgba(0,0,0,.06);
       }
 
       /* 사진 위에 반투명하게 겹쳐지는 좌우 화살표 (Google 사이트 스타일) */
@@ -405,6 +421,17 @@
       const img = document.createElement("img");
       img.className = "carousel-img";
       img.alt = `${album.title || "Album"} - ${i + 1}`;
+
+      // 로드되면: (1) 세로 사진이면 앨범 프레임을 세로로 전환
+      //          (2) 남는 여백용 흐림 배경을 같은 사진으로 채움
+      img.addEventListener("load", () => {
+        if (!img.naturalWidth) return;
+        const src = img.currentSrc || img.src;
+        if (src) slide.style.setProperty("--fill", `url("${src}")`);
+        if (img.naturalHeight > img.naturalWidth * 1.05) {
+          card.classList.add("album-portrait");
+        }
+      });
 
       // ✅ 모든 이미지는 지연 로드 (앨범이 화면에 들어올 때 IntersectionObserver로 로드)
       setImgWithDeferredLoad(img, sources, false);
