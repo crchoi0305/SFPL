@@ -108,16 +108,13 @@
         margin-bottom: 6px;
       }
 
-      .carousel{ position: relative; width: 100%; }
+      .carousel{ position: relative; width: 100%; overflow: hidden; border-radius: 14px; }
       .carousel-track{
         display:flex;
-        overflow-x:auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        gap: 0;
-        scrollbar-width: none;
+        transition: transform .38s ease;
+        will-change: transform;
+        touch-action: pan-y;
       }
-      .carousel-track::-webkit-scrollbar{ display:none; }
 
       /* 앨범 안에서 모든 사진이 같은 크기가 되도록 프레임을 고정합니다.
          - 기본(가로 사진만 있는 앨범): 3:2 가로 프레임
@@ -127,7 +124,6 @@
       .carousel-slide{
         position: relative;
         flex: 0 0 100%;
-        scroll-snap-align: center;
         aspect-ratio: 3 / 2;
         border-radius: 14px;
         overflow: hidden;
@@ -339,49 +335,49 @@
     }
   }
 
-  function scrollToIndex(track, i){
-    const slides = track.querySelectorAll(".carousel-slide");
-    const idx = Math.max(0, Math.min(slides.length - 1, i));
-    const target = slides[idx];
-    const left = target.offsetLeft - track.offsetLeft;
-    track.scrollTo({ left, behavior: "smooth" });
-    track.dataset.index = String(idx);
-
-    // ✅ 넘길 때 해당 장 + 좌우 1장만 로드
-    hydrateAround(track, idx, 1);
-  }
-
   function setActiveDot(dots, idx){
+    if (!dots) return;
     [...dots.children].forEach((d, k) => d.classList.toggle("active", k === idx));
   }
 
-  function bindScrollSync(track, dots){
-    let raf = null;
-    const slides = () => [...track.querySelectorAll(".carousel-slide")];
+  // 무한 루프 캐러셀 (transform 기반). track 끝에 1번 슬라이드 복제본이 있어
+  // 마지막 -> 첫 장으로 자연스럽게 이어집니다. pos 는 0..count(복제본).
+  function goToIndex(track, dots, pos, animate){
+    const count = parseInt(track.dataset.count || "0", 10);
+    if (count <= 1) return;
+    track.style.transition = (animate === false) ? "none" : "";
+    track.style.transform = `translateX(${-pos * 100}%)`;
+    track.dataset.pos = String(pos);
 
-    track.addEventListener("scroll", () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const ss = slides();
-        if (!ss.length) return;
+    const realIdx = ((pos % count) + count) % count;
+    track.dataset.index = String(realIdx);
+    setActiveDot(dots, realIdx);
+    hydrateAround(track, realIdx, 1);
+    if (track._clone && (realIdx === 0 || realIdx >= count - 1)) {
+      hydrateImg(track._clone.querySelector("img.carousel-img"));
+    }
+  }
 
-        const center = track.scrollLeft + track.clientWidth / 2;
-        let bestIdx = 0;
-        let bestDist = Infinity;
+  function stepCarousel(track, dots, dir){
+    const count = parseInt(track.dataset.count || "0", 10);
+    if (count <= 1) return;
+    let pos = parseInt(track.dataset.pos || "0", 10);
 
-        ss.forEach((s, i) => {
-          const sCenter = (s.offsetLeft - track.offsetLeft) + s.clientWidth / 2;
-          const dist = Math.abs(center - sCenter);
-          if (dist < bestDist) { bestDist = dist; bestIdx = i; }
-        });
-
-        track.dataset.index = String(bestIdx);
-        setActiveDot(dots, bestIdx);
-
-        // ✅ 스크롤로 인덱스가 바뀌면 주변만 로드
-        hydrateAround(track, bestIdx, 1);
-      });
-    }, { passive: true });
+    if (dir > 0) {
+      pos += 1;
+      goToIndex(track, dots, pos, true);
+      if (pos >= count) {
+        window.setTimeout(() => goToIndex(track, dots, 0, false), 460);
+      }
+    } else {
+      if (pos <= 0) {
+        goToIndex(track, dots, count, false);  // 복제본(=1번과 동일)으로 순간 이동
+        void track.offsetWidth;                // 리플로우
+        goToIndex(track, dots, count - 1, true); // 마지막 장으로 슬라이드
+      } else {
+        goToIndex(track, dots, pos - 1, true);
+      }
+    }
   }
 
   // ===== build album carousel =====
@@ -412,10 +408,12 @@
     const wrap = el("div", "carousel");
     const track = el("div", "carousel-track");
     track.dataset.index = "0";
+    track.dataset.pos = "0";
 
     const raw = Array.isArray(album.images) ? album.images : [];
     const imgs = raw.map(resolveImgSources).filter(o => (o && (o.primary || o.fallback)));
 
+    const firstSlideRef = {};
     imgs.forEach((sources, i) => {
       const slide = el("div", "carousel-slide");
       const img = document.createElement("img");
@@ -424,12 +422,18 @@
 
       // 로드되면: (1) 세로 사진이면 앨범 프레임을 세로로 전환
       //          (2) 남는 여백용 흐림 배경을 같은 사진으로 채움
+      //          (3) 1번 슬라이드면 끝의 복제본도 동일하게 채움
       img.addEventListener("load", () => {
         if (!img.naturalWidth) return;
         const src = img.currentSrc || img.src;
         if (src) slide.style.setProperty("--fill", `url("${src}")`);
         if (img.naturalHeight > img.naturalWidth * 1.05) {
           card.classList.add("album-portrait");
+        }
+        if (i === 0 && track._clone && src) {
+          const cimg = track._clone.querySelector("img.carousel-img");
+          if (cimg && !cimg.src) cimg.src = src;
+          track._clone.style.setProperty("--fill", `url("${src}")`);
         }
       });
 
@@ -438,7 +442,23 @@
 
       slide.appendChild(img);
       track.appendChild(slide);
+      if (i === 0) firstSlideRef.el = slide;
     });
+
+    // 무한 루프용: 1번 슬라이드 복제본을 끝에 추가
+    if (imgs.length > 1 && firstSlideRef.el) {
+      const clone = firstSlideRef.el.cloneNode(true);  // load 리스너는 복제 안 됨(의도적)
+      clone.dataset.clone = "1";
+      const s0img = firstSlideRef.el.querySelector("img.carousel-img");
+      const cimg = clone.querySelector("img.carousel-img");
+      if (cimg) {
+        if (s0img && s0img.src) { cimg.src = s0img.src; }
+        else if (s0img && s0img.dataset.src) { cimg.removeAttribute("src"); cimg.dataset.src = s0img.dataset.src; }
+      }
+      track.appendChild(clone);
+      track._clone = clone;
+    }
+    track.dataset.count = String(imgs.length);
 
     wrap.appendChild(track);
     card.appendChild(wrap);
@@ -456,28 +476,30 @@
       prev.setAttribute("aria-label", "이전 사진");
       next.setAttribute("aria-label", "다음 사진");
 
-      prev.addEventListener("click", () => {
-        const cur = parseInt(track.dataset.index || "0", 10);
-        scrollToIndex(track, cur - 1);
-      });
-      next.addEventListener("click", () => {
-        const cur = parseInt(track.dataset.index || "0", 10);
-        scrollToIndex(track, cur + 1);
-      });
-
-      wrap.appendChild(prev);
-      wrap.appendChild(next);
-
       const dots = el("div", "carousel-dots");
       imgs.forEach((_, i) => {
         const d = el("button", "dot" + (i === 0 ? " active" : ""), "");
         d.type = "button";
-        d.addEventListener("click", () => scrollToIndex(track, i));
+        d.addEventListener("click", () => goToIndex(track, dots, i, true));
         dots.appendChild(d);
       });
-      card.appendChild(dots);
 
-      bindScrollSync(track, dots);
+      prev.addEventListener("click", () => stepCarousel(track, dots, -1));
+      next.addEventListener("click", () => stepCarousel(track, dots, +1));
+
+      // 모바일 스와이프
+      let sx = null;
+      wrap.addEventListener("touchstart", (e) => { sx = e.touches[0].clientX; }, { passive: true });
+      wrap.addEventListener("touchend", (e) => {
+        if (sx === null) return;
+        const dx = e.changedTouches[0].clientX - sx;
+        sx = null;
+        if (Math.abs(dx) > 40) stepCarousel(track, dots, dx < 0 ? 1 : -1);
+      }, { passive: true });
+
+      wrap.appendChild(prev);
+      wrap.appendChild(next);
+      card.appendChild(dots);
     }
 
     // ✅ 앨범이 뷰포트에 접근할 때만 첫 장(+좌우 1장)을 로드하도록 훅 저장
