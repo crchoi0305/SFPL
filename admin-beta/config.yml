@@ -1,12 +1,18 @@
 # ===================================================================
-#  admin-beta 전용 설정 (실험적)
-#  /admin/config.yml 과 거의 동일하지만, Photos 앨범의 이미지 필드가
-#  커스텀 "multi-image" 위젯을 사용합니다 (여러 장 한 번에 선택).
-#  문제가 생기면 그냥 /admin/ 을 계속 쓰시면 됩니다.
+#  Sveltia CMS 설정 (베타 테스트용 - /admin-beta/)
+#
+#  기존 /admin/config.yml 과 거의 동일하지만:
+#   - backend 가 git-gateway -> github (GitHub 로그인)
+#   - Photos / News 의 이미지 필드가 widget: image + multiple: true
+#     -> 미디어 라이브러리에서 여러 장 한 번에 선택/업로드 가능
+#
+#  데이터 형식(경로 문자열 배열)은 기존과 동일해서 photos.json / news.json
+#  을 그대로 씁니다.
 # ===================================================================
 
 backend:
-  name: git-gateway
+  name: github
+  repo: crchoi0305/SFPL
   branch: main
   commit_messages:
     create: "Create {{collection}} {{slug}}"
@@ -67,7 +73,8 @@ collections:
               - { label: "Description", name: "desc", widget: "text", required: false }
               - label: "Images"
                 name: "images"
-                widget: "multi-image"
+                widget: "image"
+                multiple: true
                 required: false
               - label: "Links"
                 name: "links"
@@ -105,7 +112,8 @@ collections:
               - { label: "Description", name: "desc", widget: "text", required: false }
               - label: "Images"
                 name: "images"
-                widget: "multi-image"
+                widget: "image"
+                multiple: true
                 required: false
 
   - name: "sci"
