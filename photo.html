@@ -373,6 +373,13 @@
     title.textContent = album.title || "Untitled";
     header.appendChild(title);
 
+    if (album.desc) {
+      const desc = el("p", "album-desc");
+      desc.textContent = String(album.desc);
+      desc.style.cssText = "margin:6px 0 0;color:rgba(0,0,0,.6);font-size:14px;line-height:1.6;white-space:pre-wrap;";
+      header.appendChild(desc);
+    }
+
     card.appendChild(header);
 
     const wrap = el("div", "carousel");

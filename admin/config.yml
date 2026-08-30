@@ -110,6 +110,8 @@ collections:
                 name: "title"
                 widget: "string"
 
+              - { label: "Description", name: "desc", widget: "text", required: false }
+
               - label: "Images (multi)"
                 name: "images"
                 widget: "list"

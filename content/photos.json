@@ -1,6 +1,15 @@
 {
   "albums": [
     {
+      "date": "2099.02.02",
+      "title": "BAT 경로 테스트",
+      "images": [
+        "/content/assets/photos/20990202_01.jpg",
+        "/content/assets/photos/20990202_02.jpg",
+        "/content/assets/photos/20990202_03.jpg"
+      ]
+    },
+    {
       "title": "연구실 멤버들과 벚꽃 구경 (단란하다~)",
       "date": "2024.04.02",
       "images": [
