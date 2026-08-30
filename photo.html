@@ -458,20 +458,42 @@
         return c;
       });
 
-      // 앨범 카드가 뷰포트 근처(600px)에 오면 그 앨범의 첫 이미지들을 로드
+      const hydrateCard = (c) => {
+        if (!c || c._hydrated) return;
+        c._hydrated = true;
+        if (typeof c._hydrateFirst === "function") c._hydrateFirst();
+      };
+
+      // 1) 첫 화면 앨범들은 즉시 로드 (원본이 이미 가벼워 부담 적음)
+      const EAGER = 6;
+      cards.slice(0, EAGER).forEach(hydrateCard);
+
+      // 2) 나머지는 스크롤로 뷰포트에 근접하면 로드 (IntersectionObserver + scroll 폴백)
+      const rest = cards.slice(EAGER);
+      const checkRest = () => {
+        const limit = window.innerHeight + 800;
+        rest.forEach(c => {
+          if (c._hydrated) return;
+          const top = c.getBoundingClientRect().top;
+          if (top < limit) hydrateCard(c);
+        });
+      };
+
       if ("IntersectionObserver" in window) {
         const io = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (!entry.isIntersecting) return;
-            const c = entry.target;
-            io.unobserve(c);
-            if (typeof c._hydrateFirst === "function") c._hydrateFirst();
+            io.unobserve(entry.target);
+            hydrateCard(entry.target);
           });
-        }, { rootMargin: "600px 0px" });
-        cards.forEach(c => io.observe(c));
-      } else {
-        cards.forEach(c => { if (typeof c._hydrateFirst === "function") c._hydrateFirst(); });
+        }, { rootMargin: "800px 0px" });
+        rest.forEach(c => io.observe(c));
       }
+
+      window.addEventListener("scroll", checkRest, { passive: true });
+      window.addEventListener("resize", checkRest, { passive: true });
+      checkRest();
+      setTimeout(checkRest, 1200);
     } catch (e) {
       console.error(e);
       grid.appendChild(el("div", "album-empty-wide", "Photo 데이터를 불러오지 못했습니다. (content/photos.json 확인)"));
