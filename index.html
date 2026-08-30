@@ -222,6 +222,7 @@
   function hydrateImg(img){
     if (!img || img.dataset.hydrated === "1") return;
 
+    img.loading = "eager";
     const src = img.dataset.src || "";
     if (src) img.src = src;
 

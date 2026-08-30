@@ -296,6 +296,8 @@
     if (img.src) return;                // 이미 로드됨
     const ds = img.dataset.src || "";
     if (!ds) return;
+    // 로드 시점은 우리 로직이 이미 결정했으므로 즉시 받아오도록 강제
+    img.loading = "eager";
     img.src = ds;
     delete img.dataset.src;
   }
