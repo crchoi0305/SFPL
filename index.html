@@ -3,9 +3,55 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>친환경/기능성 고분자 연구실 | Sustainable/Functional Polymer Lab</title>
+  <title>친환경 고분자 연구실 | Sustainable Polymer Lab</title>
   <link rel="preload" as="image" href="/.netlify/images?url=/assets/hero-1.jpg&w=1600&q=72&fm=webp" fetchpriority="high" />
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ===== 메인 페이지 모집 팝업 ===== */
+    .recruit-overlay{
+      position: fixed; inset: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      background: rgba(2, 6, 23, .55);
+    }
+    .recruit-overlay[hidden]{ display: none; }
+    .recruit-modal{
+      background: #fff; border-radius: 16px;
+      max-width: 520px; width: 100%;
+      max-height: calc(100vh - 40px); overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(2, 6, 23, .35);
+    }
+    .recruit-head{
+      background: linear-gradient(180deg,#0b2c54 0%, #0a2445 100%);
+      color: #fff; padding: 18px 22px;
+      border-radius: 16px 16px 0 0;
+    }
+    .recruit-head h2{ margin: 0; font-size: 19px; letter-spacing: -.01em; }
+    .recruit-body{ padding: 20px 22px 8px; color: #1f2937; line-height: 1.7; font-size: 15px; }
+    .recruit-body p{ margin: 0 0 12px; }
+    .recruit-fields{ margin: 0 0 14px; padding: 0; list-style: none; }
+    .recruit-fields li{
+      padding: 8px 12px; margin-bottom: 6px;
+      background: rgba(11,44,84,.06); border-radius: 8px;
+      font-size: 14px;
+    }
+    .recruit-contact a{ color: #0b57d0; font-weight: 600; }
+    .recruit-actions{
+      display: flex; gap: 10px; justify-content: flex-end;
+      padding: 12px 22px 20px; flex-wrap: wrap;
+    }
+    .recruit-btn{
+      border: 1px solid rgba(15,23,42,.18); background: #fff;
+      padding: 10px 16px; border-radius: 10px; cursor: pointer;
+      font-size: 14px; font-weight: 600; color: #334155;
+    }
+    .recruit-btn.primary{ background: #0b2c54; border-color: #0b2c54; color: #fff; }
+    .recruit-btn:hover{ filter: brightness(.97); }
+    @media (max-width: 480px){
+      .recruit-actions{ justify-content: stretch; }
+      .recruit-btn{ flex: 1; }
+    }
+  </style>
 </head>
 
 <body>
@@ -14,8 +60,8 @@
   <main class="container hero">
     <section class="hero-frame" aria-label="메인 비주얼">
       <div class="hero-content">
-        <h1 class="hero-title">Sustainable/Functional Polymer Lab</h1>
-        <p class="hero-subtitle">친환경/기능성 고분자 연구실</p>
+        <h1 class="hero-title">Sustainable Polymer Lab</h1>
+        <p class="hero-subtitle">친환경 고분자 연구실</p>
         <p class="hero-desc"></p>
       </div>
     </section>
@@ -36,6 +82,55 @@
   </main>
 
   <div id="site-footer"></div>
+
+  <!-- ===== 메인 페이지 모집 팝업 ===== -->
+  <div id="recruitPopup" class="recruit-overlay" role="dialog" aria-modal="true" aria-labelledby="recruitTitle" hidden>
+    <div class="recruit-modal">
+      <div class="recruit-head">
+        <h2 id="recruitTitle">대학원생 · 학부연구생 모집</h2>
+      </div>
+      <div class="recruit-body">
+        <p>친환경 고분자 소재 합성 및 응용에 관한 연구를 함께 수행할 열정적인 석·박사 대학원생 및 학부연구생을 모집합니다.</p>
+        <ul class="recruit-fields">
+          <li><strong>분야 1.</strong> 이차전지, 배터리용 방열소재 개발</li>
+          <li><strong>분야 2.</strong> 이차전지용 친환경 바인더 소재 합성</li>
+          <li><strong>분야 3.</strong> 친환경 고분자 합성</li>
+        </ul>
+        <p class="recruit-contact">관심 있는 학생은 <a href="mailto:crchoi@knu.ac.kr">crchoi@knu.ac.kr</a> 로 언제든 연락 바랍니다.</p>
+      </div>
+      <div class="recruit-actions">
+        <button type="button" class="recruit-btn" id="recruitHideToday">오늘 하루 열지 않기</button>
+        <button type="button" class="recruit-btn primary" id="recruitClose">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    var KEY = "sfpl_recruit_popup_dismissed";
+    var popup = document.getElementById("recruitPopup");
+    if (!popup) return;
+
+    var today = new Date().toDateString();
+    var dismissed = "";
+    try { dismissed = localStorage.getItem(KEY) || ""; } catch (e) {}
+    if (dismissed === today) return; // 오늘은 이미 닫음
+
+    function open() { popup.hidden = false; document.body.style.overflow = "hidden"; }
+    function close() { popup.hidden = true; document.body.style.overflow = ""; }
+    function hideToday() {
+      try { localStorage.setItem(KEY, today); } catch (e) {}
+      close();
+    }
+
+    document.getElementById("recruitClose").addEventListener("click", close);
+    document.getElementById("recruitHideToday").addEventListener("click", hideToday);
+    popup.addEventListener("click", function (e) { if (e.target === popup) close(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !popup.hidden) close(); });
+
+    open();
+  })();
+  </script>
 
 <script>
   (function () {
