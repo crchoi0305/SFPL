@@ -196,6 +196,20 @@
       display: block;
     }
 
+    /* 외부(출판사) 이미지가 만료/차단되어 로드 실패한 경우의 대체 표시 */
+    .thumb.thumb-missing{
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .thumb.thumb-missing::after{
+      content: "No image";
+      font-size: 13px;
+      color: rgba(0,0,0,.4);
+      letter-spacing: .02em;
+    }
+
     /* 카드 그리드도 명확히 */
     .pub-card{
       display: grid;
@@ -438,8 +452,16 @@
 
     const linkUrl = item.doi || item.link || item.url || "";
 
-    const img = imgSrc
-      ? `<div class="thumb"><img src="${escapeHTML(imgSrc)}" alt=""></div>`
+    // 로컬 이미지는 Netlify Image CDN으로 경량화(webp), 외부 URL은 그대로
+    const finalSrc = imgSrc && imgSrc.startsWith("/")
+      ? `/.netlify/images?url=${encodeURI(imgSrc)}&w=600&q=72&fm=webp`
+      : imgSrc;
+
+    // 외부(출판사) 이미지가 만료/차단되면 깨진 아이콘 대신 "No image" 자리표시자로 대체
+    const onErr = "this.closest('.thumb').classList.add('thumb-missing');this.remove();";
+
+    const img = finalSrc
+      ? `<div class="thumb"><img src="${escapeHTML(finalSrc)}" alt="" loading="lazy" decoding="async" onerror="${onErr}"></div>`
       : `<div class="thumb"></div>`;
 
     const line = [
