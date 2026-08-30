@@ -21,8 +21,6 @@ backend:
     uploadMedia: "Upload {{path}}"
     deleteMedia: "Delete {{path}}"
 
-local_backend: false
-
 media_folder: "assets"
 public_folder: "/assets"
 
