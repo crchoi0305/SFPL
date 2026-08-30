@@ -345,6 +345,8 @@
   function goToIndex(track, dots, pos, animate){
     const count = parseInt(track.dataset.count || "0", 10);
     if (count <= 1) return;
+    if (track._snapT) { clearTimeout(track._snapT); track._snapT = null; }
+
     track.style.transition = (animate === false) ? "none" : "";
     track.style.transform = `translateX(${-pos * 100}%)`;
     track.dataset.pos = String(pos);
@@ -361,18 +363,25 @@
   function stepCarousel(track, dots, dir){
     const count = parseInt(track.dataset.count || "0", 10);
     if (count <= 1) return;
+
     let pos = parseInt(track.dataset.pos || "0", 10);
+    // 복제본/범위 밖에 걸려 있으면 먼저 실제 위치로 순간 정렬 (빠른 연타 대비)
+    if (pos >= count) { goToIndex(track, dots, 0, false); void track.offsetWidth; pos = 0; }
+    else if (pos < 0) { goToIndex(track, dots, count - 1, false); void track.offsetWidth; pos = count - 1; }
 
     if (dir > 0) {
       pos += 1;
       goToIndex(track, dots, pos, true);
       if (pos >= count) {
-        window.setTimeout(() => goToIndex(track, dots, 0, false), 460);
+        track._snapT = window.setTimeout(function () {
+          track._snapT = null;
+          goToIndex(track, dots, 0, false);
+        }, 460);
       }
     } else {
       if (pos <= 0) {
-        goToIndex(track, dots, count, false);  // 복제본(=1번과 동일)으로 순간 이동
-        void track.offsetWidth;                // 리플로우
+        goToIndex(track, dots, count, false);   // 복제본(=1번과 동일)으로 순간 이동
+        void track.offsetWidth;                 // 리플로우
         goToIndex(track, dots, count - 1, true); // 마지막 장으로 슬라이드
       } else {
         goToIndex(track, dots, pos - 1, true);

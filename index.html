@@ -363,6 +363,8 @@
   function setHomeIndex(track, dots, pos, animate){
     const N = homeRealCount(track);
     if (N <= 1) return;
+    if (track._snapT) { clearTimeout(track._snapT); track._snapT = null; }
+
     track.style.transition = (animate === false) ? "none" : "";
     track.style.transform = `translateX(${-pos * 100}%)`;
     track.dataset.pos = String(pos);
@@ -380,12 +382,20 @@
   function stepHome(track, dots, dir){
     const N = homeRealCount(track);
     if (N <= 1) return;
+
     let pos = parseInt(track.dataset.pos || "0", 10);
+    if (pos >= N) { setHomeIndex(track, dots, 0, false); void track.offsetWidth; pos = 0; }
+    else if (pos < 0) { setHomeIndex(track, dots, N - 1, false); void track.offsetWidth; pos = N - 1; }
 
     if (dir > 0) {
       pos += 1;
       setHomeIndex(track, dots, pos, true);
-      if (pos >= N) window.setTimeout(() => setHomeIndex(track, dots, 0, false), 430);
+      if (pos >= N) {
+        track._snapT = window.setTimeout(function () {
+          track._snapT = null;
+          setHomeIndex(track, dots, 0, false);
+        }, 430);
+      }
     } else {
       if (pos <= 0) {
         setHomeIndex(track, dots, N, false);
