@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin (beta) | Sustainable/Functional Polymer Lab</title>
+  <link href="config.yml" type="text/yaml" rel="cms-config-url" />
+</head>
+<body>
+  <!-- Netlify Identity -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    (function () {
+      function initIdentity() {
+        if (window.netlifyIdentity) window.netlifyIdentity.init();
+      }
+      if (document.readyState === "complete") initIdentity();
+      else window.addEventListener("load", initIdentity);
+    })();
+  </script>
+
+  <!-- Decap CMS (수동 init: 커스텀 위젯 먼저 등록한 뒤 시작) -->
+  <script>window.CMS_MANUAL_INIT = true;</script>
+  <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
+
+  <!-- ============================================================
+       Custom widget: "multi-image"
+       - stores an array of image paths (same shape as a list<image>)
+       - "여러 장 선택" 버튼 하나로 미디어 라이브러리에서 다중 선택
+       - 다중 선택이 환경상 안 되면 한 장씩 추가하는 방식으로 자연스럽게 동작
+       ============================================================ -->
+  <script>
+  (function () {
+    if (!window.CMS || !window.createClass || !window.h) return;
+    var h = window.h;
+    var createClass = window.createClass;
+
+    function toArray(v) {
+      if (!v) return [];
+      if (Array.isArray(v)) return v.slice();
+      if (typeof v.toJS === "function") { try { return v.toJS(); } catch (e) {} }
+      if (typeof v === "string") return [v];
+      return [];
+    }
+
+    var MultiImageControl = createClass({
+      getInitialState: function () { return { seen: null }; },
+
+      currentList: function () { return toArray(this.props.value); },
+
+      emit: function (list) {
+        // Decap list-of-strings 로 저장
+        this.props.onChange(list);
+      },
+
+      openLibrary: function () {
+        this.props.onOpenMediaLibrary({
+          controlID: this.props.forID,
+          forImage: true,
+          allowMultiple: true,
+          value: this.currentList(),
+          field: this.props.field,
+        });
+      },
+
+      componentDidUpdate: function (prevProps) {
+        var id = this.props.forID;
+        var mp = this.props.mediaPaths;
+        if (!mp || typeof mp.get !== "function") return;
+        var inserted = mp.get(id);
+        if (inserted == null) return;
+
+        // 이미 처리한 값이면 무시
+        if (inserted === this.state.seen) return;
+
+        var added = [];
+        if (typeof inserted === "string") added = [inserted];
+        else if (Array.isArray(inserted)) added = inserted;
+        else if (inserted && typeof inserted.toJS === "function") {
+          try { added = inserted.toJS(); } catch (e) { added = []; }
+        }
+        added = added.filter(Boolean);
+        if (!added.length) return;
+
+        var list = this.currentList();
+        added.forEach(function (p) { if (list.indexOf(p) === -1) list.push(p); });
+
+        this.setState({ seen: inserted });
+        this.emit(list);
+        if (this.props.onRemoveInsertedMedia) this.props.onRemoveInsertedMedia(id);
+      },
+
+      removeAt: function (i) {
+        var list = this.currentList();
+        list.splice(i, 1);
+        this.emit(list);
+      },
+
+      move: function (i, dir) {
+        var list = this.currentList();
+        var j = i + dir;
+        if (j < 0 || j >= list.length) return;
+        var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+        this.emit(list);
+      },
+
+      render: function () {
+        var self = this;
+        var list = this.currentList();
+        var getAsset = this.props.getAsset;
+
+        var thumbs = list.map(function (path, i) {
+          var src = path;
+          try { if (getAsset) { var a = getAsset(path); src = a && a.toString ? a.toString() : path; } } catch (e) {}
+          return h("div", { key: path + i, style: {
+            position: "relative", width: "110px", height: "110px",
+            border: "1px solid #ddd", borderRadius: "6px", overflow: "hidden", background: "#f6f6f6"
+          }},
+            h("img", { src: src, style: { width: "100%", height: "100%", objectFit: "cover" } }),
+            h("button", { type: "button", onClick: function () { self.removeAt(i); },
+              title: "삭제",
+              style: { position: "absolute", top: "2px", right: "2px", border: "none",
+                background: "rgba(0,0,0,.6)", color: "#fff", borderRadius: "4px",
+                width: "20px", height: "20px", cursor: "pointer", lineHeight: "1" } }, "×"),
+            h("button", { type: "button", onClick: function () { self.move(i, -1); }, title: "앞으로",
+              style: { position: "absolute", bottom: "2px", left: "2px", border: "none",
+                background: "rgba(0,0,0,.55)", color: "#fff", borderRadius: "4px",
+                width: "20px", height: "20px", cursor: "pointer", lineHeight: "1" } }, "‹"),
+            h("button", { type: "button", onClick: function () { self.move(i, 1); }, title: "뒤로",
+              style: { position: "absolute", bottom: "2px", right: "2px", border: "none",
+                background: "rgba(0,0,0,.55)", color: "#fff", borderRadius: "4px",
+                width: "20px", height: "20px", cursor: "pointer", lineHeight: "1" } }, "›")
+          );
+        });
+
+        return h("div", { className: this.props.classNameWrapper },
+          h("div", { style: { display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "8px" } }, thumbs),
+          h("button", { type: "button", onClick: this.openLibrary, style: {
+            padding: "8px 14px", borderRadius: "6px", border: "1px solid #c4c6d0",
+            background: "#fff", cursor: "pointer", fontWeight: "600"
+          } }, list.length ? "＋ 사진 더 추가 / 여러 장 선택" : "＋ 사진 선택 (여러 장 가능)"),
+          h("span", { style: { marginLeft: "10px", color: "#888", fontSize: "13px" } },
+            list.length + "장")
+        );
+      }
+    });
+
+    var MultiImagePreview = createClass({
+      render: function () {
+        var list = toArray(this.props.value);
+        return h("div", {}, list.map(function (p, i) {
+          return h("img", { key: i, src: p, style: { maxWidth: "160px", marginRight: "6px", borderRadius: "4px" } });
+        }));
+      }
+    });
+
+    try {
+      window.CMS.registerWidget("multi-image", MultiImageControl, MultiImagePreview);
+      console.log("[admin-beta] multi-image widget registered");
+    } catch (e) {
+      console.error("[admin-beta] failed to register multi-image widget", e);
+    }
+
+    // 위젯 등록 후 CMS 시작
+    try {
+      window.CMS.init();
+      console.log("[admin-beta] CMS.init() called");
+    } catch (e) {
+      console.error("[admin-beta] CMS.init failed", e);
+    }
+  })();
+  </script>
+</body>
+</html>

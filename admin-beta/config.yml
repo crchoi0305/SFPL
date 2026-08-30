@@ -1,0 +1,149 @@
+# ===================================================================
+#  admin-beta 전용 설정 (실험적)
+#  /admin/config.yml 과 거의 동일하지만, Photos 앨범의 이미지 필드가
+#  커스텀 "multi-image" 위젯을 사용합니다 (여러 장 한 번에 선택).
+#  문제가 생기면 그냥 /admin/ 을 계속 쓰시면 됩니다.
+# ===================================================================
+
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: "Create {{collection}} {{slug}}"
+    update: "Update {{collection}} {{slug}}"
+    delete: "Delete {{collection}} {{slug}}"
+    uploadMedia: "Upload {{path}}"
+    deleteMedia: "Delete {{path}}"
+
+local_backend: false
+
+media_folder: "assets"
+public_folder: "/assets"
+
+collections:
+  - name: "current"
+    label: "People - Current"
+    media_folder: "/content/assets/members"
+    public_folder: "/content/assets/members"
+    files:
+      - file: "content/current.json"
+        label: "Current Members"
+        name: "current_members"
+        fields:
+          - label: "Members"
+            name: "members"
+            widget: "list"
+            summary: "{{fields.name}}"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Photo", name: "photo", widget: "image", choose_url: false }
+              - { label: "B.S.", name: "bs", widget: "string" }
+              - { label: "M.S./Ph.D.", name: "ms", widget: "string", required: false }
+              - { label: "Research", name: "research", widget: "string", required: false }
+              - { label: "Email", name: "email", widget: "string", required: false }
+              - { label: "Bio", name: "bio", widget: "text", required: false }
+
+  - name: "news"
+    label: "News"
+    media_folder: "/content/assets/news"
+    public_folder: "/content/assets/news"
+    files:
+      - file: "content/news.json"
+        label: "News Posts"
+        name: "news_posts"
+        fields:
+          - label: "Posts"
+            name: "posts"
+            widget: "list"
+            summary: "{{fields.date}} | {{fields.title}}"
+            fields:
+              - label: "Date"
+                name: "date"
+                widget: "datetime"
+                format: "YYYY.MM.DD"
+                date_format: "YYYY.MM.DD"
+                time_format: false
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "desc", widget: "text", required: false }
+              - label: "Images"
+                name: "images"
+                widget: "multi-image"
+                required: false
+              - label: "Links"
+                name: "links"
+                widget: "list"
+                required: false
+                summary: "{{fields.label}}"
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "URL", name: "url", widget: "string" }
+
+  - name: "photos"
+    label: "Photos"
+    media_folder: "/content/assets/photos"
+    public_folder: "/content/assets/photos"
+    files:
+      - file: "content/photos.json"
+        label: "Photo Albums"
+        name: "photo_albums"
+        fields:
+          - label: "Albums"
+            name: "albums"
+            widget: "list"
+            summary: "{{fields.date}} | {{fields.title}}"
+            fields:
+              - label: "Date"
+                name: "date"
+                widget: "datetime"
+                format: "YYYY.MM.DD"
+                date_format: "YYYY.MM.DD"
+                time_format: false
+                required: true
+              - label: "Title"
+                name: "title"
+                widget: "string"
+              - { label: "Description", name: "desc", widget: "text", required: false }
+              - label: "Images"
+                name: "images"
+                widget: "multi-image"
+                required: false
+
+  - name: "sci"
+    label: "Sci / Publications"
+    files:
+      - file: "content/sci.json"
+        label: "Publications Data"
+        name: "sci_publications"
+        media_folder: "/content/assets/sci"
+        public_folder: "/content/assets/sci"
+        fields:
+          - label: "Publications"
+            name: "publications"
+            widget: "list"
+            summary: "{{fields.year}} | {{fields.title}}"
+            fields:
+              - { label: "Year", name: "year", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Journal (venue)", name: "venue", widget: "string", required: false }
+              - { label: "Vol / Page (bib)", name: "bib", widget: "string", required: false }
+              - label: "Authors"
+                name: "authors"
+                widget: "list"
+                summary: "{{fields.name}}"
+                fields:
+                  - { label: "Name", name: "name", widget: "string" }
+                  - { label: "KIT-Polymer author", name: "is_lab", widget: "boolean", default: false }
+                  - label: "Roles"
+                    name: "roles"
+                    widget: "select"
+                    multiple: true
+                    required: false
+                    options:
+                      - { label: "Co-first author (†)", value: "co-first" }
+                      - { label: "Corresponding author (*)", value: "corresponding" }
+              - { label: "DOI (URL)", name: "doi", widget: "string", required: false }
+              - label: "Thumbnail Image"
+                name: "image"
+                widget: "image"
+                required: false
+                choose_url: false
