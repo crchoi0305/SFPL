@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin-beta/
+Disallow: /recovery.html
+
+Sitemap: https://crchoi-lab.kr/sitemap.xml
