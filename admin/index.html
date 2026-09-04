@@ -1,34 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin | Sustainable Polymer Lab</title>
 </head>
 <body>
-  <!-- 1) Netlify Identity widget -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <!--
+    Sveltia CMS.
+    미디어 라이브러리에서 사진 여러 장을 한 번에 선택/업로드할 수 있습니다.
 
-  <script>
-    (function () {
-      // Identity가 로드되면 초기화만 수행 (자동 open()은 제거)
-      function initIdentity() {
-        if (!window.netlifyIdentity) return;
-        window.netlifyIdentity.init();
-      }
-
-      // 스크립트 로딩 타이밍 대비
-      if (document.readyState === "complete") initIdentity();
-      else window.addEventListener("load", initIdentity);
-
-      // 디버그용: 콘솔에서 상태 확인 가능
-      window.__openLogin = function () {
-        if (window.netlifyIdentity) window.netlifyIdentity.open();
-      };
-    })();
-  </script>
-
-  <!-- 2) Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
+    로그인: GitHub 계정 (저장소 소유자 crchoi0305).
+    Netlify 대시보드에서 GitHub OAuth 공급자를 한 번 연결해야 합니다.
+    (Site configuration → Access & security → OAuth → Install provider → GitHub)
+  -->
+  <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
 </body>
 </html>

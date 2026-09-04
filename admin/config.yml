@@ -1,5 +1,17 @@
+# ===================================================================
+#  Sveltia CMS 설정 (/admin/)
+#
+#   - backend: github (GitHub 로그인)
+#   - Photos / News 의 이미지 필드가 widget: image + multiple: true
+#     -> 미디어 라이브러리에서 여러 장 한 번에 선택/업로드 가능
+#
+#  데이터 형식(경로 문자열 배열)은 기존과 동일해서 photos.json / news.json
+#  을 그대로 씁니다.
+# ===================================================================
+
 backend:
-  name: git-gateway
+  name: github
+  repo: crchoi0305/SFPL
   branch: main
   commit_messages:
     create: "Create {{collection}} {{slug}}"
@@ -8,16 +20,12 @@ backend:
     uploadMedia: "Upload {{path}}"
     deleteMedia: "Delete {{path}}"
 
-local_backend: false
-
-# 기본 업로드 위치(컬렉션별 media_folder가 있으면 그 설정이 우선)
 media_folder: "assets"
 public_folder: "/assets"
 
 collections:
   - name: "current"
     label: "People - Current"
-    # ✅ 루트 기준 절대경로로 고정 (content/content/... 방지)
     media_folder: "/content/assets/members"
     public_folder: "/content/assets/members"
     files:
@@ -40,7 +48,6 @@ collections:
 
   - name: "news"
     label: "News"
-    # ✅ 루트 기준 절대경로로 고정
     media_folder: "/content/assets/news"
     public_folder: "/content/assets/news"
     files:
@@ -59,21 +66,13 @@ collections:
                 format: "YYYY.MM.DD"
                 date_format: "YYYY.MM.DD"
                 time_format: false
-
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Description", name: "desc", widget: "text", required: false }
-
-              - label: "Images (multi)"
+              - label: "Images"
                 name: "images"
-                widget: "list"
+                widget: "image"
+                multiple: true
                 required: false
-                summary: "{{fields.image}}"
-                field:
-                  label: "Image"
-                  name: "image"
-                  widget: "image"
-                  choose_url: false
-
               - label: "Links"
                 name: "links"
                 widget: "list"
@@ -85,7 +84,6 @@ collections:
 
   - name: "photos"
     label: "Photos"
-    # ✅ 루트 기준 절대경로로 고정 (content/content/... 방지)
     media_folder: "/content/assets/photos"
     public_folder: "/content/assets/photos"
     files:
@@ -105,23 +103,15 @@ collections:
                 date_format: "YYYY.MM.DD"
                 time_format: false
                 required: true
-
               - label: "Title"
                 name: "title"
                 widget: "string"
-
               - { label: "Description", name: "desc", widget: "text", required: false }
-
-              - label: "Images (multi)"
+              - label: "Images"
                 name: "images"
-                widget: "list"
+                widget: "image"
+                multiple: true
                 required: false
-                summary: "{{fields.image}}"
-                field:
-                  label: "Image"
-                  name: "image"
-                  widget: "image"
-                  choose_url: false
 
   - name: "sci"
     label: "Sci / Publications"
@@ -129,7 +119,6 @@ collections:
       - file: "content/sci.json"
         label: "Publications Data"
         name: "sci_publications"
-        # ✅ files 내부에서도 절대경로로 고정
         media_folder: "/content/assets/sci"
         public_folder: "/content/assets/sci"
         fields:
@@ -142,7 +131,6 @@ collections:
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Journal (venue)", name: "venue", widget: "string", required: false }
               - { label: "Vol / Page (bib)", name: "bib", widget: "string", required: false }
-
               - label: "Authors"
                 name: "authors"
                 widget: "list"
@@ -158,9 +146,7 @@ collections:
                     options:
                       - { label: "Co-first author (†)", value: "co-first" }
                       - { label: "Corresponding author (*)", value: "corresponding" }
-
               - { label: "DOI (URL)", name: "doi", widget: "string", required: false }
-
               - label: "Thumbnail Image"
                 name: "image"
                 widget: "image"
