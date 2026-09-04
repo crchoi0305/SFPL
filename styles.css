@@ -25,6 +25,16 @@ a{ color:inherit; text-decoration:none; }
   display:flex; align-items:center; gap:12px;
 }
 
+/* 경북대 심볼 (헤더 남색 배경 위 흰색 단색) */
+.brand-logo{
+  height:40px; width:auto; display:block;
+  filter: brightness(0) invert(1);   /* 어떤 색상의 투명 PNG/SVG든 흰색으로 통일 */
+}
+.brand-divider{
+  width:1px; height:38px; background:rgba(255,255,255,.35);
+  display:block; flex:0 0 auto;
+}
+
 .brand-text{ display:grid; gap:2px; line-height:1.1; }
 .brand-title{ font-weight:800; letter-spacing:-0.02em; font-size:50px; }
 .brand-subtitle{ font-size:14px; opacity:.82; }
@@ -459,8 +469,21 @@ main {
   font-weight: 800;
 }
 
+.site-header .brand{
+  gap: 8px;
+}
+.site-header .brand .brand-logo{
+  height: 18px;
+}
+.site-header .brand .brand-divider{
+  height: 24px;
+}
 .site-header .brand .brand-title{
-  font-size: 18px !important;
+  font-size: 17px !important;
+  white-space: nowrap;
+}
+.site-header .brand .brand-subtitle{
+  white-space: nowrap;
 }
 .site-header .brand .brand-subtitle{
   font-size: 14px !important;
